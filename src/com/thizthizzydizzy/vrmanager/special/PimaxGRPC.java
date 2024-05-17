@@ -88,7 +88,7 @@ rpcCheckConnectStatus
         Logger.info("GRPC has stopped.");
         Logger.pop();
     }
-    public static HashMap<String, Object> rpcCallMessage(Descriptors.EnumValueDescriptor requestType) throws InterruptedException{//TODO proper error handling
+    public static HashMap<String, Object> rpcCallMessage(Descriptors.EnumValueDescriptor requestType, int maxAttempts) throws InterruptedException{//TODO proper error handling
         Logger.push(PimaxGRPC.class);
         var callMessage = PimaxGRPC.getMethod("rpcCallMessage");
         var reqType = PimaxGRPC.getField(callMessage, "req_type");
@@ -99,9 +99,11 @@ rpcCheckConnectStatus
         var replyFields = getMessageField("Struct", "fields");
         HashMap<String, Object> rpcResult = new HashMap<>();
         boolean[] hasResult = new boolean[1];
-        for(int i = 0; i<10000; i++){
-            if(i%1000==0){
-                Logger.info("Sending GRPC: "+callMessage.getFullName()+" "+requestType.getFullName()+" (Attempt "+((i/1000)+1)+")");
+        int attempts = 0;
+        for(int i = 0; i<Math.max(10000,maxAttempts*1000); i++){
+            if(i%1000==0&&attempts<maxAttempts){
+                attempts++;
+                Logger.info("Sending GRPC: "+callMessage.getFullName()+" "+requestType.getFullName()+" (Attempt "+attempts+")");
                 callRPC(callMessage, (t) -> t.setField(reqType, requestType).build(), (t) -> {
                     Logger.info(t.toString());
                 });
