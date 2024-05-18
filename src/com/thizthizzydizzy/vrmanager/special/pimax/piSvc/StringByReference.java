@@ -1,4 +1,4 @@
-package com.thizthizzydizzy.vrmanager.special.piSvc;
+package com.thizthizzydizzy.vrmanager.special.pimax.piSvc;
 import com.sun.jna.Memory;
 public class StringByReference extends Memory{
     public StringByReference(){

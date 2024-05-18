@@ -1,7 +1,7 @@
 package com.thizthizzydizzy.vrmanager.task;
 import com.thizthizzydizzy.vrmanager.Logger;
 import com.thizthizzydizzy.vrmanager.VRManager;
-import com.thizthizzydizzy.vrmanager.special.WindowsManager;
+import com.thizthizzydizzy.vrmanager.special.Windows;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -24,7 +24,7 @@ public class WatcherTask extends Task{
             Logger.push("Watcher");
             while(true){
                 try{
-                    for(var task : WindowsManager.getTasks()){
+                    for(var task : Windows.getTasks()){
                         if(task.imageName.equals(target)){
                             if(!pids.contains(task.pid)){
                                 pids.add(task.pid);
@@ -32,7 +32,7 @@ public class WatcherTask extends Task{
                                     @Override
                                     public boolean isActive(){
                                         try{
-                                            for(var t : WindowsManager.getTasks()){
+                                            for(var t : Windows.getTasks()){
                                                 if(t.pid==task.pid)return true;
                                             }
                                         }catch(IOException ex){
@@ -42,7 +42,7 @@ public class WatcherTask extends Task{
                                     }
                                     @Override
                                     public void shutdown(){
-                                        WindowsManager.runCommand("taskkill /PID "+task.pid);
+                                        Windows.runCommand("taskkill /PID "+task.pid);
                                     }
                                 };
                                 VRManager.startTask(subtask);

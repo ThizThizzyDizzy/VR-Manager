@@ -1,4 +1,4 @@
-package com.thizthizzydizzy.vrmanager.special.piSvc.piSvcType;
+package com.thizthizzydizzy.vrmanager.special.pimax.piSvc.piSvcType;
 public class piServiceMessage{
     public static final int SERVICE_USB = 0;
     public static final int SERVICE_HDMI = 1;

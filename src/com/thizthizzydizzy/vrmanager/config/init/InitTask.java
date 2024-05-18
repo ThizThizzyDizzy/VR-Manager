@@ -1,7 +1,7 @@
 package com.thizthizzydizzy.vrmanager.config.init;
 import com.thizthizzydizzy.vrmanager.Logger;
 import com.thizthizzydizzy.vrmanager.VRManager;
-import com.thizthizzydizzy.vrmanager.special.WindowsManager;
+import com.thizthizzydizzy.vrmanager.special.Windows;
 import com.thizthizzydizzy.vrmanager.task.WatcherTask;
 import java.io.File;
 import java.io.IOException;
@@ -15,13 +15,13 @@ public class InitTask{
         switch(type){
             case RUN -> {
                 try{
-                    for(var task : WindowsManager.getTasks()){
+                    for(var task : Windows.getTasks()){
                         if(task.imageName.equals(new File(target).getName())){
                             Logger.warn("WARNING: Found task "+task.imageName+" (PID "+task.pid+") already running! This task may not be managed properly by VR Manager!");
                         }
                     }
                 }catch(IOException ex){}
-                VRManager.startIndirect(new File(target), arguments.toArray(String[]::new));
+                VRManager.start(new File(target), arguments.toArray(String[]::new));
             }
             case WATCH -> {
                 VRManager.startTask(new WatcherTask(target));
@@ -30,6 +30,6 @@ public class InitTask{
         }
     }
     public static enum Type{
-        RUN, WATCH, RUN_JAVA;
+        RUN, WATCH, RUN_JAVA, PIMAX;
     }
 }

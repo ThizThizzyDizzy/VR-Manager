@@ -1,4 +1,4 @@
-package com.thizthizzydizzy.vrmanager.special.piSvc.piSvcCapability;
+package com.thizthizzydizzy.vrmanager.special.pimax.piSvc.piSvcCapability;
 //tracked device.
 public class TrackedDeviceType{
     public static final int TrackedDevice_UNKNOW = 0x0000;

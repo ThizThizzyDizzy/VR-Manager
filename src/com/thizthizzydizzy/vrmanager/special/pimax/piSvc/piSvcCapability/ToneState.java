@@ -1,4 +1,4 @@
-package com.thizthizzydizzy.vrmanager.special.piSvc.piSvcCapability;
+package com.thizthizzydizzy.vrmanager.special.pimax.piSvc.piSvcCapability;
 public class ToneState{
     public static final int TONE_WARM = 0x00;
     public static final int TONE_COOL = 0x01;

@@ -2,8 +2,8 @@ package com.thizthizzydizzy.vrmanager.module;
 import com.thizthizzydizzy.vrmanager.command.NamedCommand;
 import com.thizthizzydizzy.vrmanager.command.Command;
 import com.thizthizzydizzy.vrmanager.Logger;
-import com.thizthizzydizzy.vrmanager.special.PiSvc;
-import com.thizthizzydizzy.vrmanager.special.PimaxGRPC;
+import com.thizthizzydizzy.vrmanager.special.pimax.PiSvc;
+import com.thizthizzydizzy.vrmanager.special.pimax.PimaxGRPC;
 public class PimaxModule extends VRModule{
     @Override
     public String getName(){

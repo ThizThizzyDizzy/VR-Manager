@@ -1,4 +1,4 @@
-package com.thizthizzydizzy.vrmanager.special.piSvc.piSvcDesc;
+package com.thizthizzydizzy.vrmanager.special.pimax.piSvc.piSvcDesc;
 import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
 import java.util.Arrays;

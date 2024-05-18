@@ -1,4 +1,4 @@
-package com.thizthizzydizzy.vrmanager.special.piSvc.piSvcCapability;
+package com.thizthizzydizzy.vrmanager.special.pimax.piSvc.piSvcCapability;
 public class LogLevel{
     public static final int LOG_NONE = 0; //output nothing
     public static final int LOG_NORMAL = 1;

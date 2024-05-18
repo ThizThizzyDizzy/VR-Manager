@@ -1,4 +1,4 @@
-package com.thizthizzydizzy.vrmanager.special;
+package com.thizthizzydizzy.vrmanager.special.pimax;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.FloatByReference;
 import com.sun.jna.ptr.IntByReference;
@@ -6,12 +6,12 @@ import com.sun.jna.ptr.PointerByReference;
 import com.thizthizzydizzy.vrmanager.Logger;
 import com.thizthizzydizzy.vrmanager.task.Task;
 import com.thizthizzydizzy.vrmanager.VRManager;
-import com.thizthizzydizzy.vrmanager.special.piSvc.BooleanByReference;
-import com.thizthizzydizzy.vrmanager.special.piSvc.StringByReference;
-import com.thizthizzydizzy.vrmanager.special.piSvc.piSvcCAPI;
-import com.thizthizzydizzy.vrmanager.special.piSvc.piSvcDesc.piSvcHmdInfo;
-import com.thizthizzydizzy.vrmanager.special.piSvc.piSvcDesc.piVector3f;
-import com.thizthizzydizzy.vrmanager.special.piSvc.piSvcType.piSvcResult;
+import com.thizthizzydizzy.vrmanager.special.pimax.piSvc.BooleanByReference;
+import com.thizthizzydizzy.vrmanager.special.pimax.piSvc.StringByReference;
+import com.thizthizzydizzy.vrmanager.special.pimax.piSvc.piSvcCAPI;
+import com.thizthizzydizzy.vrmanager.special.pimax.piSvc.piSvcDesc.piSvcHmdInfo;
+import com.thizthizzydizzy.vrmanager.special.pimax.piSvc.piSvcDesc.piVector3f;
+import com.thizthizzydizzy.vrmanager.special.pimax.piSvc.piSvcType.piSvcResult;
 public class PiSvc{
     private static Task task;
     public static boolean active = false;

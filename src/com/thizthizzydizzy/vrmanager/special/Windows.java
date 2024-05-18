@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-public class WindowsManager{
+public class Windows{
     public static String getRegistryValue(String path, String key){
         for(String str : runCommand("reg query "+path+" /v "+key).split("\n")){
             str = str.trim();

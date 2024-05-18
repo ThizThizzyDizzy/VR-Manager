@@ -44,50 +44,55 @@ public class VRManager{
             configuration.modules.add("pimax");
             {
                 InitTask pimax = new InitTask();
-                pimax.title = "Pimax Client";
-                pimax.target = "C:\\Program Files\\Pimax\\PimaxClient\\pimaxui\\PimaxClient.exe";
+                pimax.title = "Pimax";
+                pimax.type = InitTask.Type.PIMAX;
                 configuration.initialization.initTasks.add(pimax);
-                //TODO wait for startup & connection, restart headset, verify passthrough and whatnot
-
-                InitTask pimaxClient = new InitTask();
-                pimaxClient.type = InitTask.Type.WATCH;
-                pimaxClient.target = "PimaxClient.exe";
-                configuration.initialization.initTasks.add(pimaxClient);
-
-                InitTask deviceSetting = new InitTask();
-                deviceSetting.type = InitTask.Type.WATCH;
-                deviceSetting.target = "DeviceSetting.exe";
-                configuration.initialization.initTasks.add(deviceSetting);
-
-                InitTask piVST = new InitTask();
-                piVST.type = InitTask.Type.WATCH;
-                piVST.target = "pi_vst.exe";
-                configuration.initialization.initTasks.add(piVST);
-
-                InitTask piServer = new InitTask();
-                piServer.type = InitTask.Type.WATCH;
-                piServer.target = "pi_server.exe";
-                configuration.initialization.initTasks.add(piServer);
-
-                InitTask piOverlay = new InitTask();
-                piOverlay.type = InitTask.Type.WATCH;
-                piOverlay.target = "pi_overlay.exe";
-                configuration.initialization.initTasks.add(piOverlay);
-
-                InitTask piService = new InitTask();
-                piService.type = InitTask.Type.WATCH;
-                piService.target = "PiService.exe";
-                configuration.initialization.initTasks.add(piService);
-
-                InitTask platformRuntime = new InitTask();
-                platformRuntime.type = InitTask.Type.WATCH;
-                platformRuntime.target = "platform_runtime_VR4PIMAXP3B_service.exe";
-                configuration.initialization.initTasks.add(platformRuntime);
-
-                InitTask pvrHome = new InitTask();
-                pvrHome.type = InitTask.Type.WATCH;
-                pvrHome.target = "PVRHome.exe";
-                configuration.initialization.initTasks.add(pvrHome);
+                
+//                InitTask pimax = new InitTask();
+//                pimax.title = "Pimax Client";
+//                pimax.target = "C:\\Program Files\\Pimax\\PimaxClient\\pimaxui\\PimaxClient.exe";
+//                configuration.initialization.initTasks.add(pimax);
+//                //TODO wait for startup & connection, restart headset, verify passthrough and whatnot
+//
+//                InitTask pimaxClient = new InitTask();
+//                pimaxClient.type = InitTask.Type.WATCH;
+//                pimaxClient.target = "PimaxClient.exe";
+//                configuration.initialization.initTasks.add(pimaxClient);
+//
+//                InitTask deviceSetting = new InitTask();
+//                deviceSetting.type = InitTask.Type.WATCH;
+//                deviceSetting.target = "DeviceSetting.exe";
+//                configuration.initialization.initTasks.add(deviceSetting);
+//
+//                InitTask piVST = new InitTask();
+//                piVST.type = InitTask.Type.WATCH;
+//                piVST.target = "pi_vst.exe";
+//                configuration.initialization.initTasks.add(piVST);
+//
+//                InitTask piServer = new InitTask();
+//                piServer.type = InitTask.Type.WATCH;
+//                piServer.target = "pi_server.exe";
+//                configuration.initialization.initTasks.add(piServer);
+//
+//                InitTask piOverlay = new InitTask();
+//                piOverlay.type = InitTask.Type.WATCH;
+//                piOverlay.target = "pi_overlay.exe";
+//                configuration.initialization.initTasks.add(piOverlay);
+//
+//                InitTask piService = new InitTask();
+//                piService.type = InitTask.Type.WATCH;
+//                piService.target = "PiService.exe";
+//                configuration.initialization.initTasks.add(piService);
+//
+//                InitTask platformRuntime = new InitTask();
+//                platformRuntime.type = InitTask.Type.WATCH;
+//                platformRuntime.target = "platform_runtime_VR4PIMAXP3B_service.exe";
+//                configuration.initialization.initTasks.add(platformRuntime);
+//
+//                InitTask pvrHome = new InitTask();
+//                pvrHome.type = InitTask.Type.WATCH;
+//                pvrHome.target = "PVRHome.exe";
+//                configuration.initialization.initTasks.add(pvrHome);
             }
 //            {
 //                InitTask steamVR = new InitTask();

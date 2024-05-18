@@ -1,4 +1,4 @@
-package com.thizthizzydizzy.vrmanager.special.piSvc.piSvcType;
+package com.thizthizzydizzy.vrmanager.special.pimax.piSvc.piSvcType;
 public class piSvcResult{
     public static final int svc_success = 0;
     public static final int svc_failed = -1;

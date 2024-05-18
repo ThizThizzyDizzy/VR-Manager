@@ -1,4 +1,4 @@
-package com.thizthizzydizzy.vrmanager.special.piSvc.piSvcCapability;
+package com.thizthizzydizzy.vrmanager.special.pimax.piSvc.piSvcCapability;
 public class TrackedDeviceBateryLevel{
     public static final int TrackedDeviceBateryLevel_NotSupport = 0;
     public static final int TrackedDeviceBateryLevel_Low = 1;

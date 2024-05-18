@@ -1,5 +1,5 @@
-package com.thizthizzydizzy.vrmanager.special.piSvc;
-import com.thizthizzydizzy.vrmanager.special.piSvc.piSvcDesc.piSvcHmdInfo;
+package com.thizthizzydizzy.vrmanager.special.pimax.piSvc;
+import com.thizthizzydizzy.vrmanager.special.pimax.piSvc.piSvcDesc.piSvcHmdInfo;
 import com.sun.jna.Callback;
 import com.sun.jna.Library;
 import com.sun.jna.Native;
@@ -7,7 +7,7 @@ import com.sun.jna.Pointer;
 import com.sun.jna.ptr.FloatByReference;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
-import com.thizthizzydizzy.vrmanager.special.piSvc.piSvcDesc.piVector3f;
+import com.thizthizzydizzy.vrmanager.special.pimax.piSvc.piSvcDesc.piVector3f;
 /**
  * This library reflects the piSvcCAPI header file defined in the PiTool GitHub:
  * https://github.com/OpenMAR/PiTool/blob/master/PiTool/piSvc/piSvcCAPI.h

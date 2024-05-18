@@ -1,10 +1,11 @@
-package com.thizthizzydizzy.vrmanager.special;
+package com.thizthizzydizzy.vrmanager.special.pimax;
 import com.google.protobuf.DescriptorProtos;
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.DynamicMessage;
 import com.thizthizzydizzy.vrmanager.Logger;
 import com.thizthizzydizzy.vrmanager.task.Task;
 import com.thizthizzydizzy.vrmanager.VRManager;
+import com.thizthizzydizzy.vrmanager.special.Windows;
 import io.grpc.CallOptions;
 import io.grpc.ClientCall;
 import io.grpc.ManagedChannel;
@@ -54,7 +55,7 @@ public class PimaxGRPC{
         Logger.push(PimaxGRPC.class);
         Logger.info("Initializing GRPC");
         int port;
-        port = WindowsManager.getRegistryValueHex("HKEY_CURRENT_USER\\Software\\PiTool", "DeviceSettingPort");
+        port = Windows.getRegistryValueHex("HKEY_CURRENT_USER\\Software\\PiTool", "DeviceSettingPort");
         Logger.info("PiTool DeviceSettingPort: "+port);
         try(FileInputStream input = new FileInputStream("src\\rpc.desc")){
             for(int i = 0; i<3; i++)input.read(); //read 3 bytes because either the compiler or the parser doesn't understand its own format properly

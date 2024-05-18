@@ -1,4 +1,4 @@
-package com.thizthizzydizzy.vrmanager.special.piSvc.piSvcCapability;
+package com.thizthizzydizzy.vrmanager.special.pimax.piSvc.piSvcCapability;
 public class piHmdCapabilityMask{
     // Read-only flags.
     public static final int piHmdCap_ModeCtrl = 0x00000001;
