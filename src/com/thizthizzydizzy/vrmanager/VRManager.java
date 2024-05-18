@@ -47,7 +47,7 @@ public class VRManager{
                 pimax.title = "Pimax";
                 pimax.type = InitTask.Type.PIMAX;
                 configuration.initialization.initTasks.add(pimax);
-                
+
 //                InitTask pimax = new InitTask();
 //                pimax.title = "Pimax Client";
 //                pimax.target = "C:\\Program Files\\Pimax\\PimaxClient\\pimaxui\\PimaxClient.exe";
@@ -198,16 +198,18 @@ public class VRManager{
                         HashSet<Character> flags = Command.getFlags(arguments, 's', 'f', 'r');
                         Runnable exitLoop = () -> {
                             if(flags.contains('s')){
-                                synchronized(tasks){
-                                    for(Task task : tasks)if(task.isActive())task.shutdown();
+                                for(int i = 0; i<tasks.size(); i++){
+                                    Task task = tasks.get(i);
+                                    if(task.isActive())task.shutdown();
                                 }
                             }
                             if(flags.contains('f')){
                                 System.exit(0);
                             }else{
                                 ArrayList<String> taskNames = new ArrayList<>();
-                                synchronized(tasks){
-                                    for(Task task : tasks)if(task.isActive())taskNames.add(task.name);
+                                for(int i = 0; i<tasks.size(); i++){
+                                    Task task = tasks.get(i);
+                                    if(task.isActive())taskNames.add(task.name);
                                 }
                                 if(!taskNames.isEmpty()){
                                     Logger.warn("There "+(taskNames.size()==1?"is":"are")+" "+taskNames.size()+" active "+(taskNames.size()==1?"task":"tasks")+":\n"
@@ -220,8 +222,9 @@ public class VRManager{
                         int attempts = 0;
                         while(true){
                             int numTasks = 0;
-                            synchronized(tasks){
-                                for(var task : tasks)if(task.isActive())numTasks++;
+                            for(int i = 0; i<tasks.size(); i++){
+                                Task task = tasks.get(i);
+                                if(task.isActive())numTasks++;
                             }
                             attempts++;
                             exitLoop.run();
@@ -230,8 +233,9 @@ public class VRManager{
                                 break;
                             }
                             int nowTasks = 0;
-                            synchronized(tasks){
-                                for(var task : tasks)if(task.isActive())nowTasks++;
+                            for(int i = 0; i<tasks.size(); i++){
+                                Task task = tasks.get(i);
+                                if(task.isActive())nowTasks++;
                             }
                             if(nowTasks==numTasks&&attempts>2){
                                 Logger.error("Recursive shutdown cancelled! "+nowTasks+" tasks have not stopped after "+attempts+" attempts.");
@@ -349,9 +353,7 @@ public class VRManager{
         });
     }
     public static void startTask(Task task){
-        synchronized(tasks){
-            tasks.add(task);
-        }
+        tasks.add(task);
         task.start();
     }
     public enum StartupFlags{

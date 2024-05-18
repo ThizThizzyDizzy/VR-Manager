@@ -20,10 +20,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.logging.Level;
 public class PiRpcAPI{
     private static Task task;
     public static boolean active = false;
+    public static boolean debug = false;
     public static Descriptors.FileDescriptor protoDescriptor;
     private static ManagedChannel rpcChannel;
     public static Descriptors.ServiceDescriptor piRPC;
@@ -130,12 +130,12 @@ public class PiRpcAPI{
         boolean[] hasResult = new boolean[1];
         int attempts = 0;
         try{
-            for(int i = 0; i<Math.max(10000, maxAttempts*1000); i++){
-                if(i%1000==0&&attempts<Math.max(1, maxAttempts)){
+            for(int i = 0; i<Math.max(500, maxAttempts*100); i++){
+                if(i%100==0&&attempts<Math.max(1, maxAttempts)){
                     attempts++;
-                    Logger.info("Sending GRPC: "+callMessage.getFullName()+" "+requestType.getFullName()+" (Attempt "+attempts+")");
+                    if(debug)Logger.info("Sending GRPC: "+callMessage.getFullName()+" "+requestType.getFullName()+" (Attempt "+attempts+")");
                     callRPC(callMessage, (t) -> t.setField(reqType, requestType).build(), (t) -> {
-                        Logger.info(t.toString());
+                        if(debug)Logger.info(t.toString());
                     });
                 }
                 if(maxAttempts==0)break;
@@ -172,9 +172,9 @@ public class PiRpcAPI{
         }
         if(maxAttempts>0){
             if(hasResult[0]){
-                Logger.info("Success!");
+                if(debug)Logger.info("Success!");
             }else{
-                Logger.info("RPC Timed out!");
+                if(debug)Logger.info("RPC Timed out!");
             }
         }
         Logger.pop();

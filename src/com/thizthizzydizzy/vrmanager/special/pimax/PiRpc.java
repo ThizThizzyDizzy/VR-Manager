@@ -12,11 +12,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 public class PiRpc{
+    public static void start(){
+        PiRpcAPI.start();
+    }
+    public static void stop(){
+        PiRpcAPI.stop();
+    }
     private static HashMap<String, Object> rpcCallMessage(String type, int maxAttempts){
         return PiRpcAPI.rpcCallMessage(PiRpcAPI.getEnum("MsgType").findValueByName(type), maxAttempts);
     }
     public static boolean Get_HMDStatus_hmd_connect(){
-        return (boolean)rpcCallMessage("Get_HMDStatus_hmd_connect", 1).get("hmd_connect");
+        return (boolean)rpcCallMessage("Get_HMDStatus_hmd_connect", 1).getOrDefault("hmd_connect", false);
     }
     public static boolean Get_HMDStatus_spaceCalibrated(){
         return (boolean)rpcCallMessage("Get_HMDStatus_spaceCalibrated", 1).get("spaceCalibrated");

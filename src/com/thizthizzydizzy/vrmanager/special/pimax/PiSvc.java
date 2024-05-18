@@ -132,6 +132,10 @@ public class PiSvc{
     public static void svc_reconnectServer(){
         run(piSvcCAPI.INSTANCE.svc_reconnectServer(handle));
     }
+    /**
+     * @deprecated This is unreliable; Use `PiRpc.Event_rebootHmdAuto` if possible.
+     */
+    @Deprecated
     public static void svc_rebootHmd(){
         run(piSvcCAPI.INSTANCE.svc_rebootHmd(handle));
     }
