@@ -1,6 +1,7 @@
 package com.thizthizzydizzy.vrmanager.config.init;
 import com.thizthizzydizzy.vrmanager.Logger;
 import com.thizthizzydizzy.vrmanager.VRManager;
+import com.thizthizzydizzy.vrmanager.special.Pimax;
 import com.thizthizzydizzy.vrmanager.special.Windows;
 import com.thizthizzydizzy.vrmanager.task.WatcherTask;
 import java.io.File;
@@ -13,6 +14,7 @@ public class InitTask{
     public ArrayList<String> arguments = new ArrayList<>();
     public void run(){
         switch(type){
+            case PIMAX -> Pimax.init();
             case RUN -> {
                 try{
                     for(var task : Windows.getTasks()){

@@ -1,4 +1,4 @@
-package com.thizthizzydizzy.vrmanager.special.pimax;
+package com.thizthizzydizzy.vrmanager.special.pimax.piRpc;
 import com.google.protobuf.DescriptorProtos;
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.DynamicMessage;
@@ -16,10 +16,12 @@ import io.grpc.netty.shaded.io.grpc.netty.NettyChannelBuilder;
 import io.grpc.protobuf.ProtoUtils;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.Consumer;
 import java.util.function.Function;
-public class PimaxGRPC{
+import java.util.logging.Level;
+public class PiRpcAPI{
     private static Task task;
     public static boolean active = false;
     public static Descriptors.FileDescriptor protoDescriptor;
@@ -51,8 +53,27 @@ public class PimaxGRPC{
         }
         return null;
     }
+    static MethodDescriptor.MethodType getMethodTypeFromDesc(Descriptors.MethodDescriptor methodDesc){
+        if(!methodDesc.isServerStreaming()
+            &&!methodDesc.isClientStreaming()){
+            return MethodDescriptor.MethodType.UNARY;
+        }else if(methodDesc.isServerStreaming()
+            &&!methodDesc.isClientStreaming()){
+            return MethodDescriptor.MethodType.SERVER_STREAMING;
+        }else if(!methodDesc.isServerStreaming()){
+            return MethodDescriptor.MethodType.CLIENT_STREAMING;
+        }else{
+            return MethodDescriptor.MethodType.BIDI_STREAMING;
+        }
+    }
+    public static Descriptors.FieldDescriptor getField(Descriptors.MethodDescriptor method, String field){
+        for(var f : method.getInputType().getFields()){
+            if(f.getName().equals(field))return f;
+        }
+        return null;
+    }
     public static void start(){
-        Logger.push(PimaxGRPC.class);
+        Logger.push(PiRpcAPI.class);
         Logger.info("Initializing GRPC");
         int port;
         port = Windows.getRegistryValueHex("HKEY_CURRENT_USER\\Software\\PiTool", "DeviceSettingPort");
@@ -85,7 +106,7 @@ public class PimaxGRPC{
         Logger.pop();
     }
     public static void stop(){
-        Logger.push(PimaxGRPC.class);
+        Logger.push(PiRpcAPI.class);
         Logger.info("Shutting down GRPC!");
         rpcChannel.shutdownNow();
         //also clean up variables
@@ -96,10 +117,10 @@ public class PimaxGRPC{
         Logger.info("GRPC has stopped.");
         Logger.pop();
     }
-    public static HashMap<String, Object> rpcCallMessage(Descriptors.EnumValueDescriptor requestType, int maxAttempts) throws InterruptedException{//TODO proper error handling
-        Logger.push(PimaxGRPC.class);
-        var callMessage = PimaxGRPC.getMethod("rpcCallMessage");
-        var reqType = PimaxGRPC.getField(callMessage, "req_type");
+    public static HashMap<String, Object> rpcCallMessage(Descriptors.EnumValueDescriptor requestType, int maxAttempts){
+        Logger.push(PiRpcAPI.class);
+        var callMessage = PiRpcAPI.getMethod("rpcCallMessage");
+        var reqType = PiRpcAPI.getField(callMessage, "req_type");
         var replyArray = getMessageField("PollAnyMsgReply", "reply_array");
         var pollReqType = getMessageField("PollMsgReply", "poll_req_type");
         var mapResult = getMessageField("PollMsgReply", "map_result");
@@ -108,71 +129,92 @@ public class PimaxGRPC{
         HashMap<String, Object> rpcResult = new HashMap<>();
         boolean[] hasResult = new boolean[1];
         int attempts = 0;
-        for(int i = 0; i<Math.max(10000,maxAttempts*1000); i++){
-            if(i%1000==0&&attempts<maxAttempts){
-                attempts++;
-                Logger.info("Sending GRPC: "+callMessage.getFullName()+" "+requestType.getFullName()+" (Attempt "+attempts+")");
-                callRPC(callMessage, (t) -> t.setField(reqType, requestType).build(), (t) -> {
-                    Logger.info(t.toString());
-                });
-            }
-            callRPC(getMethod("rpcPollAnyMessage"), (builder) -> builder.build(), (msg) -> {
-                if(msg.getAllFields().isEmpty())return;
-                for(int j = 0; j<msg.getRepeatedFieldCount(replyArray); j++){
-                    DynamicMessage message = (DynamicMessage)msg.getRepeatedField(replyArray, j);
-                    if(message.hasField(pollReqType)&&message.getField(pollReqType).equals(requestType)){
-                        if((Boolean)message.getField(isErr))Logger.info("RPC returned an error!");
-                        DynamicMessage result = (DynamicMessage)message.getField(mapResult);
-                        for(int k = 0; k<result.getRepeatedFieldCount(replyFields); k++){
-                            DynamicMessage replyField = (DynamicMessage)result.getRepeatedField(replyFields, k);
-                            String key = null;
-                            DynamicMessage value = null;
-                            for(var field : replyField.getAllFields().keySet()){
-                                if(field.getName().equals("key"))key = (String)replyField.getField(field);
-                                if(field.getName().equals("value"))value = (DynamicMessage)replyField.getField(field);
-                            }
-                            for(var field : value.getAllFields().keySet()){
-                                switch(field.getName()){
-                                    case "null_value" -> {
+        try{
+            for(int i = 0; i<Math.max(10000, maxAttempts*1000); i++){
+                if(i%1000==0&&attempts<Math.max(1, maxAttempts)){
+                    attempts++;
+                    Logger.info("Sending GRPC: "+callMessage.getFullName()+" "+requestType.getFullName()+" (Attempt "+attempts+")");
+                    callRPC(callMessage, (t) -> t.setField(reqType, requestType).build(), (t) -> {
+                        Logger.info(t.toString());
+                    });
+                }
+                if(maxAttempts==0)break;
+                callRPC(getMethod("rpcPollAnyMessage"), (builder) -> builder.build(), (msg) -> {
+                    if(msg.getAllFields().isEmpty())return;
+                    for(int j = 0; j<msg.getRepeatedFieldCount(replyArray); j++){
+                        DynamicMessage message = (DynamicMessage)msg.getRepeatedField(replyArray, j);
+                        if(message.hasField(pollReqType)&&message.getField(pollReqType).equals(requestType)){
+                            if((Boolean)message.getField(isErr))Logger.info("RPC returned an error!");
+                            DynamicMessage result = (DynamicMessage)message.getField(mapResult);
+                            for(int k = 0; k<result.getRepeatedFieldCount(replyFields); k++){
+                                DynamicMessage replyField = (DynamicMessage)result.getRepeatedField(replyFields, k);
+                                String key = null;
+                                DynamicMessage value = null;
+                                for(var field : replyField.getAllFields().keySet()){
+                                    if(field.getName().equals("key"))key = (String)replyField.getField(field);
+                                    if(field.getName().equals("value"))value = (DynamicMessage)replyField.getField(field);
+                                }
+                                String ke = key;
+                                for(var field : value.getAllFields().keySet()){
+                                    parseValue(value, field, (obj) -> {
+                                        rpcResult.put(ke, obj);
                                         hasResult[0] = true;
-                                    }
-                                    case "double_value" -> {
-                                        rpcResult.put(key, (double)value.getField(field));
-                                        hasResult[0] = true;
-                                    }
-                                    case "string_value" -> {
-                                        rpcResult.put(key, (String)value.getField(field));
-                                        hasResult[0] = true;
-                                    }
-                                    case "bool_value" -> {
-                                        rpcResult.put(key, (boolean)value.getField(field));
-                                        hasResult[0] = true;
-                                    }
-                                    case "int32_value" -> {
-                                        rpcResult.put(key, (int)value.getField(field));
-                                        hasResult[0] = true;
-                                    }
-                                    case "int64_value" -> {
-                                        rpcResult.put(key, (long)value.getField(field));
-                                        hasResult[0] = true;
-                                    }
-                                    default ->
-                                        Logger.error("Unsupported value type: "+field.getFullName()+"! ("+value.getField(field).getClass().getName()+")");
+                                    });
                                 }
                             }
                         }
                     }
-                }
-            });
-            if(hasResult[0])break;
+                });
+                if(hasResult[0])break;
+            }
+        }catch(InterruptedException ex){
+            Logger.error("RPC Interrupted!");
         }
-        if(hasResult[0]){
-            Logger.info("Success!");
-        }else{
-            Logger.info("RPC Timed out!");
+        if(maxAttempts>0){
+            if(hasResult[0]){
+                Logger.info("Success!");
+            }else{
+                Logger.info("RPC Timed out!");
+            }
         }
         Logger.pop();
         return rpcResult;
+    }
+    public static void parseValue(DynamicMessage message, Descriptors.FieldDescriptor field, Consumer<Object> callback){
+        switch(field.getName()){
+            case "null_value" -> {
+                callback.accept(null);
+            }
+            case "double_value" -> {
+                callback.accept((double)message.getField(field));
+            }
+            case "string_value" -> {
+                callback.accept((String)message.getField(field));
+            }
+            case "bool_value" -> {
+                callback.accept((boolean)message.getField(field));
+            }
+            case "int32_value" -> {
+                callback.accept((int)message.getField(field));
+            }
+            case "int64_value" -> {
+                callback.accept((long)message.getField(field));
+            }
+            case "list_value" -> {
+                var values = getMessageField("ListValue", "values");
+                ArrayList<Object> list = new ArrayList<>();
+                DynamicMessage listMessage = (DynamicMessage)message.getField(field);
+                for(int i = 0; i<listMessage.getRepeatedFieldCount(values); i++){
+                    DynamicMessage value = (DynamicMessage)listMessage.getRepeatedField(values, i);
+                    for(var subField : value.getAllFields().keySet()){
+                        parseValue(value, subField, list::add);
+                    }
+                }
+                callback.accept(list);
+            }
+            default ->
+                Logger.error("Unsupported value type: "+field.getFullName()+"! ("+message.getField(field).getClass().getName()+")");
+        }
     }
     public static void callRPC(Descriptors.MethodDescriptor method, Function<DynamicMessage.Builder, DynamicMessage> buildMessage, Consumer<DynamicMessage> listener) throws InterruptedException{//TODO proper error handling
         Metadata metadata = new Metadata();
@@ -202,25 +244,5 @@ public class PimaxGRPC{
         call.halfClose();
         call.request(1);
         while(!closed[0])Thread.sleep(1);
-    }
-
-    static MethodDescriptor.MethodType getMethodTypeFromDesc(Descriptors.MethodDescriptor methodDesc){
-        if(!methodDesc.isServerStreaming()
-            &&!methodDesc.isClientStreaming()){
-            return MethodDescriptor.MethodType.UNARY;
-        }else if(methodDesc.isServerStreaming()
-            &&!methodDesc.isClientStreaming()){
-            return MethodDescriptor.MethodType.SERVER_STREAMING;
-        }else if(!methodDesc.isServerStreaming()){
-            return MethodDescriptor.MethodType.CLIENT_STREAMING;
-        }else{
-            return MethodDescriptor.MethodType.BIDI_STREAMING;
-        }
-    }
-    public static Descriptors.FieldDescriptor getField(Descriptors.MethodDescriptor method, String field){
-        for(var f : method.getInputType().getFields()){
-            if(f.getName().equals(field))return f;
-        }
-        return null;
     }
 }
