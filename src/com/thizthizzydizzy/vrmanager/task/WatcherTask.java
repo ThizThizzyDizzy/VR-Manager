@@ -10,9 +10,11 @@ public class WatcherTask extends Task{
     private final String target;
     private HashSet<Long> pids = new HashSet<>();
     private ArrayList<Task> subtasks = new ArrayList<>();
-    public WatcherTask(String target){
+    private final boolean force;
+    public WatcherTask(String target, boolean force){
         super("Watcher: "+target);
         this.target = target;
+        this.force = force;
     }
     @Override
     public boolean isActive(){
@@ -42,7 +44,7 @@ public class WatcherTask extends Task{
                                     }
                                     @Override
                                     public void shutdown(){
-                                        Windows.runCommand("taskkill /PID "+task.pid);
+                                        Windows.runCommand("taskkill /PID "+task.pid+(force?" /F":""));
                                     }
                                 };
                                 VRManager.startTask(subtask);

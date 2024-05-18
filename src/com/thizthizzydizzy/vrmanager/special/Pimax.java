@@ -12,6 +12,7 @@ public class Pimax extends Task{
     public static File pimaxClient = new File("C:\\Program Files\\Pimax\\PimaxClient\\pimaxui\\PimaxClient.exe");
     public static boolean usePimaxClient = false;
     public static boolean forceReboot = false;
+    public static boolean startSteamVR = true;
     public static boolean usePimaxClientForShutdown = true;
     public static void init(){
         VRManager.startTask(new Pimax());
@@ -60,6 +61,7 @@ public class Pimax extends Task{
             }
             waitForConnection();
         }
+        if(startSteamVR)PiRpc.Click_SteamVR();
         Logger.pop();
     }
     private void waitForConnection(){
