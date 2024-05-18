@@ -57,7 +57,7 @@ public class PimaxGRPC{
         int port;
         port = Windows.getRegistryValueHex("HKEY_CURRENT_USER\\Software\\PiTool", "DeviceSettingPort");
         Logger.info("PiTool DeviceSettingPort: "+port);
-        try(FileInputStream input = new FileInputStream("src\\rpc.desc")){
+        try(FileInputStream input = new FileInputStream("rpc.desc")){
             for(int i = 0; i<3; i++)input.read(); //read 3 bytes because either the compiler or the parser doesn't understand its own format properly
             var proto = DescriptorProtos.FileDescriptorProto.parseFrom(input);
             protoDescriptor = Descriptors.FileDescriptor.buildFrom(proto, new Descriptors.FileDescriptor[0]);
