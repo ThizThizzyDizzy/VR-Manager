@@ -1,8 +1,13 @@
 package com.thizthizzydizzy.vrmanager.module;
+import com.sun.jna.ptr.FloatByReference;
+import com.sun.jna.ptr.IntByReference;
+import com.sun.jna.ptr.PointerByReference;
 import com.thizthizzydizzy.vrmanager.command.NamedCommand;
 import com.thizthizzydizzy.vrmanager.command.Command;
 import com.thizthizzydizzy.vrmanager.Logger;
+import com.thizthizzydizzy.vrmanager.special.PiSvc;
 import com.thizthizzydizzy.vrmanager.special.PimaxGRPC;
+import com.thizthizzydizzy.vrmanager.special.piSvc.piSvcCAPI;
 public class PimaxModule extends VRModule{
     @Override
     public String getName(){
@@ -11,6 +16,32 @@ public class PimaxModule extends VRModule{
     @Override
     public NamedCommand[] getCommands(){
         return Command.subcommands(
+            new NamedCommand("pisvc", Command.subcommand(null,
+                new NamedCommand("start", (base, args) -> {
+                    if(!Command.noArguments(base, args))return;
+                    if(PiSvc.active){
+                        Logger.info("PiSvc Manager is already active!");
+                        return;
+                    }
+                    PiSvc.start();
+                }),
+                new NamedCommand("stop", (base, args) -> {
+                    if(!Command.noArguments(base, args))return;
+                    if(!PiSvc.active){
+                        Logger.info("PiSvc Manager is not active!");
+                        return;
+                    }
+                    PiSvc.stop();
+                }),
+                new NamedCommand("ipd", (base, args) -> {
+                    if(!Command.noArguments(base, args))return;
+                    if(!PiSvc.active){
+                        Logger.info("PiSvc Manager is not active!");
+                        return;
+                    }
+                    Logger.info("Current IPD: "+PiSvc.svc_getFloatConfig("ipd"));
+                })
+            )),
             new NamedCommand("grpc", Command.subcommand(null,
                 new NamedCommand("start", (base, args) -> {
                     if(!Command.noArguments(base, args))return;

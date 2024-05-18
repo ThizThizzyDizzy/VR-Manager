@@ -1,5 +1,6 @@
 package com.thizthizzydizzy.vrmanager.command;
 import com.thizthizzydizzy.vrmanager.Logger;
+import java.util.HashSet;
 import java.util.function.Function;
 public interface Command{
     public void run(String base, String[] arguments);
@@ -60,5 +61,18 @@ public interface Command{
             return false;
         }
         return true;
+    }
+    public static HashSet<String> getFlags(String[] arguments, String... possibleFlags){
+        HashSet<String> flags = new HashSet<>();
+        ARG:for(String s : arguments){
+            for(String flag : possibleFlags){
+                if(s.equals("-"+flag)){
+                    flags.add(flag);
+                    continue ARG;
+                }
+            }
+            Logger.info("Invalid flag: "+s+"!");
+        }
+        return flags;
     }
 }

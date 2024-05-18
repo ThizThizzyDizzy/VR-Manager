@@ -24,25 +24,25 @@ public interface piSvcCAPI extends Library{
     public int svc_getHmdCaps(Pointer handle, IntByReference caps);
     public int svc_getResolutionCaps(Pointer handle, IntByReference resolutionCaps);
     public int svc_getCurrentResolution(Pointer handle, IntByReference resolution);
-    public int svc_setResolution(Pointer handle, IntByReference resolution);
+    public int svc_setResolution(Pointer handle, int resolution);
     public int svc_getUsbState(Pointer handle);
     public int svc_getHdmiState(Pointer handle);
     //devices represent all connected TrackedDeviceType devices
     public int svc_getConnectedDevices(Pointer handle, IntByReference devices);
-    public int svc_getTrackerInfo(Pointer handle, IntByReference trackerType, StringByReference info, int size);
-    public int svc_getDeviceBatteryLevel(Pointer handle, IntByReference device, IntByReference level);
-    public int svc_getDeviceBatteryPercent(Pointer handle, IntByReference device, IntByReference percent/*percent is 0 to 100*/);
+    public int svc_getTrackerInfo(Pointer handle, int trackerType, StringByReference info, int size);
+    public int svc_getDeviceBatteryLevel(Pointer handle, int device, IntByReference level);
+    public int svc_getDeviceBatteryPercent(Pointer handle, int device, IntByReference percent/*percent is 0 to 100*/);
     public int svc_getServiceConnection(Pointer handle, IntByReference mode);
     public int svc_startFirmwareUpgrade(Pointer handle, String dfuPath);
-    public int svc_changeMode(Pointer handle, IntByReference mode);
-    public int svc_getModeCaps(Pointer hanlde, IntByReference caps);
+    public int svc_changeMode(Pointer handle, int mode);
+    public int svc_getModeCaps(Pointer handle, IntByReference caps);
     //restart current server
     public int svc_reconnectServer(Pointer handle);
     public int svc_rebootHmd(Pointer handle);
     public int svc_getToneState(Pointer handle, IntByReference tone);
-    public int svc_setToneState(Pointer handle, IntByReference tone);
+    public int svc_setToneState(Pointer handle, int tone);
     public int svc_getBrightState(Pointer handle, IntByReference bright);
-    public int svc_setBrightState(Pointer handle, IntByReference bright);
+    public int svc_setBrightState(Pointer handle, int bright);
     public int svc_getBlueLightState(Pointer handle, BooleanByReference enable);
     public int svc_enableBlueLight(Pointer handle, boolean enable);
     public int svc_getBackLightState(Pointer handle, BooleanByReference value);
@@ -66,7 +66,7 @@ public interface piSvcCAPI extends Library{
     public int svc_getIntConfig(Pointer handle, String key, IntByReference value);
     public int svc_setFloatConfig(Pointer handle, String key, float value);
     public int svc_getFloatConfig(Pointer handle, String key, FloatByReference value);
-    public int svc_setStringConfig(Pointer handle, String key, StringByReference value);
+    public int svc_setStringConfig(Pointer handle, String key, String value);
     public int svc_getStringConfig(Pointer handle, String key, StringByReference value, int size);
     public int svc_getVector3fConfig(Pointer handle, String key, piVector3f value);
     public int svc_setVector3fConfig(Pointer handle, String key, piVector3f value);
@@ -82,7 +82,7 @@ public interface piSvcCAPI extends Library{
     public int svc_getInterfaceVersion(Pointer handle, IntByReference major, IntByReference minor);
     public int svc_getServiceVersion(Pointer handle, IntByReference major, IntByReference minor);
     public int svc_getServiceLogLevel(Pointer handle, IntByReference level);
-    public int svc_setServiceLogLevel(Pointer handle, IntByReference level);
+    public int svc_setServiceLogLevel(Pointer handle, int level);
     
     /*
     New methods in PiSvc.dll that are not documented:

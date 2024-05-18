@@ -21,6 +21,8 @@ public class VRManager{
     public static HashSet<StartupFlags> flags = new HashSet<>();
     public static Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private static Configuration configuration;
+    private static final ArrayList<Task> tasks = new ArrayList<>();
+    private static boolean running = true;
     public static void main(String[] sysArgs){
         Logger.info("VR Manager starting up");
         for(String s : sysArgs){
@@ -162,7 +164,7 @@ public class VRManager{
         if(flags.contains(StartupFlags.INIT))init();
         try(BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))){
             CLI:
-            while(true){
+            while(running){
                 System.out.print("> ");
                 String line = reader.readLine();
                 Logger.reset();
@@ -176,8 +178,21 @@ public class VRManager{
                 }
                 Command.chooseCommand(parts[0], Command.trimArgument(parts), (base) -> "Unknown command: "+base,
                     new NamedCommand("exit", (base, arguments) -> {
-                        //TODO shut down everything safely, exiting will kill EVERYTHING
-                        System.exit(0);
+                        HashSet<String> flags = Command.getFlags(arguments, "s", "f");
+                        if(flags.contains("s")){
+                            for(Task task : tasks)if(task.isActive())task.shutdown();
+                        }
+                        if(flags.contains("f")){
+                            System.exit(0);
+                        }else{
+                            int active = 0;
+                            for(Task task : tasks)if(task.isActive())active++;
+                            if(active>0){
+                                Logger.warn("There are "+active+" active "+(active==1?"task":"tasks")+"! Use with -s to shut down all tasks, or with -f to force shutdown");
+                            }else{
+                                running = false;
+                            }
+                        }
                     }),
                     new NamedCommand("module", Command.subcommand(null,
                         new NamedCommand("list", (base, args) -> {
@@ -253,6 +268,9 @@ public class VRManager{
         }, "Task thread: "+target.getName());
         t.start();
         return p;
+    }
+    public static void addTask(Task task){
+        tasks.add(task);
     }
     public enum StartupFlags{
         NOGUI, INIT, @Deprecated

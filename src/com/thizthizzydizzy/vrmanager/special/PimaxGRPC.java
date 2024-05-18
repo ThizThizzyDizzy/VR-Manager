@@ -3,6 +3,8 @@ import com.google.protobuf.DescriptorProtos;
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.DynamicMessage;
 import com.thizthizzydizzy.vrmanager.Logger;
+import com.thizthizzydizzy.vrmanager.Task;
+import com.thizthizzydizzy.vrmanager.VRManager;
 import io.grpc.CallOptions;
 import io.grpc.ClientCall;
 import io.grpc.ManagedChannel;
@@ -17,6 +19,7 @@ import java.util.HashMap;
 import java.util.function.Consumer;
 import java.util.function.Function;
 public class PimaxGRPC{
+    private static Task task;
     public static boolean active = false;
     public static Descriptors.FileDescriptor protoDescriptor;
     private static ManagedChannel rpcChannel;
@@ -33,15 +36,6 @@ public class PimaxGRPC{
         }
         return null;
     }
-    /*
-    
-rpcCallMessage
-rpcPollMessage
-rpcPollAnyMessage
-rpcPollAnyMessageForTool
-rpcPollStreamMessage
-rpcCheckConnectStatus
-     */
     public static Descriptors.MethodDescriptor getMethod(String name){
         for(var m : piRPC.getMethods()){
             if(m.getName().equals(name))return m;
@@ -58,7 +52,7 @@ rpcCheckConnectStatus
     }
     public static void start(){
         Logger.push(PimaxGRPC.class);
-        Logger.info("Initializing GRPC!");
+        Logger.info("Initializing GRPC");
         int port;
         port = WindowsManager.getRegistryValueHex("HKEY_CURRENT_USER\\Software\\PiTool", "DeviceSettingPort");
         Logger.info("PiTool DeviceSettingPort: "+port);
@@ -73,6 +67,19 @@ rpcCheckConnectStatus
         rpcChannel = NettyChannelBuilder.forAddress("127.0.0.1", port).usePlaintext().build();
         piRPC = getService("Greeter");
         active = true;
+        if(task==null){
+            task = new Task(){
+                @Override
+                public boolean isActive(){
+                    return active;
+                }
+                @Override
+                public void shutdown(){
+                    stop();
+                }
+            };
+            VRManager.addTask(task);
+        }
         Logger.info("GRPC is now active!");
         Logger.pop();
     }
