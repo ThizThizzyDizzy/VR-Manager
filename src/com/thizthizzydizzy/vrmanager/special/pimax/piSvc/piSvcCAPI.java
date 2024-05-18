@@ -84,15 +84,15 @@ public interface piSvcCAPI extends Library{
     public int svc_getServiceLogLevel(Pointer handle, IntByReference level);
     public int svc_setServiceLogLevel(Pointer handle, int level);
     
+    // New methods in PiSvc.dll that are not documented: (Signatures may not be accurate)
+    public int svc_setStringDeviceConfig(Pointer handle, String key, String value);
+    public int svc_getStringDeviceConfig(Pointer handle, String key, StringByReference value, int size);
     /*
-    New methods in PiSvc.dll that are not documented:
     
     svc_getPanelMode
-    svc_getStringDeviceConfig
     svc_setKeyReportState
     svc_setLightColorState
     svc_setPanelMode
-    svc_setStringDeviceConfig
     svc_startWithMode
 
     */

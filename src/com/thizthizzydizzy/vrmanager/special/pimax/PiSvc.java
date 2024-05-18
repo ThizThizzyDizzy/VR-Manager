@@ -252,6 +252,14 @@ public class PiSvc{
         run(piSvcCAPI.INSTANCE.svc_getStringConfig(handle, key, val, size));
         return val.getVal();
     }
+    public static void svc_setStringDeviceConfig(String key, String value){
+        run(piSvcCAPI.INSTANCE.svc_setStringDeviceConfig(handle, key, value));
+    }
+    public static String svc_getStringDeviceConfig(String key, int size){
+        StringByReference val = new StringByReference();
+        run(piSvcCAPI.INSTANCE.svc_getStringDeviceConfig(handle, key, val, size));
+        return val.getVal();
+    }
     public static piVector3f svc_getVector3fConfig(String key){
         piVector3f vector = new piVector3f();
         run(piSvcCAPI.INSTANCE.svc_getVector3fConfig(handle, key, vector));

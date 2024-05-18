@@ -111,7 +111,7 @@ public class Pimax extends Task{
         if(usePimaxClientForShutdown){
             VRManager.startIndirect(pimaxClient);
             try{
-                Thread.sleep(1000);
+                Thread.sleep(3000);
             }catch(InterruptedException ex){
             }
         }

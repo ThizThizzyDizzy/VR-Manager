@@ -3,7 +3,7 @@ import com.thizthizzydizzy.vrmanager.Logger;
 import java.util.HashSet;
 import java.util.function.Function;
 public interface Command{
-    public void run(String base, String[] arguments);
+    public void run(String base, String[] args);
     public static String[] trimArgument(String[] arguments){
         return trimArguments(arguments, 1);
     }
