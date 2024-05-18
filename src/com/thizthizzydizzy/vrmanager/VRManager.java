@@ -1,4 +1,5 @@
 package com.thizthizzydizzy.vrmanager;
+import com.thizthizzydizzy.vrmanager.task.Task;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.thizthizzydizzy.vrmanager.config.Configuration;
@@ -47,6 +48,12 @@ public class VRManager{
                 pimax.target = "C:\\Program Files\\Pimax\\PimaxClient\\pimaxui\\PimaxClient.exe";
                 configuration.initialization.initTasks.add(pimax);
                 //TODO wait for startup & connection, restart headset, verify passthrough and whatnot
+
+                InitTask pimaxClient = new InitTask();
+                pimaxClient.type = InitTask.Type.WATCH;
+                pimaxClient.target = "PimaxClient.exe";
+                configuration.initialization.initTasks.add(pimaxClient);
+
                 InitTask deviceSetting = new InitTask();
                 deviceSetting.type = InitTask.Type.WATCH;
                 deviceSetting.target = "DeviceSetting.exe";
@@ -67,88 +74,93 @@ public class VRManager{
                 piOverlay.target = "pi_overlay.exe";
                 configuration.initialization.initTasks.add(piOverlay);
 
-                InitTask piPlatformService = new InitTask();
-                piPlatformService.type = InitTask.Type.WATCH;
-                piPlatformService.target = "PiPltformService_64.exe";
-                configuration.initialization.initTasks.add(piPlatformService);
+                InitTask piService = new InitTask();
+                piService.type = InitTask.Type.WATCH;
+                piService.target = "PiService.exe";
+                configuration.initialization.initTasks.add(piService);
 
                 InitTask platformRuntime = new InitTask();
                 platformRuntime.type = InitTask.Type.WATCH;
                 platformRuntime.target = "platform_runtime_VR4PIMAXP3B_service.exe";
                 configuration.initialization.initTasks.add(platformRuntime);
-            }
-            {
-                InitTask steamVR = new InitTask();
-                steamVR.title = "SteamVR";
-                steamVR.target = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\SteamVR\\bin\\win64\\vrstartup.exe";
-                configuration.initialization.initTasks.add(steamVR);
 
-                InitTask vrServer = new InitTask();
-                vrServer.type = InitTask.Type.WATCH;
-                vrServer.target = "vrserver.exe";
-                configuration.initialization.initTasks.add(vrServer);
-
-                InitTask vrMonitor = new InitTask();
-                vrMonitor.type = InitTask.Type.WATCH;
-                vrMonitor.target = "vrmonitor.exe";
-                configuration.initialization.initTasks.add(vrMonitor);
-
-                InitTask vrDashboard = new InitTask();
-                vrDashboard.type = InitTask.Type.WATCH;
-                vrDashboard.target = "vrdashboard.exe";
-                configuration.initialization.initTasks.add(vrDashboard);
-
-                InitTask vrCompositor = new InitTask();
-                vrCompositor.type = InitTask.Type.WATCH;
-                vrCompositor.target = "vrcompositor.exe";
-                configuration.initialization.initTasks.add(vrCompositor);
+                InitTask pvrHome = new InitTask();
+                pvrHome.type = InitTask.Type.WATCH;
+                pvrHome.target = "PVRHome.exe";
+                configuration.initialization.initTasks.add(pvrHome);
             }
-            {
-                InitTask vor = new InitTask();
-                vor.title = "VRChat OSC Router";
-                vor.target = "C:\\Program Files\\vor\\bin\\vor.exe";
-                vor.arguments.add("-e");
-                configuration.initialization.initTasks.add(vor);
-            }
-            {
-                InitTask vrcFaceTracking = new InitTask();
-                vrcFaceTracking.title = "VRCFaceTracking";
-                vrcFaceTracking.target = "C:\\Program Files\\WindowsApps\\96ba052f-0948-44d8-86c4-a0212e4ae047_5.1.1.0_x64__d7rcq4vxghz0r\\VRCFaceTracking.exe";
-                configuration.initialization.initTasks.add(vrcFaceTracking);
-
-                InitTask sr = new InitTask();
-                sr.type = InitTask.Type.WATCH;
-                sr.target = "sr_runtime.exe";
-                configuration.initialization.initTasks.add(sr);
-
-                InitTask sRanipal = new InitTask();
-                sRanipal.type = InitTask.Type.WATCH;
-                sRanipal.target = "SRanipalService.exe";
-                configuration.initialization.initTasks.add(sRanipal);
-            }
-            {
-                InitTask bHapticsOSC = new InitTask();
-                bHapticsOSC.title = "bHapticsOSC";
-                bHapticsOSC.target = "C:\\Users\\Thiz\\Desktop\\VR accessories\\OSC stuff\\bHapticsOSC.exe";
-                configuration.initialization.initTasks.add(bHapticsOSC);
-            }
-            {
-                InitTask bHapticsPlayer = new InitTask();
-                bHapticsPlayer.title = "bHaptics Player";
-                bHapticsPlayer.target = "C:\\Users\\Thiz\\AppData\\Local\\bHapticsPlayer\\BhapticsPlayer.exe";
-                configuration.initialization.initTasks.add(bHapticsPlayer);
-            }
-            {
-                InitTask vrcFriendDatabase = new InitTask();
-                vrcFriendDatabase.title = "VRC Friend Database";
-                vrcFriendDatabase.type = InitTask.Type.RUN_JAVA;
-                vrcFriendDatabase.target = "C:\\Users\\Thiz\\Desktop\\VR accessories\\VRC_Friend_Database.jar";
-                configuration.initialization.initTasks.add(vrcFriendDatabase);
-            }
+//            {
+//                InitTask steamVR = new InitTask();
+//                steamVR.title = "SteamVR";
+//                steamVR.target = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\SteamVR\\bin\\win64\\vrstartup.exe";
+//                configuration.initialization.initTasks.add(steamVR);
+//
+//                InitTask vrServer = new InitTask();
+//                vrServer.type = InitTask.Type.WATCH;
+//                vrServer.target = "vrserver.exe";
+//                configuration.initialization.initTasks.add(vrServer);
+//
+//                InitTask vrMonitor = new InitTask();
+//                vrMonitor.type = InitTask.Type.WATCH;
+//                vrMonitor.target = "vrmonitor.exe";
+//                configuration.initialization.initTasks.add(vrMonitor);
+//
+//                InitTask vrDashboard = new InitTask();
+//                vrDashboard.type = InitTask.Type.WATCH;
+//                vrDashboard.target = "vrdashboard.exe";
+//                configuration.initialization.initTasks.add(vrDashboard);
+//
+//                InitTask vrCompositor = new InitTask();
+//                vrCompositor.type = InitTask.Type.WATCH;
+//                vrCompositor.target = "vrcompositor.exe";
+//                configuration.initialization.initTasks.add(vrCompositor);
+//            }
+//            {
+//                InitTask vor = new InitTask();
+//                vor.title = "VRChat OSC Router";
+//                vor.target = "C:\\Program Files\\vor\\bin\\vor.exe";
+//                vor.arguments.add("-e");
+//                configuration.initialization.initTasks.add(vor);
+//            }
+//            {
+//                InitTask vrcFaceTracking = new InitTask();
+//                vrcFaceTracking.title = "VRCFaceTracking";
+//                vrcFaceTracking.target = "C:\\Program Files\\WindowsApps\\96ba052f-0948-44d8-86c4-a0212e4ae047_5.1.1.0_x64__d7rcq4vxghz0r\\VRCFaceTracking.exe";
+//                configuration.initialization.initTasks.add(vrcFaceTracking);
+//
+//                InitTask sr = new InitTask();
+//                sr.type = InitTask.Type.WATCH;
+//                sr.target = "sr_runtime.exe";
+//                configuration.initialization.initTasks.add(sr);
+//
+//                InitTask sRanipal = new InitTask();
+//                sRanipal.type = InitTask.Type.WATCH;
+//                sRanipal.target = "SRanipalService.exe";
+//                configuration.initialization.initTasks.add(sRanipal);
+//            }
+//            {
+//                InitTask bHapticsOSC = new InitTask();
+//                bHapticsOSC.title = "bHapticsOSC";
+//                bHapticsOSC.target = "C:\\Users\\Thiz\\Desktop\\VR accessories\\OSC stuff\\bHapticsOSC.exe";
+//                configuration.initialization.initTasks.add(bHapticsOSC);
+//            }
+//            {
+//                InitTask bHapticsPlayer = new InitTask();
+//                bHapticsPlayer.title = "bHaptics Player";
+//                bHapticsPlayer.target = "C:\\Users\\Thiz\\AppData\\Local\\bHapticsPlayer\\BhapticsPlayer.exe";
+//                configuration.initialization.initTasks.add(bHapticsPlayer);
+//            }
+//            {
+//                InitTask vrcFriendDatabase = new InitTask();
+//                vrcFriendDatabase.title = "VRC Friend Database";
+//                vrcFriendDatabase.type = InitTask.Type.RUN_JAVA;
+//                vrcFriendDatabase.target = "C:\\Users\\Thiz\\Desktop\\VR accessories\\VRC_Friend_Database.jar";
+//                configuration.initialization.initTasks.add(vrcFriendDatabase);
+//            }
             try{
                 Files.writeString(new File("config.json").toPath(), gson.toJson(configuration));
             }catch(IOException ex){
-
+                Logger.error("Unable to save configuration!", ex);
             }
         }
         if(!configuration.modules.isEmpty()){
@@ -178,19 +190,47 @@ public class VRManager{
                 }
                 Command.chooseCommand(parts[0], Command.trimArgument(parts), (base) -> "Unknown command: "+base,
                     new NamedCommand("exit", (base, arguments) -> {
-                        HashSet<String> flags = Command.getFlags(arguments, "s", "f");
-                        if(flags.contains("s")){
-                            for(Task task : tasks)if(task.isActive())task.shutdown();
-                        }
-                        if(flags.contains("f")){
-                            System.exit(0);
-                        }else{
-                            int active = 0;
-                            for(Task task : tasks)if(task.isActive())active++;
-                            if(active>0){
-                                Logger.warn("There are "+active+" active "+(active==1?"task":"tasks")+"! Use with -s to shut down all tasks, or with -f to force shutdown");
+                        HashSet<Character> flags = Command.getFlags(arguments, 's', 'f', 'r');
+                        Runnable exitLoop = () -> {
+                            if(flags.contains('s')){
+                                synchronized(tasks){
+                                    for(Task task : tasks)if(task.isActive())task.shutdown();
+                                }
+                            }
+                            if(flags.contains('f')){
+                                System.exit(0);
                             }else{
-                                running = false;
+                                ArrayList<String> taskNames = new ArrayList<>();
+                                synchronized(tasks){
+                                    for(Task task : tasks)if(task.isActive())taskNames.add(task.name);
+                                }
+                                if(!taskNames.isEmpty()){
+                                    Logger.warn("There "+(taskNames.size()==1?"is":"are")+" "+taskNames.size()+" active "+(taskNames.size()==1?"task":"tasks")+":\n"
+                                        +String.join(", ", taskNames)+(flags.isEmpty()?"\nUse with -s to shut down all tasks, -f to force shutdown, and -r to run recursively.":""));
+                                }else{
+                                    running = false;
+                                }
+                            }
+                        };
+                        int attempts = 0;
+                        while(true){
+                            int numTasks = 0;
+                            synchronized(tasks){
+                                for(var task : tasks)if(task.isActive())numTasks++;
+                            }
+                            attempts++;
+                            exitLoop.run();
+                            if(!running)break;
+                            if(!flags.contains('r')){
+                                break;
+                            }
+                            int nowTasks = 0;
+                            synchronized(tasks){
+                                for(var task : tasks)if(task.isActive())nowTasks++;
+                            }
+                            if(nowTasks==numTasks&&attempts>2){
+                                Logger.error("Recursive shutdown cancelled! "+nowTasks+" tasks have not stopped after "+attempts+" attempts.");
+                                break;
                             }
                         }
                     }),
@@ -251,26 +291,63 @@ public class VRManager{
         Logger.info("Initializing...");
         for(var task : configuration.initialization.initTasks)task.run();
     }
+    public static Process startIndirect(File target, String... args){
+        ArrayList<String> arguments = new ArrayList<>();
+        arguments.add("/C");
+        arguments.add("start");
+        arguments.add("\""+target.getName()+"\"");
+        arguments.add("/D");
+        arguments.add(target.getAbsoluteFile().getParent());
+        arguments.add(target.getAbsolutePath());
+        arguments.addAll(Arrays.asList(args));
+        return start("cmd.exe", arguments.toArray(String[]::new));
+    }
     public static Process start(File target, String... args){
         ArrayList<String> arguments = new ArrayList<>();
         arguments.add(target.getAbsolutePath());
         arguments.addAll(Arrays.asList(args));
-        Process p;
+        Process p = null;
         try{
             p = new ProcessBuilder(arguments).directory(target.getAbsoluteFile().getParentFile()).start();
         }catch(IOException ex){
             Logger.error("Failed to start process "+target.getAbsolutePath()+" with arguments "+Arrays.toString(args)+"!", ex);
             return null;
         }
-        Thread t = new Thread(() -> {
-//            while(p.isAlive()){
-//            }
-        }, "Task thread: "+target.getName());
-        t.start();
+        watchTask(target.getName(), p);
         return p;
     }
-    public static void addTask(Task task){
-        tasks.add(task);
+    public static Process start(String target, String... args){
+        ArrayList<String> arguments = new ArrayList<>();
+        arguments.add(target);
+        arguments.addAll(Arrays.asList(args));
+        Process p = null;
+        try{
+            p = new ProcessBuilder(arguments).start();
+        }catch(IOException ex){
+            Logger.error("Failed to start process "+target+" with arguments "+Arrays.toString(args)+"!", ex);
+            return null;
+        }
+        watchTask(target, p);
+        return p;
+    }
+    public static void watchTask(String name, Process p){
+        startTask(new Task(name==null?p.pid()+"":name){
+            @Override
+            public boolean isActive(){
+                return p.isAlive();
+            }
+            @Override
+            public void shutdown(){
+                Logger.info("Destroying process "+name+" with PID "+p.pid());
+                p.destroy();
+            }
+        });
+    }
+    public static void startTask(Task task){
+        synchronized(tasks){
+            tasks.add(task);
+        }
+        task.start();
     }
     public enum StartupFlags{
         NOGUI, INIT, @Deprecated

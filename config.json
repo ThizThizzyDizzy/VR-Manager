@@ -9,6 +9,11 @@
       },
       {
         "type": "WATCH",
+        "target": "PimaxClient.exe",
+        "arguments": []
+      },
+      {
+        "type": "WATCH",
         "target": "DeviceSetting.exe",
         "arguments": []
       },
@@ -29,7 +34,7 @@
       },
       {
         "type": "WATCH",
-        "target": "PiPltformService_64.exe",
+        "target": "PiService.exe",
         "arguments": []
       },
       {
@@ -38,71 +43,8 @@
         "arguments": []
       },
       {
-        "title": "SteamVR",
-        "type": "RUN",
-        "target": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\SteamVR\\bin\\win64\\vrstartup.exe",
-        "arguments": []
-      },
-      {
         "type": "WATCH",
-        "target": "vrserver.exe",
-        "arguments": []
-      },
-      {
-        "type": "WATCH",
-        "target": "vrmonitor.exe",
-        "arguments": []
-      },
-      {
-        "type": "WATCH",
-        "target": "vrdashboard.exe",
-        "arguments": []
-      },
-      {
-        "type": "WATCH",
-        "target": "vrcompositor.exe",
-        "arguments": []
-      },
-      {
-        "title": "VRChat OSC Router",
-        "type": "RUN",
-        "target": "C:\\Program Files\\vor\\bin\\vor.exe",
-        "arguments": [
-          "-e"
-        ]
-      },
-      {
-        "title": "VRCFaceTracking",
-        "type": "RUN",
-        "target": "C:\\Program Files\\WindowsApps\\96ba052f-0948-44d8-86c4-a0212e4ae047_5.1.1.0_x64__d7rcq4vxghz0r\\VRCFaceTracking.exe",
-        "arguments": []
-      },
-      {
-        "type": "WATCH",
-        "target": "sr_runtime.exe",
-        "arguments": []
-      },
-      {
-        "type": "WATCH",
-        "target": "SRanipalService.exe",
-        "arguments": []
-      },
-      {
-        "title": "bHapticsOSC",
-        "type": "RUN",
-        "target": "C:\\Users\\Thiz\\Desktop\\VR accessories\\OSC stuff\\bHapticsOSC.exe",
-        "arguments": []
-      },
-      {
-        "title": "bHaptics Player",
-        "type": "RUN",
-        "target": "C:\\Users\\Thiz\\AppData\\Local\\bHapticsPlayer\\BhapticsPlayer.exe",
-        "arguments": []
-      },
-      {
-        "title": "VRC Friend Database",
-        "type": "RUN_JAVA",
-        "target": "C:\\Users\\Thiz\\Desktop\\VR accessories\\VRC_Friend_Database.jar",
+        "target": "PVRHome.exe",
         "arguments": []
       }
     ]

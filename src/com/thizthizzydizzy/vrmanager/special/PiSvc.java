@@ -4,7 +4,7 @@ import com.sun.jna.ptr.FloatByReference;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
 import com.thizthizzydizzy.vrmanager.Logger;
-import com.thizthizzydizzy.vrmanager.Task;
+import com.thizthizzydizzy.vrmanager.task.Task;
 import com.thizthizzydizzy.vrmanager.VRManager;
 import com.thizthizzydizzy.vrmanager.special.piSvc.BooleanByReference;
 import com.thizthizzydizzy.vrmanager.special.piSvc.StringByReference;
@@ -30,7 +30,7 @@ public class PiSvc{
             handle = handleReference.getPointer();
             active = true;
             if(task==null){
-                task = new Task(){
+                task = new Task("PiSvc"){
                     @Override
                     public boolean isActive(){
                         return active;
@@ -40,7 +40,7 @@ public class PiSvc{
                         stop();
                     }
                 };
-                VRManager.addTask(task);
+                VRManager.startTask(task);
             }
             var serviceVersion = svc_getServiceVersion();
             var interfaceVersion = svc_getInterfaceVersion();

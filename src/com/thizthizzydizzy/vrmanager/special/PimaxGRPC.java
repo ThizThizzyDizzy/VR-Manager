@@ -3,7 +3,7 @@ import com.google.protobuf.DescriptorProtos;
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.DynamicMessage;
 import com.thizthizzydizzy.vrmanager.Logger;
-import com.thizthizzydizzy.vrmanager.Task;
+import com.thizthizzydizzy.vrmanager.task.Task;
 import com.thizthizzydizzy.vrmanager.VRManager;
 import io.grpc.CallOptions;
 import io.grpc.ClientCall;
@@ -68,7 +68,7 @@ public class PimaxGRPC{
         piRPC = getService("Greeter");
         active = true;
         if(task==null){
-            task = new Task(){
+            task = new Task("PimaxGRPC"){
                 @Override
                 public boolean isActive(){
                     return active;
@@ -78,7 +78,7 @@ public class PimaxGRPC{
                     stop();
                 }
             };
-            VRManager.addTask(task);
+            VRManager.startTask(task);
         }
         Logger.info("GRPC is now active!");
         Logger.pop();

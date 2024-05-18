@@ -62,16 +62,22 @@ public interface Command{
         }
         return true;
     }
-    public static HashSet<String> getFlags(String[] arguments, String... possibleFlags){
-        HashSet<String> flags = new HashSet<>();
-        ARG:for(String s : arguments){
-            for(String flag : possibleFlags){
-                if(s.equals("-"+flag)){
-                    flags.add(flag);
-                    continue ARG;
+    public static HashSet<Character> getFlags(String[] arguments, char... possibleFlags){
+        HashSet<Character> flags = new HashSet<>();
+        ARG:
+        for(String s : arguments){
+            if(s.startsWith("-")){
+                F:
+                for(int i = 1; i<s.length(); i++){
+                    for(char flag : possibleFlags){
+                        if(flag==s.charAt(i)){
+                            flags.add(flag);
+                            continue F;
+                        }
+                    }
+                    Logger.info("Invalid flag: "+s.charAt(i)+"!");
                 }
             }
-            Logger.info("Invalid flag: "+s+"!");
         }
         return flags;
     }
