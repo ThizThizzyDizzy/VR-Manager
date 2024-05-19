@@ -39,61 +39,6 @@ public class VRManager{
             Logger.error("Failed to load configuration! Exiting...");
             return;
         }
-        if(flags.contains(StartupFlags.GENCONFIG)){
-            configuration = new Configuration();
-            configuration.modules.add("pimax");
-            {
-                InitTask pimax = new InitTask();
-                pimax.title = "Pimax";
-                pimax.type = InitTask.Type.PIMAX;
-                configuration.initialization.initTasks.add(pimax);
-            }
-            {
-                InitTask vor = new InitTask();
-                vor.title = "VRChat OSC Router";
-                vor.target = "C:\\Program Files\\vor\\bin\\vor.exe";
-                vor.arguments.add("-e");
-                configuration.initialization.initTasks.add(vor);
-            }
-            {
-                InitTask bHapticsOSC = new InitTask();
-                bHapticsOSC.title = "bHapticsOSC";
-                bHapticsOSC.target = "C:\\Users\\Thiz\\Desktop\\VR accessories\\OSC stuff\\bHapticsOSC.exe";
-                configuration.initialization.initTasks.add(bHapticsOSC);
-            }
-            {
-                InitTask bHapticsPlayer = new InitTask();
-                bHapticsPlayer.title = "bHaptics Player";
-                bHapticsPlayer.target = "C:\\Users\\Thiz\\AppData\\Local\\bHapticsPlayer\\BhapticsPlayer.exe";
-                bHapticsPlayer.startIndirect = true;
-                bHapticsPlayer.forceShutdown = true;
-                configuration.initialization.initTasks.add(bHapticsPlayer);
-            }
-            {
-                InitTask vrcFriendDatabase = new InitTask();
-                vrcFriendDatabase.title = "VRC Friend Database";
-                vrcFriendDatabase.type = InitTask.Type.RUN_JAVA;
-                vrcFriendDatabase.target = "C:\\Users\\Thiz\\Desktop\\VR accessories\\VRC_Friend_Database.jar";
-                configuration.initialization.initTasks.add(vrcFriendDatabase);
-            }
-            {
-                InitTask vrcFaceTracking = new InitTask();
-                vrcFaceTracking.title = "VRCFaceTracking";
-                vrcFaceTracking.target = "C:\\Windows\\explorer.exe";
-                vrcFaceTracking.arguments.add("\"shell:appsFolder\\96ba052f-0948-44d8-86c4-a0212e4ae047_d7rcq4vxghz0r!App\"");
-                configuration.initialization.initTasks.add(vrcFaceTracking);
-
-                InitTask vrcft = new InitTask();
-                vrcft.type = InitTask.Type.WATCH;
-                vrcft.target = "VRCFaceTracking.exe";
-                configuration.initialization.initTasks.add(vrcft);
-            }
-            try{
-                Files.writeString(new File("config.json").toPath(), gson.toJson(configuration));
-            }catch(IOException ex){
-                Logger.error("Unable to save configuration!", ex);
-            }
-        }
         if(!configuration.modules.isEmpty()){
             for(String key : configuration.modules){
                 VRModule.setActive(key, true);
@@ -120,6 +65,62 @@ public class VRManager{
                     }
                 }
                 Command.chooseCommand(parts[0], Command.trimArgument(parts), (base) -> "Unknown command: "+base,
+                    new NamedCommand("autoconfig", (base, args) -> {
+                        configuration = new Configuration();
+                        Logger.info("Generating automatic configuration...");
+                        if(new File(System.getenv("PROGRAMFILES"), "Pimax\\Runtime\\DeviceSetting.exe").exists()){
+                            configuration.modules.add("pimax");
+                            InitTask pimax = new InitTask();
+                            pimax.title = "Pimax";
+                            pimax.type = InitTask.Type.PIMAX;
+                            configuration.initialization.initTasks.add(pimax);
+                            Logger.info("Detected Pimax");
+                        }
+                        if(new File(System.getenv("PROGRAMFILES"), "vor\\bin\\vor.exe").exists()){
+                            InitTask vor = new InitTask();
+                            vor.title = "VRChat OSC Router";
+                            vor.target = System.getenv("PROGRAMFILES")+"\\vor\\bin\\vor.exe";
+                            vor.arguments.add("-e");
+                            configuration.initialization.initTasks.add(vor);
+                            Logger.info("Detected VRChat OSC Router");
+                        }
+                        if(new File(System.getenv("LOCALAPPDATA"), "bHapticsPlayer\\BhapticsPlayer.exe").exists()){
+                            InitTask bHapticsPlayer = new InitTask();
+                            bHapticsPlayer.title = "bHaptics Player";
+                            bHapticsPlayer.target = System.getenv("LOCALAPPDATA")+"\\bHapticsPlayer\\BhapticsPlayer.exe";
+                            bHapticsPlayer.startIndirect = true;
+                            bHapticsPlayer.forceShutdown = true;
+                            configuration.initialization.initTasks.add(bHapticsPlayer);
+                            Logger.info("Detected bHaptics Player");
+                        }
+                        if(new File(System.getenv("PROGRAMFILES"), "VIVE\\SRanipal\\sr_runtime.exe").exists()){
+                            InitTask vrcFaceTracking = new InitTask();
+                            vrcFaceTracking.title = "VRCFaceTracking";
+                            vrcFaceTracking.target = "C:\\Windows\\explorer.exe";
+                            vrcFaceTracking.arguments.add("\"shell:appsFolder\\96ba052f-0948-44d8-86c4-a0212e4ae047_d7rcq4vxghz0r!App\"");
+                            configuration.initialization.initTasks.add(vrcFaceTracking);
+
+                            InitTask vrcft = new InitTask();
+                            vrcft.type = InitTask.Type.WATCH;
+                            vrcft.target = "VRCFaceTracking.exe";
+                            configuration.initialization.initTasks.add(vrcft);
+                            Logger.info("Detected SRanipal Runtime, adding VRCFaceTracking");
+                        }
+                        try{
+                            Files.writeString(new File("config.json").toPath(), gson.toJson(configuration));
+                            Logger.info("Saved configuration");
+                        }catch(IOException ex){
+                            Logger.error("Unable to save configuration!", ex);
+                        }
+                    }),
+                    new NamedCommand("save", (base, args) -> {
+                        try{
+                            Files.writeString(new File("config.json").toPath(), gson.toJson(configuration));
+                            Logger.info("Saved configuration");
+                        }catch(IOException ex){
+                            Logger.error("Unable to save configuration!", ex);
+                        }
+                    }),
                     new NamedCommand("exit", (base, arguments) -> {
                         HashSet<Character> flags = Command.getFlags(arguments, 's', 'f', 'r');
                         Runnable exitLoop = () -> {
@@ -295,7 +296,6 @@ public class VRManager{
         task.start();
     }
     public enum StartupFlags{
-        NOGUI, INIT, @Deprecated
-        GENCONFIG
+        NOGUI, INIT
     }
 }
