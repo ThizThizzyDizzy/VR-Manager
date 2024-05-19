@@ -10,10 +10,6 @@ import java.io.IOException;
 public class Pimax extends Task{
     public static File deviceSetting = new File("C:\\Program Files\\Pimax\\Runtime\\DeviceSetting.exe");
     public static File pimaxClient = new File("C:\\Program Files\\Pimax\\PimaxClient\\pimaxui\\PimaxClient.exe");
-    public static boolean usePimaxClient = false;
-    public static boolean forceReboot = false;
-    public static boolean startSteamVR = true;
-    public static boolean usePimaxClientForShutdown = true;
     public static void init(){
         VRManager.startTask(new Pimax());
     }
@@ -40,7 +36,7 @@ public class Pimax extends Task{
             Logger.warn("Could not list running tasks! Assuming DeviceSetting is not running...");
         }
         running = true;
-        if(usePimaxClient&&!isClientRunning){
+        if(VRManager.configuration.pimax.usePimaxClient&&!isClientRunning){
             Logger.info("Starting Pimax Client ("+pimaxClient.getName()+")");
             VRManager.startIndirect(pimaxClient);
         }else if(!isPimaxRunning){
@@ -52,7 +48,7 @@ public class Pimax extends Task{
         Logger.info("Starting PiRpc...");
         PiRpc.start();
         waitForConnection();
-        if(forceReboot){
+        if(VRManager.configuration.pimax.forceReboot){
             Logger.info("Rebooting HMD");
             PiRpc.Event_rebootHmdAuto();
             try{
@@ -61,7 +57,7 @@ public class Pimax extends Task{
             }
             waitForConnection();
         }
-        if(startSteamVR)PiRpc.Click_SteamVR();
+        if(VRManager.configuration.pimax.startSteamVR)PiRpc.Click_SteamVR();
         Logger.pop();
     }
     private void waitForConnection(){
@@ -110,7 +106,7 @@ public class Pimax extends Task{
         //no RPC to shut down the HMD
         PiRpc.stop();
         PiSvc.stop();
-        if(usePimaxClientForShutdown){
+        if(VRManager.configuration.pimax.usePimaxClientForShutdown){
             VRManager.startIndirect(pimaxClient);
             try{
                 Thread.sleep(3000);

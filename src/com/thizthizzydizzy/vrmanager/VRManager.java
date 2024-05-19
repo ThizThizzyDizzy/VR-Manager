@@ -21,7 +21,7 @@ import java.util.Locale;
 public class VRManager{
     public static HashSet<StartupFlags> flags = new HashSet<>();
     public static Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    private static Configuration configuration;
+    public static Configuration configuration;
     private static final ArrayList<Task> tasks = new ArrayList<>();
     private static boolean running = true;
     public static void main(String[] sysArgs){
