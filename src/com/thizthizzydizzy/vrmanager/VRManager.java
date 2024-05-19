@@ -65,6 +65,9 @@ public class VRManager{
                     }
                 }
                 Command.chooseCommand(parts[0], Command.trimArgument(parts), (base) -> "Unknown command: "+base,
+                    new NamedCommand("init", (base, args) -> {
+                        init();//TODO prevent multiple inits
+                    }),
                     new NamedCommand("autoconfig", (base, args) -> {
                         configuration = new Configuration();
                         Logger.info("Generating automatic configuration...");
