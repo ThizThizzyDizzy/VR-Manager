@@ -12,12 +12,57 @@ import com.thizthizzydizzy.vrmanager.special.pimax.piSvc.piSvcCAPI;
 import com.thizthizzydizzy.vrmanager.special.pimax.piSvc.piSvcDesc.piSvcHmdInfo;
 import com.thizthizzydizzy.vrmanager.special.pimax.piSvc.piSvcDesc.piVector3f;
 import com.thizthizzydizzy.vrmanager.special.pimax.piSvc.piSvcType.piSvcResult;
+import java.util.ArrayList;
 public class PiSvc{
     private static Task task;
     public static boolean active = false;
     private static Pointer handle;
     private static int error = 0;
     public static boolean debug = false;
+    public static final ArrayList<PiSvcConfig> knownConfigKeys = new ArrayList<>();
+    static{
+        //TODO more helpful descriptions
+        knownConfigKeys.add(new PiSvcConfig("enable_lighthouse_tracking", PiSvcConfig.Type.INT, "Doesn't appear to do anything, Always 1"));
+        knownConfigKeys.add(new PiSvcConfig("display_timing_selection", PiSvcConfig.Type.INT, "Refresh Rate (0 = 120 Hz, 1 = 90 Hz, 2 = 72 Hz"));
+        knownConfigKeys.add(new PiSvcConfig("ipd_auto_adjust", PiSvcConfig.Type.INT, "Auto Ipd Adjustment (0/1)"));
+        knownConfigKeys.add(new PiSvcConfig("hmd_mount_adjust", PiSvcConfig.Type.INT, "Wearing Location Reminder (0/1)"));
+        knownConfigKeys.add(new PiSvcConfig("ipd", PiSvcConfig.Type.FLOAT, false, "IPD Adjustment"));
+        knownConfigKeys.add(new PiSvcConfig("enable_leapmotion_controller", PiSvcConfig.Type.INT, "Gesture analog controller (0/1)"));
+        knownConfigKeys.add(new PiSvcConfig("use_controller_type_knuckles", PiSvcConfig.Type.INT, "The controller simulates the index controller (0/1)"));
+        knownConfigKeys.add(new PiSvcConfig("pixels_per_display_pixel_rate", PiSvcConfig.Type.FLOAT, "Render Quality (Normally 0.5-2.0)"));
+        knownConfigKeys.add(new PiSvcConfig("enable_foveated_rendering", PiSvcConfig.Type.INT, "Enable Dynamic Foveated Rendering (0/1)"));
+        knownConfigKeys.add(new PiSvcConfig("foveated_rendering_level", PiSvcConfig.Type.INT, "Dynamic Foveated Rendering (0 = Aggressive, 1 = Balanced, 2 = Conservative)"));
+        knownConfigKeys.add(new PiSvcConfig("dbg_asw_enable", PiSvcConfig.Type.INT, "Smart Smoothing (0/1)"));
+        knownConfigKeys.add(new PiSvcConfig("dbg_force_framerate_divide_by", PiSvcConfig.Type.INT, "Lock to half framerate (1-3; 1 = off, 2 = on)"));
+        knownConfigKeys.add(new PiSvcConfig("dbg_hidden_area_enable", PiSvcConfig.Type.INT, "Hidden Area Mask (0/1)"));
+        knownConfigKeys.add(new PiSvcConfig("support_vive_only_games", PiSvcConfig.Type.INT, "Compatible with Vive Only Game (0/1)"));
+        knownConfigKeys.add(new PiSvcConfig("color_contrast_0_rgb", PiSvcConfig.Type.VECTOR3F, "Color Contrast - Left Eye (R/G/B Normally +-0.5)"));
+        knownConfigKeys.add(new PiSvcConfig("color_contrast_1_rgb", PiSvcConfig.Type.VECTOR3F, "Color Contrast - Right Eye (R/G/B Normally +-0.5)"));
+        knownConfigKeys.add(new PiSvcConfig("color_brightness_0_rgb", PiSvcConfig.Type.VECTOR3F, "Color Brightness - Left Eye (R/G/B Normally +-0.1)"));
+        knownConfigKeys.add(new PiSvcConfig("color_brightness_1_rgb", PiSvcConfig.Type.VECTOR3F, "Color Brightness - Right Eye (R/G/B Normally +-0.1)"));
+        knownConfigKeys.add(new PiSvcConfig("auto_switch_default_audio", PiSvcConfig.Type.INT, "Headset as default audio device (0/1)"));
+        knownConfigKeys.add(new PiSvcConfig("enable_pvr_home", PiSvcConfig.Type.INT, "Home Environment (0 = Off, 1 = Pimax Home or Experience Home)"));
+        knownConfigKeys.add(new PiSvcConfig("lens_auto_detect", PiSvcConfig.Type.INT, "Auto Lens Settings (0/1)"));
+        knownConfigKeys.add(new PiSvcConfig("lens_selection", PiSvcConfig.Type.INT, "Lens Settings (0 = 35 PPD Glass, 1 = 42 PPD Poly, 2 = 35 PPD Poly, 3 = Big FOV)"));
+        knownConfigKeys.add(new PiSvcConfig("lens_horizontal_offset_0", PiSvcConfig.Type.FLOAT, "Horizontal IPD Offset - Left Eye (Normally +-.020)"));
+        knownConfigKeys.add(new PiSvcConfig("lens_horizontal_offset_1", PiSvcConfig.Type.FLOAT, "Horizontal IPD Offset - Right Eye (Normally +-.020)"));
+        knownConfigKeys.add(new PiSvcConfig("lens_vertical_offset_0", PiSvcConfig.Type.FLOAT, "Screen Vertical Offset - Left Eye (Normally +-.010)"));
+        knownConfigKeys.add(new PiSvcConfig("lens_vertical_offset_1", PiSvcConfig.Type.FLOAT, "Screen Vertical Offset - Right Eye (Normally +-.010)"));
+        knownConfigKeys.add(new PiSvcConfig("local_dimming_black_level", PiSvcConfig.Type.FLOAT, "Local Dimming Level (1-0, 1 = off, 0.6 = Balanced, 0.3 = Highlight, 0 = Extreme)"));
+        knownConfigKeys.add(new PiSvcConfig("enable_vst", PiSvcConfig.Type.INT, "Video Pass Through (0/1)"));
+        knownConfigKeys.add(new PiSvcConfig("double_tap_for_vst", PiSvcConfig.Type.INT, "Double-click the HMD to switch Pass Through (0/1)"));
+        knownConfigKeys.add(new PiSvcConfig("disable_room_boundary_global", PiSvcConfig.Type.INT, "Automatic active play area (1/0)"));
+        knownConfigKeys.add(new PiSvcConfig("motion_cancellation_device", PiSvcConfig.Type.STRING, "Motion Compensation (Device Name, ex. LHR-etc)"));
+        knownConfigKeys.add(new PiSvcConfig("steamvr_use_native_fov", PiSvcConfig.Type.INT, "Always 0"));
+        knownConfigKeys.add(new PiSvcConfig("fov_level", PiSvcConfig.Type.INT, "Reduces FOV (0-3) - This just sets fov_outer_adjust_degree to 10x the supplied value"));
+        knownConfigKeys.add(new PiSvcConfig("fov_outer_adjust_degree", PiSvcConfig.Type.FLOAT, "Reduces FOV (in degrees)"));
+        knownConfigKeys.add(new PiSvcConfig("support_hmd_volume_adjust", PiSvcConfig.Type.INT, "Switches between HMD and windows volume control (0 = Windows volume, 1 = HMD volume)"));
+        knownConfigKeys.add(new PiSvcConfig("enable_screen_saver", PiSvcConfig.Type.INT, "Probably enables the screen saver (0/1)"));
+        knownConfigKeys.add(new PiSvcConfig("standby_timeout_min", PiSvcConfig.Type.INT, "Default 3"));
+        knownConfigKeys.add(new PiSvcConfig("headphone_state", PiSvcConfig.Type.INT, false, ""));
+        knownConfigKeys.add(new PiSvcConfig("hmd_debug_status", PiSvcConfig.Type.INT, false, ""));
+        knownConfigKeys.add(new PiSvcConfig("expire_ts", PiSvcConfig.Type.INT, false, ""));
+    }
     public static void start(){
         Logger.push(PiSvc.class);
         Logger.info("Initializing PiSvc");

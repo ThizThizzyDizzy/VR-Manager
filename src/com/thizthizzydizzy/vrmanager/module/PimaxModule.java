@@ -5,7 +5,14 @@ import com.thizthizzydizzy.vrmanager.Logger;
 import com.thizthizzydizzy.vrmanager.special.pimax.PiRpc;
 import com.thizthizzydizzy.vrmanager.special.pimax.PiSvc;
 import com.thizthizzydizzy.vrmanager.special.pimax.piRpc.PiRpcAPI;
+import com.thizthizzydizzy.vrmanager.special.pimax.piSvc.piSvcDesc.piVector3f;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashSet;
 public class PimaxModule extends VRModule{
     @Override
     public String getName(){
@@ -15,6 +22,31 @@ public class PimaxModule extends VRModule{
     public NamedCommand[] getCommands(){
         return Command.subcommands(
             new NamedCommand("pisvc", Command.subcommand(null,
+                new NamedCommand("scanlog", (base, args) -> {
+                    if(!Command.noArguments(base, args))return;
+                    File f = new File(System.getenv("LOCALAPPDATA"), "Pimax\\PiService");
+                    if(!f.isDirectory()){
+                        Logger.info("Could not find folder: "+f.getAbsolutePath());
+                        return;
+                    }
+                    HashSet<String> strs = new HashSet<>();
+                    for(File logFile : f.listFiles()){
+                        if(logFile.getName().endsWith(".log")){
+                            Logger.info("Reading file: "+logFile.getName());
+                            try(BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(logFile)))){
+                                String line;
+                                while((line = reader.readLine())!=null){
+                                    if(line.contains("pimax_svcpiHmdManager")){
+                                        strs.add(line.substring(line.indexOf("pimax_svcpiHmdManager"), line.length()-1));
+                                    }
+                                }
+                            }catch(IOException ex){
+                                Logger.error("Failed to read file "+logFile.getName(), ex);
+                            }
+                        }
+                    }
+                    for(var str : strs)Logger.info(str);
+                }),
                 new NamedCommand("start", (base, args) -> {
                     if(PiSvc.active){
                         Logger.info("PiSvc Manager is already active!");
@@ -37,9 +69,11 @@ public class PimaxModule extends VRModule{
                         return;
                     }
                     if(args.length==0){
-                        Logger.info("""
-                                    Please provide a variable to GET. Known variables:
-                                    ipd (int)""");
+                        String text = "Please provide a variable to GET. Known variables:";
+                        for(var key : PiSvc.knownConfigKeys){
+                            text+="\n"+key.toString();
+                        }
+                        Logger.info(text);
                         return;
                     }
                     if(!Command.nArguments(base, args, 1))return;
@@ -49,6 +83,47 @@ public class PimaxModule extends VRModule{
                     Logger.info("Float: "+PiSvc.svc_getFloatConfig(args[0]));
                     var vec = PiSvc.svc_getVector3fConfig(args[0]);
                     Logger.info("Vector3: ["+vec.x+", "+vec.y+", "+vec.z+"]");
+                }),
+                new NamedCommand("set", (base, args) -> {
+                    if(!PiSvc.active){
+                        Logger.info("PiSvc Manager is not active!");
+                        return;
+                    }
+                    if(args.length==0){
+                        String text = "Please provide a variable to SET. Known variables:";
+                        for(var key : PiSvc.knownConfigKeys){
+                            text+="\n"+key.toString();
+                        }
+                        Logger.info(text);
+                        return;
+                    }
+                    if(!Command.nArguments(base, args, 2))return;
+                    String key = args[0];
+                    try{
+                        int val = Integer.parseInt(args[1]);
+                        PiSvc.svc_setIntConfig(key, val);
+                        Logger.info("Set Int "+key+" = "+val);
+                    }catch(NumberFormatException ex){
+                        try{
+                            float val = Float.parseFloat(args[1]);
+                            PiSvc.svc_setFloatConfig(key, val);
+                            Logger.info("Set Float "+key+" = "+val);
+                        }catch(NumberFormatException ex2){
+                            try{
+                                String[] nums = args[1].split(",", 3);
+                                var val = new piVector3f();
+                                val.x = Float.parseFloat(nums[0]);
+                                val.y = Float.parseFloat(nums[1]);
+                                val.z = Float.parseFloat(nums[2]);
+                                PiSvc.svc_setVector3fConfig(key, val);
+                                Logger.info("Set Vector "+key+" = ["+val.x+", "+val.y+", "+val.z+"]");
+                            }catch(Exception ex3){
+                                String val = args[1];
+                                PiSvc.svc_setStringConfig(key, val);
+                                Logger.info("Set String "+key+" = "+val);
+                            }
+                        }
+                    }
                 }),
                 new NamedCommand("bruteforce", (base, args) -> {
                     if(!PiSvc.active){
