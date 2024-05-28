@@ -92,7 +92,7 @@ public class PimaxModule extends VRModule{
                     if(args.length==0){
                         String text = "Please provide a variable to SET. Known variables:";
                         for(var key : PiSvc.knownConfigKeys){
-                            text+="\n"+key.toString();
+                            if(key.writable)text+="\n"+key.toString();
                         }
                         Logger.info(text);
                         return;
@@ -172,7 +172,7 @@ public class PimaxModule extends VRModule{
                             String str = PiSvc.svc_getStringConfig(var, 1024);
                             for(int i = 0; i<16; i++)if(!str.isBlank())str = PiSvc.svc_getStringConfig(var, 1024);
                             String str2 = PiSvc.svc_getStringDeviceConfig(var, 1024);
-                            for(int i = 0; i<16; i++)if(!str2.isBlank())if(!str2.equals(PiSvc.svc_getStringDeviceConfig(var, 1024)))str2 = "";
+                            for(int i = 0; i<1024; i++)if(!str2.isBlank())if(!str2.equals(PiSvc.svc_getStringDeviceConfig(var, 1024)))str2 = "";
                             int i = PiSvc.svc_getIntConfig(var);
                             float f = PiSvc.svc_getFloatConfig(var);
                             var vec = PiSvc.svc_getVector3fConfig(var);

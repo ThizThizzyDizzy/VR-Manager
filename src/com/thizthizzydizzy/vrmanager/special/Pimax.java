@@ -3,6 +3,8 @@ import com.thizthizzydizzy.vrmanager.Logger;
 import com.thizthizzydizzy.vrmanager.VRManager;
 import com.thizthizzydizzy.vrmanager.special.pimax.PiRpc;
 import com.thizthizzydizzy.vrmanager.special.pimax.PiSvc;
+import com.thizthizzydizzy.vrmanager.special.pimax.piRpc.PiRpcAPI;
+import com.thizthizzydizzy.vrmanager.special.pimax.piSvc.piSvcDesc.piVector3f;
 import com.thizthizzydizzy.vrmanager.special.pimax.piSvc.piSvcType.piSvcResult;
 import com.thizthizzydizzy.vrmanager.task.Task;
 import java.io.File;
@@ -43,26 +45,64 @@ public class Pimax extends Task{
             Logger.info("Starting Pitool (DeviceSetting.exe)");
             service = VRManager.start(deviceSetting);
         }
-        Logger.info("Starting PiSvc...");
-        PiSvc.start();
-        Logger.info("Starting PiRpc...");
-        PiRpc.start();
-        waitForConnection();
+        if(!PiSvc.active){
+            Logger.info("Starting PiSvc...");
+            PiSvc.start();
+        }
+        if(!PiRpcAPI.active){
+            Logger.info("Starting PiRpc...");
+            PiRpc.start();
+        }
+        waitForConnection(0);
         if(VRManager.configuration.pimax.forceReboot){
             Logger.info("Rebooting HMD");
             PiRpc.Event_rebootHmdAuto();
-            try{
-                Thread.sleep(5000);
-            }catch(InterruptedException ex){
+            waitForConnection(5000);
+        }
+        //Check settings, adjust and wait for reboots as neccessary
+        for(var entry : VRManager.configuration.pimax.intSettings.entrySet()){
+            int value;
+            while((value = PiSvc.svc_getIntConfig(entry.getKey()))!=entry.getValue()){
+                Logger.info("Changing Setting "+entry.getKey()+" ("+value+" -> "+entry.getValue()+")");
+                PiSvc.svc_setIntConfig(entry.getKey(), entry.getValue());
+                waitForConnection(500);
             }
-            waitForConnection();
+        }
+        for(var entry : VRManager.configuration.pimax.floatSettings.entrySet()){
+            float value;
+            while((value = PiSvc.svc_getFloatConfig(entry.getKey()))!=entry.getValue()){
+                Logger.info("Changing Setting "+entry.getKey()+" ("+value+" -> "+entry.getValue()+")");
+                PiSvc.svc_setFloatConfig(entry.getKey(), entry.getValue());
+                waitForConnection(500);
+            }
+        }
+        for(var entry : VRManager.configuration.pimax.stringSettings.entrySet()){
+            String value;
+            while(!(value = PiSvc.svc_getStringConfig(entry.getKey(), entry.getValue().length())).equals(entry.getValue())){
+                Logger.info("Changing Setting "+entry.getKey()+" ("+value+" -> "+entry.getValue()+")");
+                PiSvc.svc_setStringConfig(entry.getKey(), entry.getValue());
+                waitForConnection(500);
+            }
+        }
+        for(var entry : VRManager.configuration.pimax.vectorSettings.entrySet()){
+            piVector3f value;
+            while(!(value = PiSvc.svc_getVector3fConfig(entry.getKey())).equals(entry.getValue())){
+                Logger.info("Changing Setting "+entry.getKey()+" ("+value.toString()+" -> "+entry.getValue().toString()+")");
+                PiSvc.svc_setVector3fConfig(entry.getKey(), entry.getValue());
+                waitForConnection(500);
+            }
         }
         if(VRManager.configuration.pimax.startSteamVR)PiRpc.Click_SteamVR();
         Logger.pop();
     }
-    private void waitForConnection(){
+    private void waitForConnection(int minDelay){
         int consecutiveA = 0;
         int consecutiveB = 0;
+        try{
+            Thread.sleep(minDelay);
+        }catch(InterruptedException ex){
+            Logger.error("Pimax Initialization was interrupted!", ex);
+        }
         while(true){
             PiSvc.svc_getUsbState();
             int usbState = PiSvc.checkError();

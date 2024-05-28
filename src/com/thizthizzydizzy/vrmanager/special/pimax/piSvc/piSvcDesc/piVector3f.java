@@ -16,4 +16,8 @@ public class piVector3f extends Structure{
     protected List<String> getFieldOrder(){
         return Arrays.asList("x", "y", "z");
     }
+    @Override
+    public boolean equals(Object o){
+        return o instanceof piVector3f vec&&vec.x==x&&vec.y==y&&vec.z==z;
+    }
 }
