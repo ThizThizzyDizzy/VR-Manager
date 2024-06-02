@@ -56,8 +56,11 @@ public interface Command{
         return true;
     }
     public static boolean nArguments(String base, String[] arguments, int n){
+        return nArguments(base, arguments, n, null);
+    }
+    public static boolean nArguments(String base, String[] arguments, int n, String message){
         if(arguments.length!=n){
-            Logger.info(base+" must have exactly "+n+" argument"+(arguments.length==1?"":"s")+"!");
+            Logger.info(base+" must have exactly "+n+" argument"+(arguments.length==1?"":"s")+(message!=null?": "+message:"!"));
             return false;
         }
         return true;

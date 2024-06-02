@@ -6,6 +6,7 @@ public class PimaxConfiguration{
     public boolean forceReboot = false;
     public boolean startSteamVR = false;
     public boolean usePimaxClientForShutdown = false;
+    public boolean watchUSBDevices = true;
     public HashMap<String, Integer> intSettings = new HashMap<>();
     public HashMap<String, Float> floatSettings = new HashMap<>();
     public HashMap<String, String> stringSettings = new HashMap<>();

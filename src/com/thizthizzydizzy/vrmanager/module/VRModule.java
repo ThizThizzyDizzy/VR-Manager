@@ -4,7 +4,8 @@ import com.thizthizzydizzy.vrmanager.Logger;
 import java.util.HashSet;
 public abstract class VRModule{
     public static final VRModule[] modules = new VRModule[]{
-        new PimaxModule()
+        new PimaxModule(),
+        new UsbModule()
     };
     public static final HashSet<VRModule> activeModules = new HashSet<>();
     public static VRModule get(String name){
@@ -19,6 +20,9 @@ public abstract class VRModule{
         else{
             activeModules.remove(module);
         }
+    }
+    public static boolean isActive(String key){
+        return activeModules.contains(get(key));
     }
     public abstract String getName();
     public abstract NamedCommand[] getCommands();
