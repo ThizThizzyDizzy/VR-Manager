@@ -70,6 +70,7 @@ public class VRManager{
                     }),
                     new NamedCommand("autoconfig", (base, args) -> {
                         configuration = new Configuration();
+                        boolean usb = false;
                         Logger.info("Generating automatic configuration...");
                         if(new File(System.getenv("PROGRAMFILES"), "Pimax\\Runtime\\DeviceSetting.exe").exists()){
                             configuration.modules.add("pimax");
@@ -77,6 +78,7 @@ public class VRManager{
                             pimax.title = "Pimax";
                             pimax.type = InitTask.Type.PIMAX;
                             configuration.initialization.initTasks.add(pimax);
+                            usb = true;
                             Logger.info("Detected Pimax");
                         }
                         if(new File(System.getenv("PROGRAMFILES"), "vor\\bin\\vor.exe").exists()){
@@ -96,7 +98,7 @@ public class VRManager{
                             configuration.initialization.initTasks.add(bHapticsPlayer);
                             Logger.info("Detected bHaptics Player");
                         }
-                        if(new File(System.getenv("PROGRAMFILES"), "VIVE\\SRanipal\\sr_runtime.exe").exists()){
+                        if(new File(System.getenv("LOCALAPPDATA"), "Packages\\96ba052f-0948-44d8-86c4-a0212e4ae047_d7rcq4vxghz0r").exists()){
                             InitTask vrcFaceTracking = new InitTask();
                             vrcFaceTracking.title = "VRCFaceTracking";
                             vrcFaceTracking.target = "C:\\Windows\\explorer.exe";
@@ -107,7 +109,33 @@ public class VRManager{
                             vrcft.type = InitTask.Type.WATCH;
                             vrcft.target = "VRCFaceTracking.exe";
                             configuration.initialization.initTasks.add(vrcft);
-                            Logger.info("Detected SRanipal Runtime, adding VRCFaceTracking");
+                            Logger.info("Detected VRCFaceTracking");
+                        }
+                        if(new File(System.getenv("LOCALAPPDATA"), "Packages\\OWO-Desktop_kn5h6p6y0g1fc").exists()){
+                            InitTask owo = new InitTask();
+                            owo.title = "OWO";
+                            owo.target = "C:\\Windows\\explorer.exe";
+                            owo.arguments.add("\"shell:appsFolder\\OWO-Desktop_kn5h6p6y0g1fc!App\"");
+                            configuration.initialization.initTasks.add(owo);
+
+                            InitTask owoDesktop = new InitTask();
+                            owoDesktop.type = InitTask.Type.WATCH;
+                            owoDesktop.target = "OWO_Desktop.exe";
+                            configuration.initialization.initTasks.add(owoDesktop);
+                            Logger.info("Detected OWO");
+                        }
+                        if(new File(System.getenv("PROGRAMFILES(x86)"), "KAT Gateway\\KAT Gateway.exe").exists()){
+                            InitTask katVR = new InitTask();
+                            katVR.title = "KatVR Gateway";
+                            katVR.target = System.getenv("PROGRAMFILES(x86)")+"\\KAT Gateway\\KAT Gateway.exe";
+                            katVR.startIndirect = false;
+                            katVR.forceShutdown = false;
+                            configuration.initialization.initTasks.add(katVR);
+                            Logger.info("Detected Kat Gateway");
+                        }
+                        if(usb){
+                            Logger.info("At least one detected service supports USB tracking, adding USB Module");
+                            configuration.modules.add("usb");
                         }
                         try{
                             Files.writeString(new File("config.json").toPath(), gson.toJson(configuration));
