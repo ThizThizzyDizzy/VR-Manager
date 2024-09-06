@@ -28,7 +28,7 @@ public class PiSvc{
         knownConfigKeys.add(new PiSvcConfig("hmd_mount_adjust", PiSvcConfig.Type.INT, "Wearing Location Reminder (0/1)"));
         knownConfigKeys.add(new PiSvcConfig("ipd", PiSvcConfig.Type.FLOAT, false, "IPD Adjustment"));
         knownConfigKeys.add(new PiSvcConfig("enable_leapmotion_controller", PiSvcConfig.Type.INT, "Gesture analog controller (0/1)"));
-        knownConfigKeys.add(new PiSvcConfig("use_controller_type_knuckles", PiSvcConfig.Type.INT, "The controller simulates the index controller (0/1)"));
+        knownConfigKeys.add(new PiSvcConfig("use_controller_type_knuckles", PiSvcConfig.Type.INT, "Simulate as Valve Index Controllers (0/1)"));
         knownConfigKeys.add(new PiSvcConfig("pixels_per_display_pixel_rate", PiSvcConfig.Type.FLOAT, "Render Quality (Normally 0.5-2.0)"));
         knownConfigKeys.add(new PiSvcConfig("enable_foveated_rendering", PiSvcConfig.Type.INT, "Enable Dynamic Foveated Rendering (0/1)"));
         knownConfigKeys.add(new PiSvcConfig("foveated_rendering_level", PiSvcConfig.Type.INT, "Dynamic Foveated Rendering (0 = Aggressive, 1 = Balanced, 2 = Conservative)"));
@@ -62,6 +62,11 @@ public class PiSvc{
         knownConfigKeys.add(new PiSvcConfig("headphone_state", PiSvcConfig.Type.INT, false, ""));
         knownConfigKeys.add(new PiSvcConfig("hmd_debug_status", PiSvcConfig.Type.INT, false, ""));
         knownConfigKeys.add(new PiSvcConfig("expire_ts", PiSvcConfig.Type.INT, false, ""));
+        knownConfigKeys.add(new PiSvcConfig("notify_feature_update", PiSvcConfig.Type.INT, "This was set to 1 at some point"));
+        knownConfigKeys.add(new PiSvcConfig("vr_mode", PiSvcConfig.Type.INT, "This is set to 1 when Recline Mode is enabled, and 0 when disabled."));
+        knownConfigKeys.add(new PiSvcConfig("controller_haptic_scale", PiSvcConfig.Type.FLOAT, "Handle vibration adjust (0-1)"));
+        knownConfigKeys.add(new PiSvcConfig("camera_mode_auto_detect", PiSvcConfig.Type.INT, true, "Room Lighting Frequency 'Auto' setting (0-1) - this will automatically override camera_mode_idx"));
+        knownConfigKeys.add(new PiSvcConfig("camera_mode_idx", PiSvcConfig.Type.INT, true, "Room Lighting Frequency (0 = 60 Hz, 1 = 50 Hz)"));
     }
     public static void start(){
         Logger.push(PiSvc.class);
