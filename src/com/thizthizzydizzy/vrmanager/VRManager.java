@@ -1,12 +1,15 @@
 package com.thizthizzydizzy.vrmanager;
+import com.thizthizzydizzy.vrmanager.gui.ManagerGUI;
 import com.thizthizzydizzy.vrmanager.task.Task;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.thizthizzydizzy.vrmanager.config.Configuration;
-import com.thizthizzydizzy.vrmanager.config.init.InitTask;
-import com.thizthizzydizzy.vrmanager.command.Command;
+import com.thizthizzydizzy.vrmanager.command.CommandUtil;
 import com.thizthizzydizzy.vrmanager.command.NamedCommand;
+import com.thizthizzydizzy.vrmanager.config.module.ProcessManagerConfiguration;
+import com.thizthizzydizzy.vrmanager.special.pimax.piSvc.piVector3fAdapter;
 import com.thizthizzydizzy.vrmanager.module.VRModule;
+import com.thizthizzydizzy.vrmanager.special.pimax.piSvc.piSvcDesc.piVector3f;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -15,12 +18,12 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.function.Consumer;
 public class VRManager{
     public static HashSet<StartupFlags> flags = new HashSet<>();
-    public static Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    public static Gson gson = new GsonBuilder().registerTypeAdapter(piVector3f.class, new piVector3fAdapter()).setPrettyPrinting().create();
     public static Configuration configuration;
     private static final ArrayList<Task> tasks = new ArrayList<>();
     private static boolean running = true;
@@ -39,12 +42,6 @@ public class VRManager{
             Logger.error("Failed to load configuration! Exiting...");
             return;
         }
-        if(!configuration.modules.isEmpty()){
-            for(String key : configuration.modules){
-                VRModule.setActive(key, true);
-            }
-            Logger.info("Loaded "+configuration.modules.size()+" modules");
-        }
         if(!flags.contains(StartupFlags.NOGUI)){
             Logger.info("Starting GUI");
             ManagerGUI.start();
@@ -58,102 +55,23 @@ public class VRManager{
                 Logger.reset();
                 if(line.isBlank())continue;
                 String[] parts = line.split(" ");
-                for(VRModule module : VRModule.activeModules){
+                for(VRModule module : VRModule.modules){
                     if(parts[0].equals(module.getName())){
-                        Command.chooseSubcommand(module.getName(), Command.trimArgument(parts), null, module.getCommands());
+                        CommandUtil.chooseSubcommand(module.getName(), CommandUtil.trimArgument(parts), null, module.getCommands());
                         continue CLI;
                     }
                 }
-                Command.chooseCommand(parts[0], Command.trimArgument(parts), (base) -> "Unknown command: "+base,
+                CommandUtil.chooseCommand(parts[0], CommandUtil.trimArgument(parts), (base) -> "Unknown command: "+base,
                     new NamedCommand("init", (base, args) -> {
                         init();//TODO prevent multiple inits
                     }),
                     new NamedCommand("autoconfig", (base, args) -> {
-                        configuration = new Configuration();
-                        boolean usb = false;
-                        Logger.info("Generating automatic configuration...");
-                        if(new File(System.getenv("PROGRAMFILES"), "Pimax\\Runtime\\DeviceSetting.exe").exists()){
-                            configuration.modules.add("pimax");
-                            InitTask pimax = new InitTask();
-                            pimax.title = "Pimax";
-                            pimax.type = InitTask.Type.PIMAX;
-                            configuration.initialization.initTasks.add(pimax);
-                            usb = true;
-                            Logger.info("Detected Pimax");
-                        }
-                        if(new File(System.getenv("PROGRAMFILES"), "vor\\bin\\vor.exe").exists()){
-                            InitTask vor = new InitTask();
-                            vor.title = "VRChat OSC Router";
-                            vor.target = System.getenv("PROGRAMFILES")+"\\vor\\bin\\vor.exe";
-                            vor.arguments.add("-e");
-                            configuration.initialization.initTasks.add(vor);
-                            Logger.info("Detected VRChat OSC Router");
-                        }
-                        if(new File(System.getenv("LOCALAPPDATA"), "bHapticsPlayer\\BhapticsPlayer.exe").exists()){
-                            InitTask bHapticsPlayer = new InitTask();
-                            bHapticsPlayer.title = "bHaptics Player";
-                            bHapticsPlayer.target = System.getenv("LOCALAPPDATA")+"\\bHapticsPlayer\\BhapticsPlayer.exe";
-                            bHapticsPlayer.startIndirect = true;
-                            bHapticsPlayer.forceShutdown = true;
-                            configuration.initialization.initTasks.add(bHapticsPlayer);
-                            Logger.info("Detected bHaptics Player");
-                        }
-                        if(new File(System.getenv("LOCALAPPDATA"), "Packages\\96ba052f-0948-44d8-86c4-a0212e4ae047_d7rcq4vxghz0r").exists()){
-                            InitTask vrcFaceTracking = new InitTask();
-                            vrcFaceTracking.title = "VRCFaceTracking";
-                            vrcFaceTracking.target = "C:\\Windows\\explorer.exe";
-                            vrcFaceTracking.arguments.add("\"shell:appsFolder\\96ba052f-0948-44d8-86c4-a0212e4ae047_d7rcq4vxghz0r!App\"");
-                            configuration.initialization.initTasks.add(vrcFaceTracking);
-
-                            InitTask vrcft = new InitTask();
-                            vrcft.type = InitTask.Type.WATCH;
-                            vrcft.target = "VRCFaceTracking.exe";
-                            configuration.initialization.initTasks.add(vrcft);
-                            Logger.info("Detected VRCFaceTracking");
-                        }
-                        if(new File(System.getenv("LOCALAPPDATA"), "Packages\\OWO-Desktop_kn5h6p6y0g1fc").exists()){
-                            InitTask owo = new InitTask();
-                            owo.title = "OWO";
-                            owo.target = "C:\\Windows\\explorer.exe";
-                            owo.arguments.add("\"shell:appsFolder\\OWO-Desktop_kn5h6p6y0g1fc!App\"");
-                            configuration.initialization.initTasks.add(owo);
-
-                            InitTask owoDesktop = new InitTask();
-                            owoDesktop.type = InitTask.Type.WATCH;
-                            owoDesktop.target = "OWO_Desktop.exe";
-                            configuration.initialization.initTasks.add(owoDesktop);
-                            Logger.info("Detected OWO");
-                        }
-                        if(new File(System.getenv("PROGRAMFILES(x86)"), "KAT Gateway\\KAT Gateway.exe").exists()){
-                            InitTask katVR = new InitTask();
-                            katVR.title = "KatVR Gateway";
-                            katVR.target = System.getenv("PROGRAMFILES(x86)")+"\\KAT Gateway\\KAT Gateway.exe";
-                            katVR.startIndirect = false;
-                            katVR.forceShutdown = false;
-                            configuration.initialization.initTasks.add(katVR);
-                            Logger.info("Detected Kat Gateway");
-                        }
-                        if(usb){
-                            Logger.info("At least one detected service supports USB tracking, adding USB Module");
-                            configuration.modules.add("usb");
-                        }
-                        try{
-                            Files.writeString(new File("config.json").toPath(), gson.toJson(configuration));
-                            Logger.info("Saved configuration");
-                        }catch(IOException ex){
-                            Logger.error("Unable to save configuration!", ex);
-                        }
+                        configuration = autoConfig(null);
+                        saveConfig();
                     }),
-                    new NamedCommand("save", (base, args) -> {
-                        try{
-                            Files.writeString(new File("config.json").toPath(), gson.toJson(configuration));
-                            Logger.info("Saved configuration");
-                        }catch(IOException ex){
-                            Logger.error("Unable to save configuration!", ex);
-                        }
-                    }),
+                    new NamedCommand("save", (base, args) -> saveConfig()),
                     new NamedCommand("exit", (base, arguments) -> {
-                        HashSet<Character> flags = Command.getFlags(arguments, 's', 'f', 'r');
+                        HashSet<Character> flags = CommandUtil.getFlags(arguments, 's', 'f', 'r');
                         Runnable exitLoop = () -> {
                             if(flags.contains('s')){
                                 for(int i = 0; i<tasks.size(); i++){
@@ -161,6 +79,7 @@ public class VRManager{
                                     if(task.isActive())task.shutdown();
                                 }
                             }
+                            ManagerGUI.stop();
                             if(flags.contains('f')&&!flags.contains('r')){
                                 System.exit(0);
                             }else{
@@ -205,65 +124,28 @@ public class VRManager{
                                 break;
                             }
                         }
-                    }),
-                    new NamedCommand("module", Command.subcommand(null,
-                        new NamedCommand("list", (base, args) -> {
-                            ArrayList<String> active = new ArrayList<>();
-                            ArrayList<String> inactive = new ArrayList<>();
-                            for(var module : VRModule.activeModules)active.add(module.getName());
-                            for(var module : VRModule.modules)inactive.add(module.getName());
-                            inactive.removeAll(active);
-                            Collections.sort(active);
-                            Collections.sort(inactive);
-                            Logger.info(active.size()+" active module"+(active.size()==1?"":"s")+": "+String.join(", ", active)+"\n"
-                                +inactive.size()+" inactive module"+(inactive.size()==1?"":"s")+": "+String.join(", ", inactive));
-                        }),
-                        new NamedCommand("enable", (base, args) -> {
-                            if(!Command.nArguments(base, args, 1))return;
-                            for(var module : VRModule.modules){
-                                if(module.getName().equals(args[0])){
-                                    if(VRModule.activeModules.contains(module)){
-                                        Logger.info("Module "+module.getName()+" is already enabled!");
-                                        return;
-                                    }
-                                    VRModule.activeModules.add(module);
-                                    Logger.info("Enabled module "+module.getName());
-                                    return;
-                                }
-                            }
-                            Logger.info("Invalid module: "+args[0]+"!");
-                        }),
-                        new NamedCommand("disable", (base, args) -> {
-                            if(!Command.nArguments(base, args, 1))return;
-                            for(var module : VRModule.modules){
-                                if(module.getName().equals(args[0])){
-                                    if(!VRModule.activeModules.contains(module)){
-                                        Logger.info("Module "+module.getName()+" is not enabled!");
-                                        return;
-                                    }
-                                    VRModule.activeModules.remove(module);
-                                    Logger.info("Disabled module "+module.getName());
-                                    return;
-                                }
-                            }
-                            Logger.info("Invalid module: "+args[0]+"!");
-                        })
-                    ))
+                    })
                 );
             }
         }catch(IOException ex){
             throw new RuntimeException(ex);
         }
     }
-    private static void init(){
-        if(configuration.initialization.initTasks.isEmpty()){
-            Logger.info("No init tasks have been specified! Skipping initialization.");
-            return;
-        }
+    public static void init(){
+        Logger.push(VRManager.class);
         Logger.info("Initializing...");
-        for(var task : configuration.initialization.initTasks)task.run();
+        for(var module : configuration.modules){
+            VRModule m = VRModule.get(module);
+            if(m!=null){
+                Logger.info("Initializing Module: "+module);
+                m.init();
+            }else{
+                Logger.error("Could not find module: "+module);
+            }
+        }
+        Logger.pop();
     }
-    public static Process startIndirect(File target, String... args){
+    public static void startIndirect(File target, String... args){
         ArrayList<String> arguments = new ArrayList<>();
         arguments.add("/C");
         arguments.add("start");
@@ -272,21 +154,15 @@ public class VRManager{
         arguments.add(target.getAbsoluteFile().getParent());
         arguments.add(target.getAbsolutePath());
         arguments.addAll(Arrays.asList(args));
-        return start("cmd.exe", arguments.toArray(String[]::new));
+        start("cmd.exe", arguments.toArray(String[]::new)); // this process has no reason to exist
     }
-    public static Process start(File target, String... args){
+    public static Process start(File target, String... args) throws IOException{
         ArrayList<String> arguments = new ArrayList<>();
         arguments.add(target.getAbsolutePath());
         arguments.addAll(Arrays.asList(args));
         Process p = null;
-        try{
-            Logger.info("Starting "+target.getAbsolutePath()+" with arguments "+Arrays.toString(args)+"...");
-            p = new ProcessBuilder(arguments).directory(target.getAbsoluteFile().getParentFile()).start();
-        }catch(IOException ex){
-            Logger.error("Failed to start process "+target.getAbsolutePath()+"!", ex);
-            return null;
-        }
-        watchTask(target.getName(), p);
+        Logger.info("Starting "+target.getAbsolutePath()+" with arguments "+Arrays.toString(args)+"...");
+        p = new ProcessBuilder(arguments).directory(target.getAbsoluteFile().getParentFile()).start();
         return p;
     }
     public static Process start(String target, String... args){
@@ -306,25 +182,84 @@ public class VRManager{
             Logger.error("Failed to start process "+target+" with arguments "+Arrays.toString(args)+"!", ex);
             return null;
         }
-        watchTask(target, p);
         return p;
     }
-    public static void watchTask(String name, Process p){
-        startTask(new Task(name==null?p.pid()+"":name){
-            @Override
-            public boolean isActive(){
-                return p.isAlive();
-            }
-            @Override
-            public void shutdown(){
-                Logger.info("Destroying process "+name+" with PID "+p.pid());
-                p.destroy();
-            }
-        });
-    }
-    public static void startTask(Task task){
+    public static <T extends Task> T startTask(T task){
         tasks.add(task);
         task.start();
+        return task;
+    }
+    public static Configuration autoConfig(Consumer<String> logCallback){
+        var configuration = new Configuration();
+        Consumer<String> log = (str) -> {
+            Logger.info(str);
+            if(logCallback!=null)logCallback.accept(str);
+        };
+        boolean usb = false;
+        log.accept("Generating automatic configuration...");
+        if(new File(System.getenv("PROGRAMFILES"), "Pimax\\Runtime\\DeviceSetting.exe").exists()){
+            configuration.modules.add("pimax");
+            usb = true;
+            log.accept("Detected Pimax");
+        }
+        if(new File(System.getenv("PROGRAMFILES"), "vor\\bin\\vor.exe").exists()){
+            ProcessManagerConfiguration.ProcessConfiguration vor = new ProcessManagerConfiguration.ProcessConfiguration();
+            vor.title = "VRChat OSC Router";
+            vor.target = System.getenv("PROGRAMFILES")+"\\vor\\bin\\vor.exe";
+            vor.arguments.add("-e");
+            configuration.processManager.processes.add(vor);
+            log.accept("Detected VRChat OSC Router");
+        }
+        if(new File(System.getenv("LOCALAPPDATA"), "bHapticsPlayer\\BhapticsPlayer.exe").exists()){
+            ProcessManagerConfiguration.ProcessConfiguration bHapticsPlayer = new ProcessManagerConfiguration.ProcessConfiguration();
+            bHapticsPlayer.title = "bHaptics Player";
+            bHapticsPlayer.target = System.getenv("LOCALAPPDATA")+"\\bHapticsPlayer\\BhapticsPlayer.exe";
+            bHapticsPlayer.startIndirect = true;
+            bHapticsPlayer.forceShutdown = true;
+            configuration.processManager.processes.add(bHapticsPlayer);
+            log.accept("Detected bHaptics Player");
+        }
+        if(new File(System.getenv("LOCALAPPDATA"), "Packages\\96ba052f-0948-44d8-86c4-a0212e4ae047_d7rcq4vxghz0r").exists()){
+            ProcessManagerConfiguration.ProcessConfiguration vrcft = new ProcessManagerConfiguration.ProcessConfiguration();
+            vrcft.isWindowsApp = true;
+            vrcft.title = "VRCFaceTracking";
+            vrcft.target = "96ba052f-0948-44d8-86c4-a0212e4ae047_d7rcq4vxghz0r";
+            vrcft.exeName = "VRCFaceTracking.exe";
+            configuration.processManager.processes.add(vrcft);
+            log.accept("Detected VRCFaceTracking");
+        }
+        if(new File(System.getenv("LOCALAPPDATA"), "Packages\\OWO-Desktop_kn5h6p6y0g1fc").exists()){
+            ProcessManagerConfiguration.ProcessConfiguration owo = new ProcessManagerConfiguration.ProcessConfiguration();
+            owo.isWindowsApp = true;
+            owo.title = "OWO";
+            owo.target = "OWO-Desktop_kn5h6p6y0g1fc";
+            owo.exeName = "OWO_Desktop.exe";
+            configuration.processManager.processes.add(owo);
+            log.accept("Detected OWO");
+        }
+        if(new File(System.getenv("PROGRAMFILES(x86)"), "KAT Gateway\\KAT Gateway.exe").exists()){
+            ProcessManagerConfiguration.ProcessConfiguration katVR = new ProcessManagerConfiguration.ProcessConfiguration();
+            katVR.title = "KatVR Gateway";
+            katVR.target = System.getenv("PROGRAMFILES(x86)")+"\\KAT Gateway\\KAT Gateway.exe";
+            katVR.startIndirect = false;
+            katVR.forceShutdown = false;
+            configuration.processManager.processes.add(katVR);
+            log.accept("Detected Kat Gateway");
+        }
+        if(usb){
+            log.accept("At least one detected service supports USB tracking, adding USB Module");
+            configuration.modules.add(0, "usb");//add at the very beginning, so it can monitor startup & shutdown
+        }
+        if(configuration.processManager.processes.size()>0)configuration.modules.add("process");
+        return configuration;
+    }
+    public static void saveConfig(){
+        try{
+            Files.writeString(new File("config.json").toPath(), gson.toJson(configuration));
+            Logger.info("Saved configuration");
+        }catch(IOException ex){
+            Logger.error("Unable to save configuration!", ex);
+        }
     }
     public enum StartupFlags{
         NOGUI, INIT

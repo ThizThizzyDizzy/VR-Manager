@@ -15,6 +15,9 @@ public class Windows{
     public static Integer getRegistryValueHex(String path, String key){
         return Integer.valueOf(getRegistryValue(path, key).substring(2), 16);
     }
+    public static void taskkill(String exeName){
+        runCommand("taskkill /IM "+exeName);
+    }
     public static String runCommand(String command){
         Logger.push("Windows");
         Logger.info("Running windows command: "+command);

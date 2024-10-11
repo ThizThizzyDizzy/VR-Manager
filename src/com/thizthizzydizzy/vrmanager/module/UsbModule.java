@@ -1,6 +1,6 @@
 package com.thizthizzydizzy.vrmanager.module;
 import com.thizthizzydizzy.vrmanager.Logger;
-import com.thizthizzydizzy.vrmanager.command.Command;
+import com.thizthizzydizzy.vrmanager.command.CommandUtil;
 import com.thizthizzydizzy.vrmanager.command.NamedCommand;
 import com.thizthizzydizzy.vrmanager.special.Usb;
 public class UsbModule extends VRModule{
@@ -16,7 +16,7 @@ public class UsbModule extends VRModule{
                     Logger.info("USB Watcher is already active!");
                     return;
                 }
-                if(!Command.noArguments(base, args))return;
+                if(!CommandUtil.noArguments(base, args))return;
                 Usb.start();
             }),
             new NamedCommand("stop", (base, args) -> {
@@ -24,11 +24,11 @@ public class UsbModule extends VRModule{
                     Logger.info("USB Watcher is not active!");
                     return;
                 }
-                if(!Command.noArguments(base, args))return;
+                if(!CommandUtil.noArguments(base, args))return;
                 Usb.stop();
             }),
             new NamedCommand("watch", (base, args) -> {
-                if((args.length<1||args.length>2)&&!Command.nArguments(base, args, 2, "<idVendor> [<idProduct>]"))return;
+                if((args.length<1||args.length>2)&&!CommandUtil.nArguments(base, args, 2, "<idVendor> [<idProduct>]"))return;
                 int vendorID = -1;
                 try{
                     vendorID = Integer.parseInt(args[0], 16);
@@ -46,7 +46,7 @@ public class UsbModule extends VRModule{
                 Usb.watch(vendorID, productID);
             }),
             new NamedCommand("list", (base, args) -> {
-                if(!Command.noArguments(base, args))return;
+                if(!CommandUtil.noArguments(base, args))return;
                 for(var device : Usb.allDevices){
                     boolean connected = Usb.devices.contains(device);
                     var desc = device.getUsbDeviceDescriptor();
@@ -54,5 +54,9 @@ public class UsbModule extends VRModule{
                 }
             })
         };
+    }
+    @Override
+    public void init(){
+        Usb.start();
     }
 }

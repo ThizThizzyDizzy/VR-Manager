@@ -130,7 +130,10 @@ public class Usb{
         for(var watch : watching){
             if(watch.vendorID==vendorID&&watch.productID==productID)return;
         }
+        Logger.push(Usb.class);
         watching.add(new WatchInfo(vendorID, productID));
+        Logger.info("Started watching devices (Vendor "+Integer.toHexString(vendorID)+(productID>=0?", Product "+Integer.toHexString(productID):"")+")");
+        Logger.pop();
     }
     public static void watch(int vendorID){
         watch(vendorID, -1);

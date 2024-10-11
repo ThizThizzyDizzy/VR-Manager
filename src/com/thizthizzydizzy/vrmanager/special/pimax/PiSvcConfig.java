@@ -4,6 +4,9 @@ public class PiSvcConfig{
     public Type type;
     public boolean writable;
     public String description;
+    public float min;
+    public float max;
+    public boolean hasDefinedRange;
     public PiSvcConfig(String key, Type type, String description){
         this(key, type, true, description);
     }
@@ -12,6 +15,12 @@ public class PiSvcConfig{
         this.type = type;
         this.writable = writable;
         this.description = description;
+    }
+    public PiSvcConfig(String key, Type type, String description, float min, float max){
+        this(key, type, description);
+        hasDefinedRange = true;
+        this.min = min;
+        this.max = max;
     }
     @Override
     public String toString(){

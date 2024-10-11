@@ -1,7 +1,9 @@
 package com.thizthizzydizzy.vrmanager.module;
 import com.thizthizzydizzy.vrmanager.command.NamedCommand;
-import com.thizthizzydizzy.vrmanager.command.Command;
 import com.thizthizzydizzy.vrmanager.Logger;
+import com.thizthizzydizzy.vrmanager.command.CommandUtil;
+import com.thizthizzydizzy.vrmanager.gui.module.ConfigurePimaxGUI;
+import com.thizthizzydizzy.vrmanager.special.Pimax;
 import com.thizthizzydizzy.vrmanager.special.pimax.PiRpc;
 import com.thizthizzydizzy.vrmanager.special.pimax.PiSvc;
 import com.thizthizzydizzy.vrmanager.special.pimax.piRpc.PiRpcAPI;
@@ -13,6 +15,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashSet;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 public class PimaxModule extends VRModule{
     @Override
     public String getName(){
@@ -20,10 +24,10 @@ public class PimaxModule extends VRModule{
     }
     @Override
     public NamedCommand[] getCommands(){
-        return Command.subcommands(
-            new NamedCommand("pisvc", Command.subcommand(null,
+        return CommandUtil.subcommands(
+            new NamedCommand("pisvc", CommandUtil.subcommand(null,
                 new NamedCommand("scanlog", (base, args) -> {
-                    if(!Command.noArguments(base, args))return;
+                    if(!CommandUtil.noArguments(base, args))return;
                     File f = new File(System.getenv("LOCALAPPDATA"), "Pimax\\PiService");
                     if(!f.isDirectory()){
                         Logger.info("Could not find folder: "+f.getAbsolutePath());
@@ -52,7 +56,7 @@ public class PimaxModule extends VRModule{
                         Logger.info("PiSvc Manager is already active!");
                         return;
                     }
-                    if(!Command.noArguments(base, args))return;
+                    if(!CommandUtil.noArguments(base, args))return;
                     PiSvc.start();
                 }),
                 new NamedCommand("stop", (base, args) -> {
@@ -60,7 +64,7 @@ public class PimaxModule extends VRModule{
                         Logger.info("PiSvc Manager is not active!");
                         return;
                     }
-                    if(!Command.noArguments(base, args))return;
+                    if(!CommandUtil.noArguments(base, args))return;
                     PiSvc.stop();
                 }),
                 new NamedCommand("get", (base, args) -> {
@@ -76,7 +80,7 @@ public class PimaxModule extends VRModule{
                         Logger.info(text);
                         return;
                     }
-                    if(!Command.nArguments(base, args, 1))return;
+                    if(!CommandUtil.nArguments(base, args, 1))return;
                     Logger.info("String: "+PiSvc.svc_getStringConfig(args[0], 1024));
                     Logger.info("Device String: "+PiSvc.svc_getStringDeviceConfig(args[0], 1024));
                     Logger.info("Int: "+PiSvc.svc_getIntConfig(args[0]));
@@ -97,7 +101,7 @@ public class PimaxModule extends VRModule{
                         Logger.info(text);
                         return;
                     }
-                    if(!Command.nArguments(base, args, 2))return;
+                    if(!CommandUtil.nArguments(base, args, 2))return;
                     String key = args[0];
                     try{
                         int val = Integer.parseInt(args[1]);
@@ -196,17 +200,17 @@ public class PimaxModule extends VRModule{
                         Logger.info("PiSvc Manager is not active!");
                         return;
                     }
-                    if(!Command.noArguments(base, args))return;
+                    if(!CommandUtil.noArguments(base, args))return;
                     Logger.info("Current IPD: "+PiSvc.svc_getFloatConfig("ipd"));
                 })
             )),
-            new NamedCommand("grpc", Command.subcommand(null,
+            new NamedCommand("grpc", CommandUtil.subcommand(null,
                 new NamedCommand("start", (base, args) -> {
                     if(PiRpcAPI.active){
                         Logger.info("Pimax GRPC Manager is already active!");
                         return;
                     }
-                    if(!Command.noArguments(base, args))return;
+                    if(!CommandUtil.noArguments(base, args))return;
                     PiRpcAPI.start();
                 }),
                 new NamedCommand("stop", (base, args) -> {
@@ -214,7 +218,7 @@ public class PimaxModule extends VRModule{
                         Logger.info("Pimax GRPC Manager is not active!");
                         return;
                     }
-                    if(!Command.noArguments(base, args))return;
+                    if(!CommandUtil.noArguments(base, args))return;
                     PiRpcAPI.stop();
                 }),
                 new NamedCommand("call", (base, args) -> {
@@ -228,7 +232,7 @@ public class PimaxModule extends VRModule{
                         for(var method : msgType.getValues())Logger.info(method.getNumber()+" - "+method.getName());
                         return;
                     }
-                    if(!Command.nArguments(base, args, 1))return;
+                    if(!CommandUtil.nArguments(base, args, 1))return;
                     for(var method : msgType.getValues()){
                         if(args[0].equals(method.getName())){
                             var map = PiRpcAPI.rpcCallMessage(method, 1);
@@ -240,17 +244,29 @@ public class PimaxModule extends VRModule{
                     }
                     Logger.info("Invalid RPC message: "+args[0]);
                 }),
-                new NamedCommand("open", Command.subcommand(null,
+                new NamedCommand("open", CommandUtil.subcommand(null,
                     new NamedCommand("settings", (base, args) -> {
                         if(!PiRpcAPI.active){
                             Logger.info("Pimax GRPC Manager is not active!");
                             return;
                         }
-                        if(!Command.noArguments(base, args))return;
+                        if(!CommandUtil.noArguments(base, args))return;
                         PiRpc.Click_ShowPitool();
                     })
                 )))
             )
         );
+    }
+    @Override
+    public void init(){
+        Pimax.init();
+    }
+    @Override
+    public boolean hasConfiguration(){
+        return true;
+    }
+    @Override
+    public JDialog getConfigurationGUI(JFrame parent){
+        return new ConfigurePimaxGUI(parent);
     }
 }

@@ -13,8 +13,9 @@ import java.io.IOException;
 public class Pimax extends Task{
     public static File deviceSetting = new File("C:\\Program Files\\Pimax\\Runtime\\DeviceSetting.exe");
     public static File pimaxClient = new File("C:\\Program Files\\Pimax\\PimaxClient\\pimaxui\\PimaxClient.exe");
+    public static Pimax pimaxTask;
     public static void init(){
-        VRManager.startTask(new Pimax());
+        pimaxTask = VRManager.startTask(new Pimax());
     }
     private boolean running = false;
     private Process service;
@@ -44,7 +45,13 @@ public class Pimax extends Task{
             VRManager.startIndirect(pimaxClient);
         }else if(!isPimaxRunning){
             Logger.info("Starting Pitool (DeviceSetting.exe)");
-            service = VRManager.start(deviceSetting);
+            try{
+                service = VRManager.start(deviceSetting);
+            }catch(IOException ex){
+                Logger.error("Could not start Pitool! (DeviceSetting.exe)");
+                Logger.pop();
+                return;
+            }
         }
         if(!PiSvc.active){
             Logger.info("Starting PiSvc...");
@@ -55,15 +62,13 @@ public class Pimax extends Task{
             PiRpc.start();
         }
         if(VRManager.configuration.pimax.watchUSBDevices){
-            if(VRModule.isActive("usb")){
-                Usb.watch(0x2104, 0x0220);//Tobii AB WinUsb Device
-                Usb.watch(0x28DE, 0x2300);//Lighthouse Faceplate (HMD tracking)
-                Usb.watch(0x28DE, 0x2101);//Watchman Dongle (HMD or standalone)
-                Usb.watch(0x34A4, 0x0012);//Pimax Crystal
-                Usb.watch(0x34A4);//Pimax
-                Usb.watch(0x28DE);//Valve
-                Usb.start();
-            }else Logger.warn("USB module is not active!");
+            Usb.watch(0x2104, 0x0220);//Tobii AB WinUsb Device
+            Usb.watch(0x28DE, 0x2300);//Lighthouse Faceplate (HMD tracking)
+            Usb.watch(0x28DE, 0x2101);//Watchman Dongle (HMD or standalone)
+            Usb.watch(0x34A4, 0x0012);//Pimax Crystal
+            Usb.watch(0x34A4);//Pimax
+            Usb.watch(0x28DE);//Valve
+            Usb.start();
         }
         waitForConnection(0);
         if(VRManager.configuration.pimax.forceReboot){
@@ -165,13 +170,14 @@ public class Pimax extends Task{
             }catch(InterruptedException ex){
             }
         }
-        Windows.runCommand("taskkill /IM PimaxClient.exe");
+        Windows.taskkill("PimaxClient.exe");
         if(service!=null){
             Logger.info("Shutting down Pitool");
             service.destroy();
         }
-        Windows.runCommand("taskkill /IM DeviceSetting.exe");
+        Windows.taskkill("DeviceSetting.exe");
         running = false;
+        pimaxTask = null;
         Logger.pop();
     }
 }
