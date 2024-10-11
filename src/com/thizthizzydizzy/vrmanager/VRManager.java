@@ -25,8 +25,8 @@ public class VRManager{
     public static HashSet<StartupFlags> flags = new HashSet<>();
     public static Gson gson = new GsonBuilder().registerTypeAdapter(piVector3f.class, new piVector3fAdapter()).setPrettyPrinting().create();
     public static Configuration configuration;
-    private static final ArrayList<Task> tasks = new ArrayList<>();
-    private static boolean running = true;
+    public static final ArrayList<Task> tasks = new ArrayList<>();
+    public static boolean running = true;
     public static void main(String[] sysArgs){
         Logger.info("VR Manager starting up");
         for(String s : sysArgs){
@@ -72,58 +72,7 @@ public class VRManager{
                     new NamedCommand("save", (base, args) -> saveConfig()),
                     new NamedCommand("exit", (base, arguments) -> {
                         HashSet<Character> flags = CommandUtil.getFlags(arguments, 's', 'f', 'r');
-                        Runnable exitLoop = () -> {
-                            if(flags.contains('s')){
-                                for(int i = 0; i<tasks.size(); i++){
-                                    Task task = tasks.get(i);
-                                    if(task.isActive())task.shutdown();
-                                }
-                            }
-                            ManagerGUI.stop();
-                            if(flags.contains('f')&&!flags.contains('r')){
-                                System.exit(0);
-                            }else{
-                                ArrayList<String> taskNames = new ArrayList<>();
-                                for(int i = 0; i<tasks.size(); i++){
-                                    Task task = tasks.get(i);
-                                    if(task.isActive())taskNames.add(task.name);
-                                }
-                                if(!taskNames.isEmpty()){
-                                    Logger.warn("There "+(taskNames.size()==1?"is":"are")+" "+taskNames.size()+" active "+(taskNames.size()==1?"task":"tasks")+":\n"
-                                        +String.join(", ", taskNames)+(flags.isEmpty()?"\nUse with -s to shut down all tasks, -f to force shutdown, and -r to run recursively.":""));
-                                }else{
-                                    running = false;
-                                }
-                            }
-                        };
-                        int attempts = 0;
-                        while(true){
-                            int numTasks = 0;
-                            for(int i = 0; i<tasks.size(); i++){
-                                Task task = tasks.get(i);
-                                if(task.isActive())numTasks++;
-                            }
-                            attempts++;
-                            exitLoop.run();
-                            if(!running)break;
-                            if(!flags.contains('r')){
-                                break;
-                            }
-                            int nowTasks = 0;
-                            for(int i = 0; i<tasks.size(); i++){
-                                Task task = tasks.get(i);
-                                if(task.isActive())nowTasks++;
-                            }
-                            if(nowTasks==numTasks&&attempts>2){
-                                if(flags.contains('f')){
-                                    Logger.error("Warning: "+nowTasks+" tasks have not stopped after "+attempts+" attempts!");
-                                    System.exit(0);
-                                }else{
-                                    Logger.error("Recursive shutdown cancelled! "+nowTasks+" tasks have not stopped after "+attempts+" attempts.");
-                                }
-                                break;
-                            }
-                        }
+                        shutdown(flags.contains('s'), flags.contains('f'), flags.contains('r'), true);
                     })
                 );
             }
@@ -234,6 +183,8 @@ public class VRManager{
             owo.title = "OWO";
             owo.target = "OWO-Desktop_kn5h6p6y0g1fc";
             owo.exeName = "OWO_Desktop.exe";
+            owo.startIndirect = true;
+            owo.forceShutdown = true;
             configuration.processManager.processes.add(owo);
             log.accept("Detected OWO");
         }
@@ -259,6 +210,67 @@ public class VRManager{
             Logger.info("Saved configuration");
         }catch(IOException ex){
             Logger.error("Unable to save configuration!", ex);
+        }
+    }
+    public static boolean hasActiveTasks(){
+        for(var task : tasks){
+            if(task.isActive())return true;
+        }
+        return false;
+    }
+    public static boolean shutdown(boolean stopTasks, boolean force, boolean recursive, boolean closeGUI){
+        Runnable exitLoop = () -> {
+            if(stopTasks){
+                for(int i = 0; i<tasks.size(); i++){
+                    Task task = tasks.get(i);
+                    if(task.isActive())task.shutdown();
+                }
+            }
+            if(closeGUI)ManagerGUI.stop();
+            if(force&&!recursive){
+                System.exit(0);
+            }else{
+                ArrayList<String> taskNames = new ArrayList<>();
+                for(int i = 0; i<tasks.size(); i++){
+                    Task task = tasks.get(i);
+                    if(task.isActive())taskNames.add(task.name);
+                }
+                if(!taskNames.isEmpty()){
+                    Logger.warn("There "+(taskNames.size()==1?"is":"are")+" "+taskNames.size()+" active "+(taskNames.size()==1?"task":"tasks")+":\n"
+                        +String.join(", ", taskNames)+(flags.isEmpty()?"\nUse with -s to shut down all tasks, -f to force shutdown, and -r to run recursively.":""));
+                }else{
+                    running = false;
+                }
+            }
+        };
+        int attempts = 0;
+        while(true){
+            int numTasks = 0;
+            for(int i = 0; i<tasks.size(); i++){
+                Task task = tasks.get(i);
+                if(task.isActive())numTasks++;
+            }
+            attempts++;
+            exitLoop.run();
+            if(!running)return true;
+            if(!recursive){
+                return false;
+            }
+            int nowTasks = 0;
+            for(int i = 0; i<tasks.size(); i++){
+                Task task = tasks.get(i);
+                if(task.isActive())nowTasks++;
+            }
+            if(nowTasks==numTasks&&attempts>2){
+                if(force){
+                    Logger.error("Warning: "+nowTasks+" tasks have not stopped after "+attempts+" attempts!");
+                    System.exit(0);
+                    return true;
+                }else{
+                    Logger.error("Recursive shutdown cancelled! "+nowTasks+" tasks have not stopped after "+attempts+" attempts.");
+                }
+                return false;
+            }
         }
     }
     public enum StartupFlags{

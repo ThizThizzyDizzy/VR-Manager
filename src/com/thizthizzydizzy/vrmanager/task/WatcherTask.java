@@ -11,10 +11,13 @@ public class WatcherTask extends Task{
     private HashSet<Long> pids = new HashSet<>();
     private ArrayList<Task> subtasks = new ArrayList<>();
     private final boolean force;
-    public WatcherTask(String target, boolean force){
-        super("Watcher: "+target);
+    public WatcherTask(String title, String target, boolean force){
+        super(title==null?"Watcher: "+target:title);
         this.target = target;
         this.force = force;
+    }
+    public WatcherTask(String target, boolean force){
+        this(null, target, force);
     }
     @Override
     public boolean isActive(){
@@ -68,7 +71,7 @@ public class WatcherTask extends Task{
     @Override
     public void shutdown(){
         for(var task : subtasks){
-            if(task.isActive())return;
+            task.shutdown();
         }
         watcher.interrupt();
     }

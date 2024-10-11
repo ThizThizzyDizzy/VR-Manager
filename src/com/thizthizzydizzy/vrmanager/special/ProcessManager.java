@@ -17,21 +17,21 @@ public class ProcessManager{
             indirectProcesses.add(VRManager.startTask(new WatcherTask(process.exeName, process.forceShutdown)));
             Logger.pop();
         }else{
-            start(process.startLocation, process.target, process.startIndirect, process.forceShutdown, process.arguments.toArray(String[]::new));
+            start(process.title, process.startLocation, process.target, process.startIndirect, process.forceShutdown, process.arguments.toArray(String[]::new));
         }
     }
-    public static void start(String startLocation, String target, boolean indirect, boolean forceShutdown, String... args){
+    public static void start(String title, String startLocation, String target, boolean indirect, boolean forceShutdown, String... args){
         Logger.push(ProcessManager.class);
         File f = new File(target);
         if(indirect){
             VRManager.startIndirect(f, args);
             Logger.info("Started process "+f.getName()+" (INDIRECT)");
-            indirectProcesses.add(VRManager.startTask(new WatcherTask(f.getName(), forceShutdown)));
+            indirectProcesses.add(VRManager.startTask(new WatcherTask(title==null?f.getName():title, f.getName(), forceShutdown)));
         }else{
             try{
                 var process = startLocation==null?VRManager.start(f, args):VRManager.startAt(new File(startLocation), target, args);
                 Logger.info("Started process "+f.getName()+" (PID "+process.pid()+")");
-                processes.add(VRManager.startTask(new ProcessTask(f.getName(), process, forceShutdown)));
+                processes.add(VRManager.startTask(new ProcessTask(title==null?f.getName():title, process, forceShutdown)));
             }catch(IOException ex){
                 Logger.error("Could not start process "+f.getName()+"!", ex);
             }

@@ -3,6 +3,7 @@ import com.thizthizzydizzy.vrmanager.Logger;
 import com.thizthizzydizzy.vrmanager.VRManager;
 import com.thizthizzydizzy.vrmanager.config.Configuration;
 import com.thizthizzydizzy.vrmanager.module.VRModule;
+import com.thizthizzydizzy.vrmanager.task.Task;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -11,6 +12,7 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -26,6 +28,37 @@ public class ManagerGUI extends javax.swing.JFrame{
         if(!new File("config.json").exists()){
             ((CardLayout)panelRoot.getLayout()).show(panelRoot, "autoconfig");
         }
+        Thread t = new Thread(() -> {
+            HashMap<Task, JLabel> taskLabels = new HashMap<>();
+            while(VRManager.running){
+                try{
+                    for(int i = 0; i<VRManager.tasks.size(); i++){
+                        var task = VRManager.tasks.get(i);
+                        JLabel label = taskLabels.get(task);
+                        if(!task.isActive()){
+                            if(label!=null){
+                                panelTasks.remove(label);
+                                revalidate();
+                                taskLabels.remove(task);
+                            }
+                            continue;
+                        }
+                        if(label==null){
+                            label = new JLabel(task.name+"    ");
+                            label.setFont(labelTasks.getFont());
+                            panelTasks.add(label);
+                            revalidate();
+                            taskLabels.put(task, label);
+                        }
+                    }
+                    Thread.sleep(100);
+                }catch(InterruptedException ex){
+                    Logger.error(ex);
+                }
+            }
+        }, "Task Monitor");
+        t.setDaemon(true);
+        t.start();
     }
     public void refreshModules(){
         panelModulesList.removeAll();
@@ -94,7 +127,16 @@ public class ManagerGUI extends javax.swing.JFrame{
         tabButtonConfigure = new javax.swing.JToggleButton();
         panelMainContent = new javax.swing.JPanel();
         panelDashboard = new javax.swing.JPanel();
-        jButton2 = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        buttonStop = new javax.swing.JButton();
+        buttonStart = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        labelTasks = new javax.swing.JLabel();
+        panelTaskHeader = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jPanel3 = new javax.swing.JPanel();
+        panelTasks = new javax.swing.JPanel();
+        panelDashboardModules = new javax.swing.JPanel();
         panelConfigure = new javax.swing.JPanel();
         panelModules = new javax.swing.JPanel();
         labelModules = new javax.swing.JLabel();
@@ -110,8 +152,13 @@ public class ManagerGUI extends javax.swing.JFrame{
         scrollableAutoconfig = new javax.swing.JScrollPane();
         labelAutoconfig = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("VR Manager");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         panelRoot.setLayout(new java.awt.CardLayout());
 
@@ -146,30 +193,59 @@ public class ManagerGUI extends javax.swing.JFrame{
 
         panelMainContent.setLayout(new java.awt.CardLayout());
 
-        jButton2.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
-        jButton2.setText("START");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        panelDashboard.setLayout(new java.awt.BorderLayout());
+
+        jPanel1.setLayout(new java.awt.GridLayout());
+
+        buttonStop.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        buttonStop.setForeground(new java.awt.Color(102, 0, 0));
+        buttonStop.setText("STOP ALL TASKS");
+        buttonStop.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                buttonStopActionPerformed(evt);
             }
         });
+        jPanel1.add(buttonStop);
 
-        javax.swing.GroupLayout panelDashboardLayout = new javax.swing.GroupLayout(panelDashboard);
-        panelDashboard.setLayout(panelDashboardLayout);
-        panelDashboardLayout.setHorizontalGroup(
-            panelDashboardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelDashboardLayout.createSequentialGroup()
-                .addGap(320, 320, 320)
-                .addComponent(jButton2)
-                .addContainerGap(366, Short.MAX_VALUE))
-        );
-        panelDashboardLayout.setVerticalGroup(
-            panelDashboardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelDashboardLayout.createSequentialGroup()
-                .addContainerGap(379, Short.MAX_VALUE)
-                .addComponent(jButton2)
-                .addContainerGap())
-        );
+        buttonStart.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        buttonStart.setForeground(new java.awt.Color(0, 102, 0));
+        buttonStart.setText("START");
+        buttonStart.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonStartActionPerformed(evt);
+            }
+        });
+        jPanel1.add(buttonStart);
+
+        panelDashboard.add(jPanel1, java.awt.BorderLayout.PAGE_END);
+
+        jPanel2.setLayout(new java.awt.BorderLayout());
+
+        labelTasks.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        labelTasks.setText("Active Tasks");
+        jPanel2.add(labelTasks, java.awt.BorderLayout.NORTH);
+
+        panelTaskHeader.setBackground(new java.awt.Color(255, 255, 255));
+        panelTaskHeader.setLayout(new java.awt.BorderLayout());
+
+        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel3.setLayout(new java.awt.BorderLayout());
+
+        panelTasks.setLayout(new java.awt.GridLayout(0, 1));
+        jPanel3.add(panelTasks, java.awt.BorderLayout.NORTH);
+
+        jScrollPane1.setViewportView(jPanel3);
+
+        panelTaskHeader.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+
+        jPanel2.add(panelTaskHeader, java.awt.BorderLayout.CENTER);
+
+        panelDashboard.add(jPanel2, java.awt.BorderLayout.LINE_END);
+
+        panelDashboardModules.setLayout(new java.awt.GridLayout());
+        panelDashboard.add(panelDashboardModules, java.awt.BorderLayout.CENTER);
 
         panelMainContent.add(panelDashboard, "dashboard");
 
@@ -316,9 +392,66 @@ public class ManagerGUI extends javax.swing.JFrame{
         refreshModules();
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        VRManager.init();
-    }//GEN-LAST:event_jButton2ActionPerformed
+    private void buttonStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonStartActionPerformed
+        if(VRManager.hasActiveTasks()){
+            ArrayList<String> taskNames = new ArrayList<>();
+            for(int i = 0; i<VRManager.tasks.size(); i++){
+                var task = VRManager.tasks.get(i);
+                if(task.isActive())taskNames.add(task.name);
+            }
+            if(JOptionPane.showConfirmDialog(this, "Tasks are already running:\n"+String.join(", ", taskNames)+"\nAre you sure you want to start them again?", "Tasks already running", JOptionPane.YES_NO_OPTION)!=JOptionPane.YES_OPTION)return;
+        }
+        buttonStart.setEnabled(false);
+        Thread initThread = new Thread(() -> {
+            VRManager.init();
+            buttonStart.setEnabled(true);
+        }, "Initialization Thread");
+        initThread.start();
+    }//GEN-LAST:event_buttonStartActionPerformed
+    private void buttonStopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonStopActionPerformed
+        buttonStop.setEnabled(false);
+        Thread stopThread = new Thread(() -> {
+            for(var task : VRManager.tasks){
+                if(task.isActive())task.shutdown();
+            }
+            buttonStop.setEnabled(true);
+        }, "Stop Tasks");
+        stopThread.setDaemon(true);
+        stopThread.start();
+    }//GEN-LAST:event_buttonStopActionPerformed
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        Thread exitThread = new Thread(() -> {
+            if(!VRManager.shutdown(false, false, false, false)){
+                switch(JOptionPane.showConfirmDialog(this, "Tasks are still running!\nDo you want to stop all tasks before closing? (This will exit VR)", "Tasks still running", JOptionPane.YES_NO_CANCEL_OPTION)){
+                    case JOptionPane.YES_OPTION -> {
+                        if(VRManager.shutdown(true, false, true, false)){
+                            dispose();
+                            System.exit(0);
+                        }else{
+                            ArrayList<String> taskNames = new ArrayList<>();
+                            for(int i = 0; i<VRManager.tasks.size(); i++){
+                                var task = VRManager.tasks.get(i);
+                                if(task.isActive())taskNames.add(task.name);
+                            }
+                            if(JOptionPane.showConfirmDialog(this, "Some tasks haven't shut down after multiple attempts:\n"+String.join(", ", taskNames)+"\nClose anyway?", "Tasks still running", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
+                                dispose();
+                                System.exit(0);
+                            }
+                        }
+                    }
+                    case JOptionPane.NO_OPTION -> {
+                        dispose();
+                        System.exit(0);
+                    }
+                }
+            }else{
+                dispose();
+                System.exit(0);
+            }
+        }, "Exit Thread");
+        exitThread.setDaemon(true);
+        exitThread.start();
+    }//GEN-LAST:event_formWindowClosing
     public static void start(){
         String[] preferredLookAndFeels = new String[]{"Windows", "Nimbus"};
         String[] classNames = new String[preferredLookAndFeels.length];
@@ -352,15 +485,22 @@ public class ManagerGUI extends javax.swing.JFrame{
     private javax.swing.JButton buttonAutoconfigConfirm;
     private javax.swing.JButton buttonAutoconfigSkip;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JButton buttonStart;
+    private javax.swing.JButton buttonStop;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel labelAutoconfig;
     private javax.swing.JLabel labelAutoconfigTitle;
     private javax.swing.JLabel labelModules;
+    private javax.swing.JLabel labelTasks;
     private javax.swing.JPanel panelAutoconfig;
     private javax.swing.JPanel panelAutoconfigButtons;
     private javax.swing.JPanel panelConfigure;
     private javax.swing.JPanel panelDashboard;
+    private javax.swing.JPanel panelDashboardModules;
     private javax.swing.JPanel panelMain;
     private javax.swing.JPanel panelMainContent;
     private javax.swing.JPanel panelMainTabs;
@@ -368,6 +508,8 @@ public class ManagerGUI extends javax.swing.JFrame{
     private javax.swing.JPanel panelModulesList;
     private javax.swing.JPanel panelModulesListContainer;
     private javax.swing.JPanel panelRoot;
+    private javax.swing.JPanel panelTaskHeader;
+    private javax.swing.JPanel panelTasks;
     private javax.swing.JScrollPane scrollableAutoconfig;
     private javax.swing.JScrollPane scrollableModules;
     private javax.swing.JToggleButton tabButtonConfigure;

@@ -35,7 +35,7 @@ public class ProcessManagerModule extends VRModule{
                 }
                 ArrayList<String> arguments = new ArrayList<>(Arrays.asList(args));
                 arguments.remove(0);
-                ProcessManager.start(null, target, flags.contains('i'), flags.contains('f'), arguments.toArray(String[]::new));
+                ProcessManager.start(new File(target).getName(), null, target, flags.contains('i'), flags.contains('f'), arguments.toArray(String[]::new));
             }).addFlag('i', "Start Indirect").addFlag('f', "Requires Forced Shutdown"),
             new NamedCommand("list", (base, args) -> {
                 CommandUtil.noArguments(base, args);
@@ -64,5 +64,5 @@ public class ProcessManagerModule extends VRModule{
     public JDialog getConfigurationGUI(JFrame parent){
         return new ConfigureProcessManagerGUI(parent);
     }
-    
+
 }
