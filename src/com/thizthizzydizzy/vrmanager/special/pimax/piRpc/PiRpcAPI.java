@@ -16,6 +16,7 @@ import io.grpc.netty.shaded.io.grpc.netty.NettyChannelBuilder;
 import io.grpc.protobuf.ProtoUtils;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.Consumer;
@@ -78,7 +79,7 @@ public class PiRpcAPI{
         int port;
         port = Windows.getRegistryValueHex("HKEY_CURRENT_USER\\Software\\PiTool", "DeviceSettingPort");
         Logger.info("PiTool DeviceSettingPort: "+port);
-        try(FileInputStream input = new FileInputStream("rpc.desc")){
+        try(InputStream input = PiRpcAPI.class.getResourceAsStream("/PiRpc.desc")){
             for(int i = 0; i<3; i++)input.read(); //read 3 bytes because either the compiler or the parser doesn't understand its own format properly
             var proto = DescriptorProtos.FileDescriptorProto.parseFrom(input);
             protoDescriptor = Descriptors.FileDescriptor.buildFrom(proto, new Descriptors.FileDescriptor[0]);
@@ -90,7 +91,7 @@ public class PiRpcAPI{
         piRPC = getService("Greeter");
         active = true;
         if(task==null){
-            task = new Task("PimaxGRPC"){
+            task = new Task("PiRPC"){
                 @Override
                 public boolean isActive(){
                     return active;

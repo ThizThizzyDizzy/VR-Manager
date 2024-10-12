@@ -128,7 +128,7 @@ public class PiRpc{
         SerialNumber serialNumber = new SerialNumber();
         serialNumber.HardwareSn = (String)values.get("HardwareSn");
         serialNumber.DeviceId = (String)values.get("DeviceId");
-        serialNumber.SN_Code_Lock_Status = (String)values.get("SN_Code_Lock_Status");
+        serialNumber.SN_Code_Lock_Status = (boolean)values.get("SN_Code_Lock_Status");
         serialNumber.Sn = (String)values.get("Sn");
         return serialNumber;
     }
@@ -157,7 +157,7 @@ public class PiRpc{
     public static SystemInfo Get_System_SystemInfo(){
         var values = rpcCallMessage("Get_System_SystemInfo", 1);
         SystemInfo info = new SystemInfo();
-        info.memlen = (int)values.get("memlen");
+        info.memlen = (String)values.get("memlen");
         info.os = (String)values.get("os");
         info.cpu = (String)values.get("cpu");
         info.gpu = (String)values.get("gpu");
@@ -166,11 +166,22 @@ public class PiRpc{
     public static String Get_Pimax_UserInfo(){
         return (String)rpcCallMessage("Get_System_SystemInfo", 1).get("hmd_name");
     }
+    public static void Get_HMDStatus_LockStatus(){
+        rpcCallMessage("Get_HMDStatus_LockStatus", 1);//don't know what this returns
+    }
     public static int Get_HMDStatus_currefresh(){
         return (int)rpcCallMessage("Get_HMDStatus_currefresh", 1).get("curRefresh");
     }
     public static boolean Get_HMDStatus_PimaxUiConfig(){
         return (boolean)rpcCallMessage("Get_HMDStatus_PimaxUiConfig", 1).get("turnOffEnable");
+    }
+    public static List<Integer> Get_HMDStatus_trackerBetterys(){
+        ArrayList<Integer> batteryLevels = new ArrayList<>();
+        batteryLevels.addAll((ArrayList)rpcCallMessage("Get_HMDStatus_trackerBetterys", 1).get("trackerBattery"));
+        return batteryLevels;
+    }
+    public static int Get_HMDStatus_TrailInfo(){
+        return (int)rpcCallMessage("Get_HMDStatus_TrailInfo", 1).get("snLockTrailStatus");
     }
     public static void Click_FirstShowConnect(){
         rpcCallMessage("Click_FirstShowConnect", 0);
@@ -270,6 +281,12 @@ public class PiRpc{
     public static void Event_Click_RefreshLockStatus(){
         rpcCallMessage("Event_Click_RefreshLockStatus", 0);
     }
+    public static void Event_Start_Pimax_Game(){
+        rpcCallMessage("Event_Start_Pimax_Game", 0);
+    }
+    public static void Event_Click_GameSetting(){
+        rpcCallMessage("Event_Click_GameSetting", 0);
+    }
     public static void Event_ReLogin(){
         rpcCallMessage("Event_ReLogin", 0);
     }
@@ -298,5 +315,23 @@ public class PiRpc{
             game.id = fields[7];
         }
         return games;
+    }
+    public static void Event_ShowConnectPage(){
+        rpcCallMessage("Event_ShowConnectPage", 0);
+    }
+    public static void Event_ShowSensorPircy(){
+        rpcCallMessage("Event_ShowSensorPircy", 0);
+    }
+    public static void Event_ActiveEvent(){
+        rpcCallMessage("Event_ActiveEvent", 0);
+    }
+    public static void Event_RefreshEvent(){
+        rpcCallMessage("Event_RefreshEvent", 0);
+    }
+    public static void Event_TrailBuy(){
+        rpcCallMessage("Event_TrailBuy", 0);
+    }
+    public static void Event_DSShowTrailBuyPage(){
+        rpcCallMessage("Event_DSShowTrailBuyPage", 0);
     }
 }

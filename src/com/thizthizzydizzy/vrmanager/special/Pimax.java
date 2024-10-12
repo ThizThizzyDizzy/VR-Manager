@@ -1,7 +1,6 @@
 package com.thizthizzydizzy.vrmanager.special;
 import com.thizthizzydizzy.vrmanager.Logger;
 import com.thizthizzydizzy.vrmanager.VRManager;
-import com.thizthizzydizzy.vrmanager.module.VRModule;
 import com.thizthizzydizzy.vrmanager.special.pimax.PiRpc;
 import com.thizthizzydizzy.vrmanager.special.pimax.PiSvc;
 import com.thizthizzydizzy.vrmanager.special.pimax.piRpc.PiRpcAPI;
@@ -62,13 +61,12 @@ public class Pimax extends Task{
             PiRpc.start();
         }
         if(VRManager.configuration.pimax.watchUSBDevices){
-            Usb.watch(0x2104, 0x0220);//Tobii AB WinUsb Device
-            Usb.watch(0x28DE, 0x2300);//Lighthouse Faceplate (HMD tracking)
-            Usb.watch(0x28DE, 0x2101);//Watchman Dongle (HMD or standalone)
-            Usb.watch(0x34A4, 0x0012);//Pimax Crystal
-            Usb.watch(0x34A4);//Pimax
-            Usb.watch(0x28DE);//Valve
-            Usb.start();
+            Usb.watch("Tobii Eye Tracking", 0x2104, 0x0220);//Tobii AB WinUsb Device
+            Usb.watch("SteamVR HMD Tracking", 0x28DE, 0x2300);//Lighthouse Faceplate (HMD tracking)
+            Usb.watch("Watchman Dongle", 0x28DE, 0x2101);//Watchman Dongle (HMD or standalone)
+            Usb.watch("Pimax Crystal", 0x34A4, 0x0012);//Pimax Crystal
+            Usb.watch("Pimax", 0x34A4);//Pimax
+            Usb.watch("Valve", 0x28DE);//Valve
         }
         waitForConnection(0);
         if(VRManager.configuration.pimax.forceReboot){

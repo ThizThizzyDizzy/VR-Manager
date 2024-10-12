@@ -26,7 +26,7 @@
     <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
-    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,1,-13,0,0,3,50"/>
+    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,3,4,0,0,4,-89"/>
   </AuxValues>
 
   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
@@ -170,8 +170,9 @@
                         <Component class="javax.swing.JLabel" name="labelTasks">
                           <Properties>
                             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                              <Font name="Segoe UI" size="18" style="0"/>
+                              <Font name="Segoe UI" size="18" style="1"/>
                             </Property>
+                            <Property name="horizontalAlignment" type="int" value="0"/>
                             <Property name="text" type="java.lang.String" value="Active Tasks"/>
                           </Properties>
                           <Constraints>
@@ -242,10 +243,2297 @@
                         </Constraint>
                       </Constraints>
 
-                      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
-                        <Property name="columns" type="int" value="0"/>
-                        <Property name="rows" type="int" value="1"/>
-                      </Layout>
+                      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
+                      <SubComponents>
+                        <Container class="javax.swing.JPanel" name="panelDashboardPimax">
+                          <Constraints>
+                            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+                              <BorderConstraints direction="Center"/>
+                            </Constraint>
+                          </Constraints>
+
+                          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
+                          <SubComponents>
+                            <Component class="javax.swing.JLabel" name="jLabel1">
+                              <Properties>
+                                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                  <Font name="Segoe UI" size="18" style="1"/>
+                                </Property>
+                                <Property name="horizontalAlignment" type="int" value="0"/>
+                                <Property name="text" type="java.lang.String" value="Pimax"/>
+                              </Properties>
+                              <Constraints>
+                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+                                  <BorderConstraints direction="First"/>
+                                </Constraint>
+                              </Constraints>
+                            </Component>
+                            <Container class="javax.swing.JPanel" name="jPanel4">
+                              <Constraints>
+                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+                                  <BorderConstraints direction="Last"/>
+                                </Constraint>
+                              </Constraints>
+
+                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                <Property name="columns" type="int" value="2"/>
+                                <Property name="rows" type="int" value="0"/>
+                              </Layout>
+                              <SubComponents>
+                                <Component class="javax.swing.JButton" name="buttonPimaxSetupGuide">
+                                  <Properties>
+                                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                      <Font name="Segoe UI" size="18" style="0"/>
+                                    </Property>
+                                    <Property name="text" type="java.lang.String" value="Setup Guide"/>
+                                  </Properties>
+                                  <Events>
+                                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonPimaxSetupGuideActionPerformed"/>
+                                  </Events>
+                                </Component>
+                                <Component class="javax.swing.JButton" name="buttonPimaxStartSteamVR">
+                                  <Properties>
+                                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                      <Font name="Segoe UI" size="18" style="0"/>
+                                    </Property>
+                                    <Property name="text" type="java.lang.String" value="Start SteamVR"/>
+                                  </Properties>
+                                  <Events>
+                                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonPimaxStartSteamVRActionPerformed"/>
+                                  </Events>
+                                </Component>
+                                <Component class="javax.swing.JButton" name="buttonPimaxRoomSetup">
+                                  <Properties>
+                                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                      <Font name="Segoe UI" size="18" style="0"/>
+                                    </Property>
+                                    <Property name="text" type="java.lang.String" value="Room Setup"/>
+                                  </Properties>
+                                  <Events>
+                                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonPimaxRoomSetupActionPerformed"/>
+                                  </Events>
+                                </Component>
+                                <Component class="javax.swing.JButton" name="buttonPimaxPairDevice">
+                                  <Properties>
+                                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                      <Font name="Segoe UI" size="18" style="0"/>
+                                    </Property>
+                                    <Property name="text" type="java.lang.String" value="Pair Device"/>
+                                  </Properties>
+                                  <Events>
+                                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonPimaxPairDeviceActionPerformed"/>
+                                  </Events>
+                                </Component>
+                                <Component class="javax.swing.JButton" name="buttonPimaxRestartHeadset">
+                                  <Properties>
+                                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                      <Font name="Segoe UI" size="18" style="0"/>
+                                    </Property>
+                                    <Property name="text" type="java.lang.String" value="Restart Headset"/>
+                                  </Properties>
+                                  <Events>
+                                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonPimaxRestartHeadsetActionPerformed"/>
+                                  </Events>
+                                </Component>
+                                <Component class="javax.swing.JButton" name="buttonPimaxRestartService">
+                                  <Properties>
+                                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                      <Font name="Segoe UI" size="18" style="0"/>
+                                    </Property>
+                                    <Property name="text" type="java.lang.String" value="Restart Service"/>
+                                  </Properties>
+                                  <Events>
+                                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonPimaxRestartServiceActionPerformed"/>
+                                  </Events>
+                                </Component>
+                                <Component class="javax.swing.JButton" name="buttonPimaxDeviceSettings">
+                                  <Properties>
+                                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                      <Font name="Segoe UI" size="18" style="0"/>
+                                    </Property>
+                                    <Property name="text" type="java.lang.String" value="Device Settings"/>
+                                  </Properties>
+                                  <Events>
+                                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonPimaxDeviceSettingsActionPerformed"/>
+                                  </Events>
+                                </Component>
+                                <Component class="javax.swing.JButton" name="buttonPimaxShutDown">
+                                  <Properties>
+                                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                      <Font name="Segoe UI" size="18" style="0"/>
+                                    </Property>
+                                    <Property name="text" type="java.lang.String" value="Shut Down Headset"/>
+                                  </Properties>
+                                  <Events>
+                                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonPimaxShutDownActionPerformed"/>
+                                  </Events>
+                                </Component>
+                              </SubComponents>
+                            </Container>
+                            <Container class="javax.swing.JPanel" name="jPanel19">
+                              <Constraints>
+                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+                                  <BorderConstraints direction="Center"/>
+                                </Constraint>
+                              </Constraints>
+
+                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                <Property name="columns" type="int" value="0"/>
+                                <Property name="rows" type="int" value="1"/>
+                              </Layout>
+                              <SubComponents>
+                                <Container class="javax.swing.JPanel" name="jPanel5">
+
+                                  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout">
+                                    <Property name="axis" type="int" value="3"/>
+                                  </Layout>
+                                  <SubComponents>
+                                    <Container class="javax.swing.JPanel" name="panelPimaxStatusLights">
+
+                                      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                        <Property name="columns" type="int" value="3"/>
+                                        <Property name="rows" type="int" value="0"/>
+                                      </Layout>
+                                      <SubComponents>
+                                        <Container class="javax.swing.JPanel" name="panelPimaxStatusHmdConnect">
+
+                                          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                            <Property name="columns" type="int" value="0"/>
+                                            <Property name="rows" type="int" value="1"/>
+                                          </Layout>
+                                          <SubComponents>
+                                            <Component class="javax.swing.JLabel" name="labelPimaxStatusHmdConnect">
+                                              <Properties>
+                                                <Property name="horizontalAlignment" type="int" value="0"/>
+                                                <Property name="text" type="java.lang.String" value="HMD Connected"/>
+                                              </Properties>
+                                            </Component>
+                                          </SubComponents>
+                                        </Container>
+                                        <Container class="javax.swing.JPanel" name="panelPimaxStatusSpaceCalibrated">
+
+                                          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                            <Property name="columns" type="int" value="0"/>
+                                            <Property name="rows" type="int" value="1"/>
+                                          </Layout>
+                                          <SubComponents>
+                                            <Component class="javax.swing.JLabel" name="labelPimaxStatusSpaceCalibrated">
+                                              <Properties>
+                                                <Property name="horizontalAlignment" type="int" value="0"/>
+                                                <Property name="text" type="java.lang.String" value="Space Calibrated"/>
+                                              </Properties>
+                                            </Component>
+                                          </SubComponents>
+                                        </Container>
+                                        <Container class="javax.swing.JPanel" name="panelPimaxStatusLeapMotionPlugin">
+
+                                          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                            <Property name="columns" type="int" value="0"/>
+                                            <Property name="rows" type="int" value="1"/>
+                                          </Layout>
+                                          <SubComponents>
+                                            <Component class="javax.swing.JLabel" name="labelPimaxStatusLeapMotionPlugin">
+                                              <Properties>
+                                                <Property name="horizontalAlignment" type="int" value="0"/>
+                                                <Property name="text" type="java.lang.String" value="Leap Motion Plugin"/>
+                                              </Properties>
+                                            </Component>
+                                          </SubComponents>
+                                        </Container>
+                                        <Container class="javax.swing.JPanel" name="panelPimaxStatusHeadTracked">
+
+                                          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                            <Property name="columns" type="int" value="0"/>
+                                            <Property name="rows" type="int" value="1"/>
+                                          </Layout>
+                                          <SubComponents>
+                                            <Component class="javax.swing.JLabel" name="labelPimaxStatusHeadTracked">
+                                              <Properties>
+                                                <Property name="horizontalAlignment" type="int" value="0"/>
+                                                <Property name="text" type="java.lang.String" value="Head Tracked"/>
+                                              </Properties>
+                                            </Component>
+                                          </SubComponents>
+                                        </Container>
+                                        <Container class="javax.swing.JPanel" name="panelPimaxStatusLeapMotionInstalled">
+
+                                          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                            <Property name="columns" type="int" value="0"/>
+                                            <Property name="rows" type="int" value="1"/>
+                                          </Layout>
+                                          <SubComponents>
+                                            <Component class="javax.swing.JLabel" name="labelPimaxStatusLeapMotionInstalled">
+                                              <Properties>
+                                                <Property name="horizontalAlignment" type="int" value="0"/>
+                                                <Property name="text" type="java.lang.String" value="Leap Motion Installed"/>
+                                              </Properties>
+                                            </Component>
+                                          </SubComponents>
+                                        </Container>
+                                        <Container class="javax.swing.JPanel" name="panelPimaxStatusLeapMotionServiceReady">
+
+                                          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                            <Property name="columns" type="int" value="0"/>
+                                            <Property name="rows" type="int" value="1"/>
+                                          </Layout>
+                                          <SubComponents>
+                                            <Component class="javax.swing.JLabel" name="labelPimaxStatusLeapMotionServiceReady">
+                                              <Properties>
+                                                <Property name="horizontalAlignment" type="int" value="0"/>
+                                                <Property name="text" type="java.lang.String" value="Leap Motion Service Ready"/>
+                                              </Properties>
+                                            </Component>
+                                          </SubComponents>
+                                        </Container>
+                                        <Container class="javax.swing.JPanel" name="panelPimaxStatusLeapMotionDeviceReady">
+
+                                          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                            <Property name="columns" type="int" value="0"/>
+                                            <Property name="rows" type="int" value="1"/>
+                                          </Layout>
+                                          <SubComponents>
+                                            <Component class="javax.swing.JLabel" name="labelPimaxStatusLeapMotionDeviceReady">
+                                              <Properties>
+                                                <Property name="horizontalAlignment" type="int" value="0"/>
+                                                <Property name="text" type="java.lang.String" value="Leap Motion Device Ready"/>
+                                              </Properties>
+                                            </Component>
+                                          </SubComponents>
+                                        </Container>
+                                        <Container class="javax.swing.JPanel" name="panelPimaxStatusEyeTrackInstalled">
+
+                                          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                            <Property name="columns" type="int" value="0"/>
+                                            <Property name="rows" type="int" value="1"/>
+                                          </Layout>
+                                          <SubComponents>
+                                            <Component class="javax.swing.JLabel" name="labelPimaxStatusEyeTrackInstalled">
+                                              <Properties>
+                                                <Property name="horizontalAlignment" type="int" value="0"/>
+                                                <Property name="text" type="java.lang.String" value="Eye Tracking Installed"/>
+                                              </Properties>
+                                            </Component>
+                                          </SubComponents>
+                                        </Container>
+                                        <Container class="javax.swing.JPanel" name="panelPimaxStatusEyeTrackPlugin">
+
+                                          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                            <Property name="columns" type="int" value="0"/>
+                                            <Property name="rows" type="int" value="1"/>
+                                          </Layout>
+                                          <SubComponents>
+                                            <Component class="javax.swing.JLabel" name="labelPimaxStatusEyeTrackPlugin">
+                                              <Properties>
+                                                <Property name="horizontalAlignment" type="int" value="0"/>
+                                                <Property name="text" type="java.lang.String" value="Eye Tracking Plugin"/>
+                                              </Properties>
+                                            </Component>
+                                          </SubComponents>
+                                        </Container>
+                                        <Container class="javax.swing.JPanel" name="panelPimaxStatusEyeTrackServiceReady">
+
+                                          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                            <Property name="columns" type="int" value="0"/>
+                                            <Property name="rows" type="int" value="1"/>
+                                          </Layout>
+                                          <SubComponents>
+                                            <Component class="javax.swing.JLabel" name="labelPimaxStatusEyeTrackServiceReady">
+                                              <Properties>
+                                                <Property name="horizontalAlignment" type="int" value="0"/>
+                                                <Property name="text" type="java.lang.String" value="Eye Tracking Service Ready"/>
+                                              </Properties>
+                                            </Component>
+                                          </SubComponents>
+                                        </Container>
+                                        <Container class="javax.swing.JPanel" name="panelPimaxStatusLighthouseEnabled">
+
+                                          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                            <Property name="columns" type="int" value="0"/>
+                                            <Property name="rows" type="int" value="1"/>
+                                          </Layout>
+                                          <SubComponents>
+                                            <Component class="javax.swing.JLabel" name="labelPimaxStatusLighthouseEnabled">
+                                              <Properties>
+                                                <Property name="horizontalAlignment" type="int" value="0"/>
+                                                <Property name="text" type="java.lang.String" value="Lighthouse Tracking"/>
+                                              </Properties>
+                                            </Component>
+                                          </SubComponents>
+                                        </Container>
+                                        <Container class="javax.swing.JPanel" name="panelPimaxStatusPvrHome">
+
+                                          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                            <Property name="columns" type="int" value="0"/>
+                                            <Property name="rows" type="int" value="1"/>
+                                          </Layout>
+                                          <SubComponents>
+                                            <Component class="javax.swing.JLabel" name="labelPimaxStatusPvrHome">
+                                              <Properties>
+                                                <Property name="horizontalAlignment" type="int" value="0"/>
+                                                <Property name="text" type="java.lang.String" value="Pimax VR Home"/>
+                                              </Properties>
+                                            </Component>
+                                          </SubComponents>
+                                        </Container>
+                                        <Container class="javax.swing.JPanel" name="panelPimaxStatusScreenProtector">
+
+                                          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                            <Property name="columns" type="int" value="0"/>
+                                            <Property name="rows" type="int" value="1"/>
+                                          </Layout>
+                                          <SubComponents>
+                                            <Component class="javax.swing.JLabel" name="labelPimaxStatusScreenProtector">
+                                              <Properties>
+                                                <Property name="horizontalAlignment" type="int" value="0"/>
+                                                <Property name="text" type="java.lang.String" value="Screen Protector"/>
+                                              </Properties>
+                                            </Component>
+                                          </SubComponents>
+                                        </Container>
+                                        <Container class="javax.swing.JPanel" name="panelPimaxStatusUiConfig">
+
+                                          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                            <Property name="columns" type="int" value="0"/>
+                                            <Property name="rows" type="int" value="1"/>
+                                          </Layout>
+                                          <SubComponents>
+                                            <Component class="javax.swing.JLabel" name="labelPimaxStatusUiConfig">
+                                              <Properties>
+                                                <Property name="horizontalAlignment" type="int" value="0"/>
+                                                <Property name="text" type="java.lang.String" value="Pimax UI Config"/>
+                                              </Properties>
+                                            </Component>
+                                          </SubComponents>
+                                        </Container>
+                                      </SubComponents>
+                                    </Container>
+                                    <Container class="javax.swing.JPanel" name="jPanel6">
+
+                                      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
+                                      <SubComponents>
+                                        <Component class="javax.swing.JLabel" name="jLabel4">
+                                          <Properties>
+                                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                              <Font name="Segoe UI" size="12" style="1"/>
+                                            </Property>
+                                            <Property name="horizontalAlignment" type="int" value="0"/>
+                                            <Property name="text" type="java.lang.String" value="HMD"/>
+                                          </Properties>
+                                          <Constraints>
+                                            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+                                              <BorderConstraints direction="North"/>
+                                            </Constraint>
+                                          </Constraints>
+                                        </Component>
+                                        <Container class="javax.swing.JPanel" name="jPanel7">
+                                          <Constraints>
+                                            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+                                              <BorderConstraints direction="Center"/>
+                                            </Constraint>
+                                          </Constraints>
+
+                                          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                            <Property name="columns" type="int" value="4"/>
+                                            <Property name="rows" type="int" value="0"/>
+                                          </Layout>
+                                          <SubComponents>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxStatusHmdErrorCode">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="1"/>
+                                                <Property name="rows" type="int" value="0"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="jLabel3">
+                                                  <Properties>
+                                                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                                      <Font name="Segoe UI" size="12" style="1"/>
+                                                    </Property>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Error Code"/>
+                                                  </Properties>
+                                                </Component>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxStatusErrorCode">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxStatusHmdModeType">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="1"/>
+                                                <Property name="rows" type="int" value="0"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="jLabel5">
+                                                  <Properties>
+                                                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                                      <Font name="Segoe UI" size="12" style="1"/>
+                                                    </Property>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Mode Type"/>
+                                                  </Properties>
+                                                </Component>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxStatusHmdMode">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxStatusHmdName">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="1"/>
+                                                <Property name="rows" type="int" value="0"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="jLabel7">
+                                                  <Properties>
+                                                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                                      <Font name="Segoe UI" size="12" style="1"/>
+                                                    </Property>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Name"/>
+                                                  </Properties>
+                                                </Component>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxStatusHmdName">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxStatusDisplayHmdName">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="1"/>
+                                                <Property name="rows" type="int" value="0"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="jLabel9">
+                                                  <Properties>
+                                                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                                      <Font name="Segoe UI" size="12" style="1"/>
+                                                    </Property>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Display Name"/>
+                                                  </Properties>
+                                                </Component>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxStatusHmdDisplayName">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxStatusFirmwareVersion">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="1"/>
+                                                <Property name="rows" type="int" value="0"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="jLabel11">
+                                                  <Properties>
+                                                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                                      <Font name="Segoe UI" size="12" style="1"/>
+                                                    </Property>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Firmware Version"/>
+                                                  </Properties>
+                                                </Component>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxStatusFirmwareVersion">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxStatusSerialNumber">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="1"/>
+                                                <Property name="rows" type="int" value="0"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="jLabel83">
+                                                  <Properties>
+                                                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                                      <Font name="Segoe UI" size="12" style="1"/>
+                                                    </Property>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Hardware Serial #"/>
+                                                  </Properties>
+                                                </Component>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxStatusHardwareSerialNumber">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="jPanel12">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="1"/>
+                                                <Property name="rows" type="int" value="0"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="jLabel85">
+                                                  <Properties>
+                                                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                                      <Font name="Segoe UI" size="12" style="1"/>
+                                                    </Property>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Device ID"/>
+                                                  </Properties>
+                                                </Component>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxStatusDeviceID">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxStatusSNCodeLock">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="1"/>
+                                                <Property name="rows" type="int" value="0"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="jLabel87">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="SN Code Lock"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="jPanel14">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="1"/>
+                                                <Property name="rows" type="int" value="0"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="jLabel89">
+                                                  <Properties>
+                                                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                                      <Font name="Segoe UI" size="12" style="1"/>
+                                                    </Property>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Serial Number"/>
+                                                  </Properties>
+                                                </Component>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxStatusSerialNumber">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxStatusHmdP3BCharge">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="1"/>
+                                                <Property name="rows" type="int" value="2"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Container class="javax.swing.JPanel" name="panelPimaxStatusHMDCharging">
+
+                                                  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                    <Property name="columns" type="int" value="0"/>
+                                                    <Property name="rows" type="int" value="1"/>
+                                                  </Layout>
+                                                  <SubComponents>
+                                                    <Component class="javax.swing.JLabel" name="jLabel91">
+                                                      <Properties>
+                                                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                                          <Font name="Segoe UI" size="12" style="1"/>
+                                                        </Property>
+                                                        <Property name="horizontalAlignment" type="int" value="0"/>
+                                                        <Property name="text" type="java.lang.String" value="HMD Charging"/>
+                                                      </Properties>
+                                                    </Component>
+                                                  </SubComponents>
+                                                </Container>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxStatusHMDCharge">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxStatusCurRefresh">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="1"/>
+                                                <Property name="rows" type="int" value="0"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="jLabel15">
+                                                  <Properties>
+                                                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                                      <Font name="Segoe UI" size="12" style="1"/>
+                                                    </Property>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Refresh Rate Setting"/>
+                                                  </Properties>
+                                                </Component>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxStatusCurRefresh">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxStatusUserInfo">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="1"/>
+                                                <Property name="rows" type="int" value="0"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="jLabel13">
+                                                  <Properties>
+                                                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                                      <Font name="Segoe UI" size="12" style="1"/>
+                                                    </Property>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="User Info"/>
+                                                  </Properties>
+                                                </Component>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxStatusUserInfo">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxStatusTrialInfo">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="1"/>
+                                                <Property name="rows" type="int" value="0"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="jLabel17">
+                                                  <Properties>
+                                                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                                      <Font name="Segoe UI" size="12" style="1"/>
+                                                    </Property>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Trial Info"/>
+                                                  </Properties>
+                                                </Component>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxStatusTrialInfo">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                          </SubComponents>
+                                        </Container>
+                                      </SubComponents>
+                                    </Container>
+                                    <Container class="javax.swing.JPanel" name="jPanel8">
+
+                                      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
+                                      <SubComponents>
+                                        <Container class="javax.swing.JPanel" name="panelPimaxStatusControllers">
+                                          <Constraints>
+                                            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+                                              <BorderConstraints direction="Center"/>
+                                            </Constraint>
+                                          </Constraints>
+
+                                          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                            <Property name="columns" type="int" value="2"/>
+                                            <Property name="rows" type="int" value="5"/>
+                                          </Layout>
+                                          <SubComponents>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxStatusLeftController">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="0"/>
+                                                <Property name="rows" type="int" value="1"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="jLabel19">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Left Controller"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxStatusRightController">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="0"/>
+                                                <Property name="rows" type="int" value="1"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="jLabel20">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Right Controller"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxStatusLeftControllerTracked">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="0"/>
+                                                <Property name="rows" type="int" value="1"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="jLabel21">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Tracked"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxStatusRightControllerTracked">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="0"/>
+                                                <Property name="rows" type="int" value="1"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="jLabel22">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Tracked"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Component class="javax.swing.JLabel" name="labelPimaxStatusLeftControllerStatus">
+                                              <Properties>
+                                                <Property name="horizontalAlignment" type="int" value="0"/>
+                                              </Properties>
+                                            </Component>
+                                            <Component class="javax.swing.JLabel" name="labelPimaxStatusRightControllerStatus">
+                                              <Properties>
+                                                <Property name="horizontalAlignment" type="int" value="0"/>
+                                              </Properties>
+                                            </Component>
+                                            <Component class="javax.swing.JLabel" name="labelPimaxStatusLeftControllerProduct">
+                                              <Properties>
+                                                <Property name="horizontalAlignment" type="int" value="0"/>
+                                              </Properties>
+                                            </Component>
+                                            <Component class="javax.swing.JLabel" name="labelPimaxStatusRightControllerProduct">
+                                              <Properties>
+                                                <Property name="horizontalAlignment" type="int" value="0"/>
+                                              </Properties>
+                                            </Component>
+                                            <Component class="javax.swing.JLabel" name="labelPimaxStatusLeftControllerCharge">
+                                              <Properties>
+                                                <Property name="horizontalAlignment" type="int" value="0"/>
+                                              </Properties>
+                                            </Component>
+                                            <Component class="javax.swing.JLabel" name="labelPimaxStatusRightControllerCharge">
+                                              <Properties>
+                                                <Property name="horizontalAlignment" type="int" value="0"/>
+                                              </Properties>
+                                            </Component>
+                                          </SubComponents>
+                                        </Container>
+                                        <Component class="javax.swing.JLabel" name="jLabel6">
+                                          <Properties>
+                                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                              <Font name="Segoe UI" size="12" style="1"/>
+                                            </Property>
+                                            <Property name="horizontalAlignment" type="int" value="0"/>
+                                            <Property name="text" type="java.lang.String" value="Controllers"/>
+                                          </Properties>
+                                          <Constraints>
+                                            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+                                              <BorderConstraints direction="First"/>
+                                            </Constraint>
+                                          </Constraints>
+                                        </Component>
+                                      </SubComponents>
+                                    </Container>
+                                    <Container class="javax.swing.JPanel" name="jPanel15">
+
+                                      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
+                                      <SubComponents>
+                                        <Container class="javax.swing.JPanel" name="panelPimaxStatusLocators">
+                                          <Constraints>
+                                            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+                                              <BorderConstraints direction="Center"/>
+                                            </Constraint>
+                                          </Constraints>
+
+                                          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                            <Property name="columns" type="int" value="4"/>
+                                            <Property name="rows" type="int" value="0"/>
+                                          </Layout>
+                                        </Container>
+                                        <Component class="javax.swing.JLabel" name="jLabel8">
+                                          <Properties>
+                                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                              <Font name="Segoe UI" size="12" style="1"/>
+                                            </Property>
+                                            <Property name="horizontalAlignment" type="int" value="0"/>
+                                            <Property name="text" type="java.lang.String" value="Base Stations"/>
+                                          </Properties>
+                                          <Constraints>
+                                            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+                                              <BorderConstraints direction="First"/>
+                                            </Constraint>
+                                          </Constraints>
+                                        </Component>
+                                      </SubComponents>
+                                    </Container>
+                                    <Container class="javax.swing.JPanel" name="jPanel16">
+
+                                      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
+                                      <SubComponents>
+                                        <Component class="javax.swing.JLabel" name="jLabel10">
+                                          <Properties>
+                                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                              <Font name="Segoe UI" size="12" style="1"/>
+                                            </Property>
+                                            <Property name="horizontalAlignment" type="int" value="0"/>
+                                            <Property name="text" type="java.lang.String" value="Trackers"/>
+                                          </Properties>
+                                          <Constraints>
+                                            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+                                              <BorderConstraints direction="First"/>
+                                            </Constraint>
+                                          </Constraints>
+                                        </Component>
+                                        <Container class="javax.swing.JPanel" name="panelPimaxStatusTrackers">
+                                          <Constraints>
+                                            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+                                              <BorderConstraints direction="Center"/>
+                                            </Constraint>
+                                          </Constraints>
+
+                                          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                            <Property name="columns" type="int" value="4"/>
+                                            <Property name="rows" type="int" value="0"/>
+                                          </Layout>
+                                        </Container>
+                                      </SubComponents>
+                                    </Container>
+                                    <Container class="javax.swing.JPanel" name="jPanel17">
+
+                                      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
+                                      <SubComponents>
+                                        <Component class="javax.swing.JLabel" name="jLabel14">
+                                          <Properties>
+                                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                              <Font name="Segoe UI" size="12" style="1"/>
+                                            </Property>
+                                            <Property name="horizontalAlignment" type="int" value="0"/>
+                                            <Property name="text" type="java.lang.String" value="Error Info"/>
+                                          </Properties>
+                                          <Constraints>
+                                            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+                                              <BorderConstraints direction="First"/>
+                                            </Constraint>
+                                          </Constraints>
+                                        </Component>
+                                        <Container class="javax.swing.JPanel" name="panelPimaxStatusErrorInfo">
+                                          <Constraints>
+                                            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+                                              <BorderConstraints direction="Center"/>
+                                            </Constraint>
+                                          </Constraints>
+
+                                          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                            <Property name="columns" type="int" value="4"/>
+                                            <Property name="rows" type="int" value="0"/>
+                                          </Layout>
+                                          <SubComponents>
+                                            <Component class="javax.swing.JLabel" name="labelPimaxStatusErrorTitle">
+                                              <Properties>
+                                                <Property name="horizontalAlignment" type="int" value="0"/>
+                                              </Properties>
+                                            </Component>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxStatusShowString">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="0"/>
+                                                <Property name="rows" type="int" value="1"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="jLabel97">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Show String"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Component class="javax.swing.JLabel" name="labelPimaxErrorCode">
+                                              <Properties>
+                                                <Property name="horizontalAlignment" type="int" value="0"/>
+                                              </Properties>
+                                            </Component>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxStatusCanClickTitle">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="0"/>
+                                                <Property name="rows" type="int" value="1"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="jLabel99">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Can Click Title"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Component class="javax.swing.JLabel" name="labelPimaxStatusErrorType">
+                                              <Properties>
+                                                <Property name="horizontalAlignment" type="int" value="0"/>
+                                              </Properties>
+                                            </Component>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxStatusCanClickString">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="0"/>
+                                                <Property name="rows" type="int" value="1"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="jLabel101">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Can click String"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Component class="javax.swing.JLabel" name="labelPimaxStatusErrHmdName">
+                                              <Properties>
+                                                <Property name="horizontalAlignment" type="int" value="0"/>
+                                              </Properties>
+                                            </Component>
+                                          </SubComponents>
+                                        </Container>
+                                        <Component class="javax.swing.JLabel" name="labelPimaxStatusErrorString">
+                                          <Properties>
+                                            <Property name="horizontalAlignment" type="int" value="0"/>
+                                          </Properties>
+                                          <Constraints>
+                                            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+                                              <BorderConstraints direction="Last"/>
+                                            </Constraint>
+                                          </Constraints>
+                                        </Component>
+                                      </SubComponents>
+                                    </Container>
+                                    <Container class="javax.swing.JPanel" name="jPanel9">
+
+                                      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
+                                      <SubComponents>
+                                        <Component class="javax.swing.JLabel" name="jLabel24">
+                                          <Properties>
+                                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                              <Font name="Segoe UI" size="12" style="1"/>
+                                            </Property>
+                                            <Property name="horizontalAlignment" type="int" value="0"/>
+                                            <Property name="text" type="java.lang.String" value="System Info"/>
+                                          </Properties>
+                                          <Constraints>
+                                            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+                                              <BorderConstraints direction="First"/>
+                                            </Constraint>
+                                          </Constraints>
+                                        </Component>
+                                        <Container class="javax.swing.JPanel" name="panelPimaxStatusSystemInfo">
+                                          <Constraints>
+                                            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+                                              <BorderConstraints direction="Center"/>
+                                            </Constraint>
+                                          </Constraints>
+
+                                          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                            <Property name="columns" type="int" value="2"/>
+                                            <Property name="rows" type="int" value="0"/>
+                                          </Layout>
+                                          <SubComponents>
+                                            <Component class="javax.swing.JLabel" name="jLabel103">
+                                              <Properties>
+                                                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                                  <Font name="Segoe UI" size="12" style="1"/>
+                                                </Property>
+                                                <Property name="horizontalAlignment" type="int" value="0"/>
+                                                <Property name="text" type="java.lang.String" value="Memory"/>
+                                              </Properties>
+                                            </Component>
+                                            <Component class="javax.swing.JLabel" name="jLabel104">
+                                              <Properties>
+                                                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                                  <Font name="Segoe UI" size="12" style="1"/>
+                                                </Property>
+                                                <Property name="horizontalAlignment" type="int" value="0"/>
+                                                <Property name="text" type="java.lang.String" value="OS"/>
+                                              </Properties>
+                                            </Component>
+                                            <Component class="javax.swing.JLabel" name="labelPimaxStatusMemory">
+                                              <Properties>
+                                                <Property name="horizontalAlignment" type="int" value="0"/>
+                                              </Properties>
+                                            </Component>
+                                            <Component class="javax.swing.JLabel" name="labelPimaxStatusOS">
+                                              <Properties>
+                                                <Property name="horizontalAlignment" type="int" value="0"/>
+                                              </Properties>
+                                            </Component>
+                                            <Component class="javax.swing.JLabel" name="jLabel105">
+                                              <Properties>
+                                                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                                  <Font name="Segoe UI" size="12" style="1"/>
+                                                </Property>
+                                                <Property name="horizontalAlignment" type="int" value="0"/>
+                                                <Property name="text" type="java.lang.String" value="CPU"/>
+                                              </Properties>
+                                            </Component>
+                                            <Component class="javax.swing.JLabel" name="jLabel106">
+                                              <Properties>
+                                                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                                  <Font name="Segoe UI" size="12" style="1"/>
+                                                </Property>
+                                                <Property name="horizontalAlignment" type="int" value="0"/>
+                                                <Property name="text" type="java.lang.String" value="GPU"/>
+                                              </Properties>
+                                            </Component>
+                                            <Component class="javax.swing.JLabel" name="labelPimaxStatusCPU">
+                                              <Properties>
+                                                <Property name="horizontalAlignment" type="int" value="0"/>
+                                              </Properties>
+                                            </Component>
+                                            <Component class="javax.swing.JLabel" name="labelPimaxStatusGPU">
+                                              <Properties>
+                                                <Property name="horizontalAlignment" type="int" value="0"/>
+                                              </Properties>
+                                            </Component>
+                                          </SubComponents>
+                                        </Container>
+                                      </SubComponents>
+                                    </Container>
+                                  </SubComponents>
+                                </Container>
+                                <Container class="javax.swing.JPanel" name="jPanel20">
+
+                                  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout">
+                                    <Property name="axis" type="int" value="3"/>
+                                  </Layout>
+                                  <SubComponents>
+                                    <Container class="javax.swing.JPanel" name="jPanel10">
+
+                                      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
+                                      <SubComponents>
+                                        <Component class="javax.swing.JLabel" name="jLabel12">
+                                          <Properties>
+                                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                              <Font name="Segoe UI" size="12" style="1"/>
+                                            </Property>
+                                            <Property name="horizontalAlignment" type="int" value="0"/>
+                                            <Property name="text" type="java.lang.String" value="Connection Info"/>
+                                          </Properties>
+                                          <Constraints>
+                                            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+                                              <BorderConstraints direction="First"/>
+                                            </Constraint>
+                                          </Constraints>
+                                        </Component>
+                                        <Container class="javax.swing.JPanel" name="jPanel11">
+                                          <Constraints>
+                                            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+                                              <BorderConstraints direction="Center"/>
+                                            </Constraint>
+                                          </Constraints>
+
+                                          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                            <Property name="columns" type="int" value="3"/>
+                                            <Property name="rows" type="int" value="0"/>
+                                          </Layout>
+                                          <SubComponents>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxConnectionUSB">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="0"/>
+                                                <Property name="rows" type="int" value="1"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="jLabel16">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="USB Connected"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxConnectionVideo">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="0"/>
+                                                <Property name="rows" type="int" value="1"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="jLabel18">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Video Connected"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxConnectionService">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="0"/>
+                                                <Property name="rows" type="int" value="1"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="jLabel23">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Service Connected"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Component class="javax.swing.JLabel" name="labelPimaxConnectionUSB">
+                                              <Properties>
+                                                <Property name="horizontalAlignment" type="int" value="0"/>
+                                              </Properties>
+                                            </Component>
+                                            <Component class="javax.swing.JLabel" name="labelPimaxConnectionVideo">
+                                              <Properties>
+                                                <Property name="horizontalAlignment" type="int" value="0"/>
+                                              </Properties>
+                                            </Component>
+                                            <Component class="javax.swing.JLabel" name="labelPimaxConnectionService">
+                                              <Properties>
+                                                <Property name="horizontalAlignment" type="int" value="0"/>
+                                              </Properties>
+                                            </Component>
+                                          </SubComponents>
+                                        </Container>
+                                      </SubComponents>
+                                    </Container>
+                                    <Container class="javax.swing.JPanel" name="jPanel13">
+
+                                      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
+                                      <SubComponents>
+                                        <Component class="javax.swing.JLabel" name="jLabel27">
+                                          <Properties>
+                                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                              <Font name="Segoe UI" size="12" style="1"/>
+                                            </Property>
+                                            <Property name="horizontalAlignment" type="int" value="0"/>
+                                            <Property name="text" type="java.lang.String" value="HMD Info"/>
+                                          </Properties>
+                                          <Constraints>
+                                            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+                                              <BorderConstraints direction="North"/>
+                                            </Constraint>
+                                          </Constraints>
+                                        </Component>
+                                        <Container class="javax.swing.JPanel" name="jPanel18">
+                                          <Constraints>
+                                            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+                                              <BorderConstraints direction="Center"/>
+                                            </Constraint>
+                                          </Constraints>
+
+                                          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                            <Property name="columns" type="int" value="3"/>
+                                            <Property name="rows" type="int" value="0"/>
+                                          </Layout>
+                                          <SubComponents>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxSvc">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="1"/>
+                                                <Property name="rows" type="int" value="0"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="jLabel36">
+                                                  <Properties>
+                                                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                                      <Font name="Segoe UI" size="12" style="1"/>
+                                                    </Property>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Product Name"/>
+                                                  </Properties>
+                                                </Component>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxSvcProductName">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxSvc1">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="1"/>
+                                                <Property name="rows" type="int" value="0"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="jLabel38">
+                                                  <Properties>
+                                                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                                      <Font name="Segoe UI" size="12" style="1"/>
+                                                    </Property>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Manufacturer"/>
+                                                  </Properties>
+                                                </Component>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxSvcManufacturer">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxSvc2">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="1"/>
+                                                <Property name="rows" type="int" value="0"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="jLabel39">
+                                                  <Properties>
+                                                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                                      <Font name="Segoe UI" size="12" style="1"/>
+                                                    </Property>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Serial Number"/>
+                                                  </Properties>
+                                                </Component>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxSvcSerialNumber">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxSvc3">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="1"/>
+                                                <Property name="rows" type="int" value="0"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="jLabel40">
+                                                  <Properties>
+                                                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                                      <Font name="Segoe UI" size="12" style="1"/>
+                                                    </Property>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Version Generation"/>
+                                                  </Properties>
+                                                </Component>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxSvcVersionGen">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxSvc4">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="1"/>
+                                                <Property name="rows" type="int" value="0"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="jLabel41">
+                                                  <Properties>
+                                                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                                      <Font name="Segoe UI" size="12" style="1"/>
+                                                    </Property>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Major &amp; Minor Version"/>
+                                                  </Properties>
+                                                </Component>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxSvcVersion">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxSvc5">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="1"/>
+                                                <Property name="rows" type="int" value="0"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="jLabel42">
+                                                  <Properties>
+                                                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                                      <Font name="Segoe UI" size="12" style="1"/>
+                                                    </Property>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="HmdiceName"/>
+                                                  </Properties>
+                                                </Component>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxSvcHmdice">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxSvc8">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="1"/>
+                                                <Property name="rows" type="int" value="0"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="jLabel28">
+                                                  <Properties>
+                                                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                                      <Font name="Segoe UI" size="12" style="1"/>
+                                                    </Property>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Resolution"/>
+                                                  </Properties>
+                                                </Component>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxSvcResolution">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxSvc10">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="1"/>
+                                                <Property name="rows" type="int" value="0"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="jLabel33">
+                                                  <Properties>
+                                                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                                      <Font name="Segoe UI" size="12" style="1"/>
+                                                    </Property>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Tone"/>
+                                                  </Properties>
+                                                </Component>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxSvcToneState">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxSvc11">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="1"/>
+                                                <Property name="rows" type="int" value="0"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="jLabel34">
+                                                  <Properties>
+                                                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                                      <Font name="Segoe UI" size="12" style="1"/>
+                                                    </Property>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Brightness"/>
+                                                  </Properties>
+                                                </Component>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxSvcBrightState">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxSvc19">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="1"/>
+                                                <Property name="rows" type="int" value="0"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Container class="javax.swing.JPanel" name="panelPimaxSvcBlueLight">
+
+                                                  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                    <Property name="columns" type="int" value="0"/>
+                                                    <Property name="rows" type="int" value="1"/>
+                                                  </Layout>
+                                                  <SubComponents>
+                                                    <Component class="javax.swing.JLabel" name="labelPimaxStatusPvrHome7">
+                                                      <Properties>
+                                                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                                          <Font name="Segoe UI" size="12" style="1"/>
+                                                        </Property>
+                                                        <Property name="horizontalAlignment" type="int" value="0"/>
+                                                        <Property name="text" type="java.lang.String" value="Blue Light"/>
+                                                      </Properties>
+                                                    </Component>
+                                                  </SubComponents>
+                                                </Container>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxSvcBlueLight">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxSvc20">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="1"/>
+                                                <Property name="rows" type="int" value="0"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Container class="javax.swing.JPanel" name="panelPimaxSvcBacklight">
+
+                                                  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                    <Property name="columns" type="int" value="0"/>
+                                                    <Property name="rows" type="int" value="1"/>
+                                                  </Layout>
+                                                  <SubComponents>
+                                                    <Component class="javax.swing.JLabel" name="labelPimaxStatusPvrHome8">
+                                                      <Properties>
+                                                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                                          <Font name="Segoe UI" size="12" style="1"/>
+                                                        </Property>
+                                                        <Property name="horizontalAlignment" type="int" value="0"/>
+                                                        <Property name="text" type="java.lang.String" value="Backlight"/>
+                                                      </Properties>
+                                                    </Component>
+                                                  </SubComponents>
+                                                </Container>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxSvcBacklight">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxSvc21">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="1"/>
+                                                <Property name="rows" type="int" value="0"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Container class="javax.swing.JPanel" name="panelPimaxSvcProximity">
+
+                                                  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                    <Property name="columns" type="int" value="0"/>
+                                                    <Property name="rows" type="int" value="1"/>
+                                                  </Layout>
+                                                  <SubComponents>
+                                                    <Component class="javax.swing.JLabel" name="labelPimaxStatusPvrHome9">
+                                                      <Properties>
+                                                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                                          <Font name="Segoe UI" size="12" style="1"/>
+                                                        </Property>
+                                                        <Property name="horizontalAlignment" type="int" value="0"/>
+                                                        <Property name="text" type="java.lang.String" value="Proximity"/>
+                                                      </Properties>
+                                                    </Component>
+                                                  </SubComponents>
+                                                </Container>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxSvcProximity">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxSvc18">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="1"/>
+                                                <Property name="rows" type="int" value="0"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Container class="javax.swing.JPanel" name="panelPimaxSvcGyro">
+
+                                                  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                    <Property name="columns" type="int" value="0"/>
+                                                    <Property name="rows" type="int" value="1"/>
+                                                  </Layout>
+                                                  <SubComponents>
+                                                    <Component class="javax.swing.JLabel" name="labelPimaxStatusPvrHome5">
+                                                      <Properties>
+                                                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                                          <Font name="Segoe UI" size="12" style="1"/>
+                                                        </Property>
+                                                        <Property name="horizontalAlignment" type="int" value="0"/>
+                                                        <Property name="text" type="java.lang.String" value="Gyro"/>
+                                                      </Properties>
+                                                    </Component>
+                                                  </SubComponents>
+                                                </Container>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxSvcGyro">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxSvc12">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="1"/>
+                                                <Property name="rows" type="int" value="0"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="jLabel35">
+                                                  <Properties>
+                                                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                                      <Font name="Segoe UI" size="12" style="1"/>
+                                                    </Property>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="IPD"/>
+                                                  </Properties>
+                                                </Component>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxSvcIPD">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxSvc13">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="1"/>
+                                                <Property name="rows" type="int" value="0"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="jLabel43">
+                                                  <Properties>
+                                                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                                      <Font name="Segoe UI" size="12" style="1"/>
+                                                    </Property>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Lens"/>
+                                                  </Properties>
+                                                </Component>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxSvcLens">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxSvc14">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="1"/>
+                                                <Property name="rows" type="int" value="0"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="jLabel44">
+                                                  <Properties>
+                                                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                                      <Font name="Segoe UI" size="12" style="1"/>
+                                                    </Property>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Display Quality"/>
+                                                  </Properties>
+                                                </Component>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxSvcDisplayQuality">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxSvc23">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="1"/>
+                                                <Property name="rows" type="int" value="0"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Container class="javax.swing.JPanel" name="panelPimaxSvcDefAudio">
+
+                                                  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                    <Property name="columns" type="int" value="0"/>
+                                                    <Property name="rows" type="int" value="1"/>
+                                                  </Layout>
+                                                  <SubComponents>
+                                                    <Component class="javax.swing.JLabel" name="labelPimaxStatusPvrHome10">
+                                                      <Properties>
+                                                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                                          <Font name="Segoe UI" size="12" style="1"/>
+                                                        </Property>
+                                                        <Property name="horizontalAlignment" type="int" value="0"/>
+                                                        <Property name="text" type="java.lang.String" value="Default Audio Config"/>
+                                                      </Properties>
+                                                    </Component>
+                                                  </SubComponents>
+                                                </Container>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxSvcDefAudio">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxSvc15">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="1"/>
+                                                <Property name="rows" type="int" value="0"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="jLabel45">
+                                                  <Properties>
+                                                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                                      <Font name="Segoe UI" size="12" style="1"/>
+                                                    </Property>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Interface Version"/>
+                                                  </Properties>
+                                                </Component>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxSvcInterfaceVersion">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxSvc16">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="1"/>
+                                                <Property name="rows" type="int" value="0"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="jLabel46">
+                                                  <Properties>
+                                                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                                      <Font name="Segoe UI" size="12" style="1"/>
+                                                    </Property>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Service Version"/>
+                                                  </Properties>
+                                                </Component>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxSvcServiceVersion">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxSvc17">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="1"/>
+                                                <Property name="rows" type="int" value="0"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="jLabel47">
+                                                  <Properties>
+                                                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                                      <Font name="Segoe UI" size="12" style="1"/>
+                                                    </Property>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Service Log Level"/>
+                                                  </Properties>
+                                                </Component>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxSvcServiceLogLevel">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                          </SubComponents>
+                                        </Container>
+                                        <Container class="javax.swing.JPanel" name="panelPimaxSvcPosition1">
+                                          <Constraints>
+                                            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+                                              <BorderConstraints direction="Last"/>
+                                            </Constraint>
+                                          </Constraints>
+
+                                          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                            <Property name="columns" type="int" value="1"/>
+                                            <Property name="rows" type="int" value="0"/>
+                                          </Layout>
+                                          <SubComponents>
+                                            <Component class="javax.swing.JLabel" name="jLabel37">
+                                              <Properties>
+                                                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                                  <Font name="Segoe UI" size="12" style="1"/>
+                                                </Property>
+                                                <Property name="horizontalAlignment" type="int" value="0"/>
+                                                <Property name="text" type="java.lang.String" value="HMD Position"/>
+                                              </Properties>
+                                            </Component>
+                                            <Component class="javax.swing.JLabel" name="labelPimaxSvcPosition">
+                                              <Properties>
+                                                <Property name="horizontalAlignment" type="int" value="0"/>
+                                              </Properties>
+                                            </Component>
+                                          </SubComponents>
+                                        </Container>
+                                      </SubComponents>
+                                    </Container>
+                                    <Container class="javax.swing.JPanel" name="panelHmdCapabilities">
+
+                                      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
+                                      <SubComponents>
+                                        <Component class="javax.swing.JLabel" name="jLabel29">
+                                          <Properties>
+                                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                              <Font name="Segoe UI" size="12" style="1"/>
+                                            </Property>
+                                            <Property name="horizontalAlignment" type="int" value="0"/>
+                                            <Property name="text" type="java.lang.String" value="HMD Capabilities"/>
+                                          </Properties>
+                                          <Constraints>
+                                            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+                                              <BorderConstraints direction="North"/>
+                                            </Constraint>
+                                          </Constraints>
+                                        </Component>
+                                        <Container class="javax.swing.JPanel" name="panelPimaxCapabilities">
+                                          <Constraints>
+                                            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+                                              <BorderConstraints direction="Center"/>
+                                            </Constraint>
+                                          </Constraints>
+
+                                          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                            <Property name="columns" type="int" value="5"/>
+                                            <Property name="rows" type="int" value="0"/>
+                                          </Layout>
+                                          <SubComponents>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxSvcCapModeCtrl">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="0"/>
+                                                <Property name="rows" type="int" value="1"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxStatusHmdConnect1">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Mode"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxSvcCapBackLightCtrl">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="0"/>
+                                                <Property name="rows" type="int" value="1"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxStatusSpaceCalibrated1">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Backlight"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxSvcCapResolutionCtrl">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="0"/>
+                                                <Property name="rows" type="int" value="1"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxStatusLeapMotionPlugin1">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Resolution"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxSvcCapToneCtrl">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="0"/>
+                                                <Property name="rows" type="int" value="1"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxStatusHeadTracked1">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Tone"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxSvcCapBrightCtrl">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="0"/>
+                                                <Property name="rows" type="int" value="1"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxStatusLeapMotionInstalled1">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Brightness"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxSvcCapIpdAdjust">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="0"/>
+                                                <Property name="rows" type="int" value="1"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxStatusLeapMotionServiceReady1">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="IPD Adjustment"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxSvcCapBlueLightCtrl">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="0"/>
+                                                <Property name="rows" type="int" value="1"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxStatusLeapMotionDeviceReady1">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Blue Light"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxSvcCapProximityCtrl">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="0"/>
+                                                <Property name="rows" type="int" value="1"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxStatusEyeTrackInstalled1">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Proximity"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxSvcCapGyroControl">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="0"/>
+                                                <Property name="rows" type="int" value="1"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxStatusEyeTrackPlugin1">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Gyro"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxSvcCapEyePoseCtrl">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="0"/>
+                                                <Property name="rows" type="int" value="1"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxStatusEyeTrackServiceReady1">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Eye Pose"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxSvcCapAudioCtrl">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="0"/>
+                                                <Property name="rows" type="int" value="1"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxStatusLighthouseEnabled1">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Audio"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxSvcCapDisplayQualityCtrl">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="0"/>
+                                                <Property name="rows" type="int" value="1"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxStatusPvrHome1">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Display Quality"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxSvcCapLensSeparationCtrl">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="0"/>
+                                                <Property name="rows" type="int" value="1"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxStatusScreenProtector1">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Lens Separation"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxSvcCapReboot">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="0"/>
+                                                <Property name="rows" type="int" value="1"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxStatusUiConfig1">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Reboot"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxSvcCapBusinessFlag">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="0"/>
+                                                <Property name="rows" type="int" value="1"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxStatusUiConfig2">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Business Flag"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                          </SubComponents>
+                                        </Container>
+                                        <Component class="javax.swing.JLabel" name="labelPimaxSvcCapErr">
+                                          <Properties>
+                                            <Property name="horizontalAlignment" type="int" value="0"/>
+                                          </Properties>
+                                          <Constraints>
+                                            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+                                              <BorderConstraints direction="South"/>
+                                            </Constraint>
+                                          </Constraints>
+                                        </Component>
+                                      </SubComponents>
+                                    </Container>
+                                    <Container class="javax.swing.JPanel" name="panelResolutionCapabilities">
+
+                                      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
+                                      <SubComponents>
+                                        <Component class="javax.swing.JLabel" name="jLabel30">
+                                          <Properties>
+                                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                              <Font name="Segoe UI" size="12" style="1"/>
+                                            </Property>
+                                            <Property name="horizontalAlignment" type="int" value="0"/>
+                                            <Property name="text" type="java.lang.String" value="Resolution Capabilities"/>
+                                          </Properties>
+                                          <Constraints>
+                                            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+                                              <BorderConstraints direction="North"/>
+                                            </Constraint>
+                                          </Constraints>
+                                        </Component>
+                                        <Container class="javax.swing.JPanel" name="panelPimaxCapabilities1">
+                                          <Constraints>
+                                            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+                                              <BorderConstraints direction="Center"/>
+                                            </Constraint>
+                                          </Constraints>
+
+                                          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                            <Property name="columns" type="int" value="4"/>
+                                            <Property name="rows" type="int" value="0"/>
+                                          </Layout>
+                                          <SubComponents>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxSvcCapRes1">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="0"/>
+                                                <Property name="rows" type="int" value="1"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxStatusHmdConnect2">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="1920x1080"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxSvcCapRes2">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="0"/>
+                                                <Property name="rows" type="int" value="1"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxStatusSpaceCalibrated2">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="2560x1440"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxSvcCapRes3">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="0"/>
+                                                <Property name="rows" type="int" value="1"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxStatusLeapMotionPlugin2">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="2160x1200"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxSvcCapRes4">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="0"/>
+                                                <Property name="rows" type="int" value="1"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxStatusHeadTracked2">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="3840x2160"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                          </SubComponents>
+                                        </Container>
+                                        <Component class="javax.swing.JLabel" name="labelPimaxSvcCapErr1">
+                                          <Properties>
+                                            <Property name="horizontalAlignment" type="int" value="0"/>
+                                          </Properties>
+                                          <Constraints>
+                                            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+                                              <BorderConstraints direction="South"/>
+                                            </Constraint>
+                                          </Constraints>
+                                        </Component>
+                                      </SubComponents>
+                                    </Container>
+                                    <Container class="javax.swing.JPanel" name="panelResolutionCapabilities1">
+
+                                      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
+                                      <SubComponents>
+                                        <Component class="javax.swing.JLabel" name="jLabel32">
+                                          <Properties>
+                                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                              <Font name="Segoe UI" size="12" style="1"/>
+                                            </Property>
+                                            <Property name="horizontalAlignment" type="int" value="0"/>
+                                            <Property name="text" type="java.lang.String" value="Mode Capabilities"/>
+                                          </Properties>
+                                          <Constraints>
+                                            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+                                              <BorderConstraints direction="North"/>
+                                            </Constraint>
+                                          </Constraints>
+                                        </Component>
+                                        <Container class="javax.swing.JPanel" name="panelPimaxCapabilities2">
+                                          <Constraints>
+                                            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+                                              <BorderConstraints direction="Center"/>
+                                            </Constraint>
+                                          </Constraints>
+
+                                          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                            <Property name="columns" type="int" value="3"/>
+                                            <Property name="rows" type="int" value="0"/>
+                                          </Layout>
+                                          <SubComponents>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxSvcCapMode1">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="0"/>
+                                                <Property name="rows" type="int" value="1"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxStatusHmdConnect3">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Smart"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxSvcCapMode2">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="0"/>
+                                                <Property name="rows" type="int" value="1"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxStatusSpaceCalibrated3">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="Video"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                            <Container class="javax.swing.JPanel" name="panelPimaxSvcCapMode3">
+
+                                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                                <Property name="columns" type="int" value="0"/>
+                                                <Property name="rows" type="int" value="1"/>
+                                              </Layout>
+                                              <SubComponents>
+                                                <Component class="javax.swing.JLabel" name="labelPimaxStatusLeapMotionPlugin3">
+                                                  <Properties>
+                                                    <Property name="horizontalAlignment" type="int" value="0"/>
+                                                    <Property name="text" type="java.lang.String" value="DFU"/>
+                                                  </Properties>
+                                                </Component>
+                                              </SubComponents>
+                                            </Container>
+                                          </SubComponents>
+                                        </Container>
+                                        <Component class="javax.swing.JLabel" name="labelPimaxSvcCapErr2">
+                                          <Properties>
+                                            <Property name="horizontalAlignment" type="int" value="0"/>
+                                          </Properties>
+                                          <Constraints>
+                                            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+                                              <BorderConstraints direction="South"/>
+                                            </Constraint>
+                                          </Constraints>
+                                        </Component>
+                                      </SubComponents>
+                                    </Container>
+                                  </SubComponents>
+                                </Container>
+                              </SubComponents>
+                            </Container>
+                          </SubComponents>
+                        </Container>
+                        <Container class="javax.swing.JPanel" name="panelDashboardUSB">
+                          <Constraints>
+                            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+                              <BorderConstraints direction="East"/>
+                            </Constraint>
+                          </Constraints>
+
+                          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
+                          <SubComponents>
+                            <Component class="javax.swing.JLabel" name="jLabel2">
+                              <Properties>
+                                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                  <Font name="Segoe UI" size="18" style="1"/>
+                                </Property>
+                                <Property name="horizontalAlignment" type="int" value="0"/>
+                                <Property name="text" type="java.lang.String" value="USB Tracker"/>
+                              </Properties>
+                              <Constraints>
+                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+                                  <BorderConstraints direction="First"/>
+                                </Constraint>
+                              </Constraints>
+                            </Component>
+                            <Container class="javax.swing.JPanel" name="panelTaskHeader1">
+                              <Constraints>
+                                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+                                  <BorderConstraints direction="Center"/>
+                                </Constraint>
+                              </Constraints>
+
+                              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
+                              <SubComponents>
+                                <Container class="javax.swing.JScrollPane" name="jScrollPane2">
+                                  <Properties>
+                                    <Property name="horizontalScrollBarPolicy" type="int" value="31"/>
+                                  </Properties>
+                                  <Constraints>
+                                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+                                      <BorderConstraints direction="Center"/>
+                                    </Constraint>
+                                  </Constraints>
+
+                                  <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+                                  <SubComponents>
+                                    <Container class="javax.swing.JPanel" name="jPanel21">
+
+                                      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
+                                      <SubComponents>
+                                        <Container class="javax.swing.JPanel" name="panelUsbDevices">
+                                          <Constraints>
+                                            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+                                              <BorderConstraints direction="North"/>
+                                            </Constraint>
+                                          </Constraints>
+
+                                          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+                                            <Property name="columns" type="int" value="1"/>
+                                            <Property name="rows" type="int" value="0"/>
+                                          </Layout>
+                                        </Container>
+                                      </SubComponents>
+                                    </Container>
+                                  </SubComponents>
+                                </Container>
+                              </SubComponents>
+                            </Container>
+                          </SubComponents>
+                        </Container>
+                      </SubComponents>
                     </Container>
                   </SubComponents>
                 </Container>

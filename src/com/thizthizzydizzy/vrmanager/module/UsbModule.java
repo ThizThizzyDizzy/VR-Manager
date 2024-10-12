@@ -43,7 +43,7 @@ public class UsbModule extends VRModule{
                     Logger.info("Invalid product ID: "+args[1]+"!");
                     return;
                 }
-                Usb.watch(vendorID, productID);
+                Usb.watch(null, vendorID, productID);
             }),
             new NamedCommand("list", (base, args) -> {
                 if(!CommandUtil.noArguments(base, args))return;
