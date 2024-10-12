@@ -1,4 +1,4 @@
-package com.thizthizzydizzy.vrmanager.special;
+package com.thizthizzydizzy.vrmanager.special.usb;
 import com.thizthizzydizzy.vrmanager.Logger;
 import com.thizthizzydizzy.vrmanager.VRManager;
 import com.thizthizzydizzy.vrmanager.task.Task;
@@ -127,22 +127,22 @@ public class Usb{
         var desc = device.getUsbDeviceDescriptor();
         Logger.info("Device Attached: "+getDeviceDescription(device));
     }
-    public static void watch(String name, int vendorID, int productID){
+    public static void watch(int vendorID, int productID){
         for(var watch : watching){
             if(watch.vendorID==vendorID&&watch.productID==productID)return;
         }
         Logger.push(Usb.class);
-        watching.add(new WatchInfo(name, vendorID, productID));
+        watching.add(new WatchInfo(vendorID, productID));
         Logger.info("Started watching devices (Vendor "+Integer.toHexString(vendorID)+(productID>=0?", Product "+Integer.toHexString(productID):"")+")");
         Logger.pop();
     }
-    public static void watch(String name, int vendorID){
-        watch(name, vendorID, -1);
+    public static void watch(int vendorID){
+        watch(vendorID, -1);
     }
     public static WatchInfo isWatching(UsbDevice device){
         var desc = device.getUsbDeviceDescriptor();
         for(var watch : watching){
-            if(watch.vendorID==desc.idVendor()&&(watch.productID==-1||watch.productID==desc.idProduct()))return watch;
+            if((watch.vendorID==-1||watch.vendorID==desc.idVendor())&&(watch.productID==-1||watch.productID==desc.idProduct()))return watch;
         }
         return null;
     }
@@ -155,11 +155,9 @@ public class Usb{
         return Integer.toString(desc.idVendor(), 16)+" "+Integer.toString(desc.idProduct(), 16);
     }
     public static class WatchInfo{
-        public String name;
         public final int vendorID;
         public final int productID;
-        public WatchInfo(String name, int vendorID, int productID){
-            this.name = name;
+        public WatchInfo(int vendorID, int productID){
             this.vendorID = vendorID;
             this.productID = productID;
         }

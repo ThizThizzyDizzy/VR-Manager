@@ -1,8 +1,12 @@
 package com.thizthizzydizzy.vrmanager.module;
 import com.thizthizzydizzy.vrmanager.Logger;
+import com.thizthizzydizzy.vrmanager.VRManager;
 import com.thizthizzydizzy.vrmanager.command.CommandUtil;
 import com.thizthizzydizzy.vrmanager.command.NamedCommand;
-import com.thizthizzydizzy.vrmanager.special.Usb;
+import com.thizthizzydizzy.vrmanager.gui.module.ConfigureUsbGUI;
+import com.thizthizzydizzy.vrmanager.special.usb.Usb;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 public class UsbModule extends VRModule{
     @Override
     public String getName(){
@@ -43,7 +47,7 @@ public class UsbModule extends VRModule{
                     Logger.info("Invalid product ID: "+args[1]+"!");
                     return;
                 }
-                Usb.watch(null, vendorID, productID);
+                Usb.watch(vendorID, productID);
             }),
             new NamedCommand("list", (base, args) -> {
                 if(!CommandUtil.noArguments(base, args))return;
@@ -58,5 +62,16 @@ public class UsbModule extends VRModule{
     @Override
     public void init(){
         Usb.start();
+        for(var device : VRManager.configuration.usb.devices)Usb.watch(device.vendor, device.product);
+        for(var vendor : VRManager.configuration.usb.vendors)Usb.watch(vendor);
+        if(VRManager.configuration.usb.watchAllDevices)Usb.watch(-1);
+    }
+    @Override
+    public boolean hasConfiguration(){
+        return true;
+    }
+    @Override
+    public JDialog getConfigurationGUI(JFrame parent){
+        return new ConfigureUsbGUI(parent);
     }
 }

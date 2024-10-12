@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.function.Consumer;
+import javax.swing.JOptionPane;
 public class VRManager{
     public static HashSet<StartupFlags> flags = new HashSet<>();
     public static Gson gson = new GsonBuilder().registerTypeAdapter(piVector3f.class, new piVector3fAdapter()).setPrettyPrinting().create();
@@ -34,13 +35,26 @@ public class VRManager{
         }
         Logger.info("Flags: "+flags.toString());
         Logger.info("Loading configuration");
+        File configFile = new File("config.json");
         try{
-            configuration = gson.fromJson(Files.readString(new File("config.json").toPath()), Configuration.class);
+            configuration = gson.fromJson(Files.readString(configFile.toPath()), Configuration.class);
         }catch(NoSuchFileException _ignored){
             configuration = new Configuration();
         }catch(IOException ex){
-            Logger.error("Failed to load configuration! Exiting...");
-            return;
+            configuration = null;
+        }
+        if(configuration==null){
+            boolean reset = false;
+            if(!flags.contains(StartupFlags.NOGUI)){
+                int option = JOptionPane.showOptionDialog(null, "Failed to load settings!\nReset configuration?", "VR Manager", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, new String[]{"Exit", "Reset Configuration"}, "Reset Configuration");
+                reset = option==1;
+            }
+            if(!reset){
+                Logger.error("Failed to load configuration! Exiting...");
+                return;
+            }
+            configuration = new Configuration();
+            configFile.delete();
         }
         if(!flags.contains(StartupFlags.NOGUI)){
             Logger.info("Starting GUI");
@@ -140,6 +154,7 @@ public class VRManager{
     }
     public static Configuration autoConfig(Consumer<String> logCallback){
         var configuration = new Configuration();
+        configuration.enableTelemetry = VRManager.configuration.enableTelemetry;//remember telemetry setting
         Consumer<String> log = (str) -> {
             Logger.info(str);
             if(logCallback!=null)logCallback.accept(str);

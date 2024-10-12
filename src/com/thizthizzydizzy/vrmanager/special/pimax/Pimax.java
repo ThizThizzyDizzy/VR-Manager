@@ -1,8 +1,8 @@
-package com.thizthizzydizzy.vrmanager.special;
+package com.thizthizzydizzy.vrmanager.special.pimax;
 import com.thizthizzydizzy.vrmanager.Logger;
 import com.thizthizzydizzy.vrmanager.VRManager;
-import com.thizthizzydizzy.vrmanager.special.pimax.PiRpc;
-import com.thizthizzydizzy.vrmanager.special.pimax.PiSvc;
+import com.thizthizzydizzy.vrmanager.special.usb.Usb;
+import com.thizthizzydizzy.vrmanager.special.Windows;
 import com.thizthizzydizzy.vrmanager.special.pimax.piRpc.PiRpcAPI;
 import com.thizthizzydizzy.vrmanager.special.pimax.piSvc.piSvcDesc.piVector3f;
 import com.thizthizzydizzy.vrmanager.special.pimax.piSvc.piSvcType.piSvcResult;
@@ -38,6 +38,7 @@ public class Pimax extends Task{
         }catch(IOException ex){
             Logger.warn("Could not list running tasks! Assuming DeviceSetting is not running...");
         }
+        if(VRManager.configuration.enableTelemetry)PiSvc.scanLog(); // check previous session
         running = true;
         if(VRManager.configuration.pimax.usePimaxClient&&!isClientRunning){
             Logger.info("Starting Pimax Client ("+pimaxClient.getName()+")");
@@ -61,12 +62,9 @@ public class Pimax extends Task{
             PiRpc.start();
         }
         if(VRManager.configuration.pimax.watchUSBDevices){
-            Usb.watch("Tobii Eye Tracking", 0x2104, 0x0220);//Tobii AB WinUsb Device
-            Usb.watch("SteamVR HMD Tracking", 0x28DE, 0x2300);//Lighthouse Faceplate (HMD tracking)
-            Usb.watch("Watchman Dongle", 0x28DE, 0x2101);//Watchman Dongle (HMD or standalone)
-            Usb.watch("Pimax Crystal", 0x34A4, 0x0012);//Pimax Crystal
-            Usb.watch("Pimax", 0x34A4);//Pimax
-            Usb.watch("Valve", 0x28DE);//Valve
+            Usb.watch(0x2104);//Tobii
+            Usb.watch(0x34A4);//Pimax
+            Usb.watch(0x28DE);//Valve
         }
         waitForConnection(0);
         if(VRManager.configuration.pimax.forceReboot){
@@ -158,6 +156,7 @@ public class Pimax extends Task{
     @Override
     public void shutdown(){
         Logger.push(this);
+        if(VRManager.configuration.enableTelemetry)PiSvc.scanLog();
         //no RPC to shut down the HMD
         PiRpc.stop();
         PiSvc.stop();
@@ -174,6 +173,7 @@ public class Pimax extends Task{
             service.destroy();
         }
         Windows.taskkill("DeviceSetting.exe");
+        Windows.taskkill("VRServer.exe");
         running = false;
         pimaxTask = null;
         Logger.pop();

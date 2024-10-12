@@ -29,10 +29,13 @@ public class Logger{
     public static void reset(){
         getSourceStack().clear();
     }
+    public static String getCurrentSource(){
+        var stack = getSourceStack();
+        return stack.isEmpty()?null:stack.peek();
+    }
     public static void log(MessageType type, String message, Throwable t){//TODO log to a file
         PrintStream out = type==MessageType.ERROR?System.err:System.out;
-        var stack = getSourceStack();
-        String source = stack.isEmpty()?null:stack.peek();
+        String source = getCurrentSource();
         String err = message!=null?message+"\n":"";
         if(t!=null){
             err += t.getClass().getName()+": "+t.getMessage();

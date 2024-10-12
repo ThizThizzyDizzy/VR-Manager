@@ -2,9 +2,10 @@ package com.thizthizzydizzy.vrmanager.gui;
 import com.thizthizzydizzy.vrmanager.Logger;
 import com.thizthizzydizzy.vrmanager.VRManager;
 import com.thizthizzydizzy.vrmanager.config.Configuration;
+import com.thizthizzydizzy.vrmanager.config.module.UsbConfiguration;
 import com.thizthizzydizzy.vrmanager.module.VRModule;
-import com.thizthizzydizzy.vrmanager.special.Usb;
-import com.thizthizzydizzy.vrmanager.special.Usb.WatchInfo;
+import com.thizthizzydizzy.vrmanager.special.usb.Usb;
+import com.thizthizzydizzy.vrmanager.special.usb.Usb.WatchInfo;
 import com.thizthizzydizzy.vrmanager.special.pimax.PiRpc;
 import com.thizthizzydizzy.vrmanager.special.pimax.PiSvc;
 import com.thizthizzydizzy.vrmanager.special.pimax.piRpc.PiRpcAPI;
@@ -12,11 +13,10 @@ import com.thizthizzydizzy.vrmanager.special.pimax.piSvc.piSvcCapability.BrightS
 import com.thizthizzydizzy.vrmanager.special.pimax.piSvc.piSvcCapability.LogLevel;
 import com.thizthizzydizzy.vrmanager.special.pimax.piSvc.piSvcCapability.Mode_Type;
 import com.thizthizzydizzy.vrmanager.special.pimax.piSvc.piSvcCapability.ToneState;
-import com.thizthizzydizzy.vrmanager.special.pimax.piSvc.piSvcCapability.TrackedDeviceBateryLevel;
-import com.thizthizzydizzy.vrmanager.special.pimax.piSvc.piSvcCapability.TrackedDeviceType;
 import com.thizthizzydizzy.vrmanager.special.pimax.piSvc.piSvcCapability.piHmdCapabilityMask;
 import com.thizthizzydizzy.vrmanager.special.pimax.piSvc.piSvcCapability.piResolutionCapabilityFlag;
 import com.thizthizzydizzy.vrmanager.special.pimax.piSvc.piSvcType.piSvcResult;
+import com.thizthizzydizzy.vrmanager.special.usb.UsbDictionary;
 import com.thizthizzydizzy.vrmanager.task.Task;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -28,6 +28,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.function.Supplier;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -64,7 +65,7 @@ public class ManagerGUI extends javax.swing.JFrame{
     }
     private void updatePimaxBool(JPanel panel, Boolean b, JLabel statusLabel){
         int err = PiSvc.checkError();
-        statusLabel.setText(piSvcResult.getName(err));
+        statusLabel.setText(err==0?"":piSvcResult.getName(err));
         updatePimaxBool(panel, b, err);
     }
     private void updatePimaxSvcMessage(JLabel label, String message){
@@ -79,12 +80,14 @@ public class ManagerGUI extends javax.swing.JFrame{
         panelDashboardPimax.setVisible(false);
         refreshModules();
         if(!new File("config.json").exists()){
-            ((CardLayout)panelRoot.getLayout()).show(panelRoot, "autoconfig");
+            ((CardLayout)panelRoot.getLayout()).show(panelRoot, "telemetry");
         }
         Thread t = new Thread(() -> {
             long lastPimaxCheck = System.currentTimeMillis();
             HashMap<Task, JLabel> taskLabels = new HashMap<>();
             HashMap<UsbDevice, JPanel> usbPanels = new HashMap<>();
+            HashMap<UsbConfiguration.Device, JPanel> transientUsbPanels = new HashMap<>();
+            HashMap<UsbConfiguration.Device, Integer> transientUsbDevices = new HashMap<>();
             while(VRManager.running){
                 try{
                     //TODO these should be moved to the actual modules
@@ -259,19 +262,50 @@ public class ManagerGUI extends javax.swing.JFrame{
                     }
                     // USB
                     if(Usb.isActive()){
+                        HashSet<UsbConfiguration.Device> visitedTransient = new HashSet<>();
                         for(var device : Usb.allDevices){
                             WatchInfo watch = Usb.isWatching(device);
                             if(watch==null)continue;
-                            boolean connected = Usb.devices.contains(device);
-                            JPanel panel = usbPanels.get(device);
-                            if(panel==null){
-                                panel = new JPanel(new GridLayout());
-                                var desc = device.getUsbDeviceDescriptor();
-                                panel.add(new JLabel(watch.name==null?Integer.toHexString(desc.idVendor())+" "+Integer.toHexString(desc.idProduct()):(watch.name+(watch.productID<0?" "+Integer.toHexString(desc.idProduct()):""))));
-                                panelUsbDevices.add(panel);
-                                usbPanels.put(device, panel);
+                            var desc = device.getUsbDeviceDescriptor();
+                            if(UsbDictionary.isTransient(desc.idVendor(), desc.idProduct())){
+                                UsbConfiguration.Device transientDevice = new UsbConfiguration.Device(desc.idVendor(), desc.idProduct());
+                                if(visitedTransient.contains(transientDevice))continue;
+                                int count = 0;
+                                for(int i = 0; i<Usb.devices.size(); i++){
+                                    var d = Usb.devices.get(i);
+                                    var ddesc = d.getUsbDeviceDescriptor();
+                                    if(ddesc.idVendor()==transientDevice.vendor&&ddesc.idProduct()==transientDevice.product)count++;
+                                }
+                                transientUsbDevices.put(transientDevice, Math.max(transientUsbDevices.getOrDefault(transientDevice, 0), count));
+                                int max = transientUsbDevices.get(transientDevice);
+                                JPanel panel = transientUsbPanels.get(transientDevice);
+                                if(panel==null){
+                                    panel = new JPanel(new GridLayout());
+                                    panel.add(new JLabel(UsbDictionary.getDisplayName(desc.idVendor(), desc.idProduct())+(max>1?" ("+count+"/"+max+")":"")+"        "));
+                                    panelUsbDevices.add(panel);
+                                    transientUsbPanels.put(transientDevice, panel);
+                                    revalidate();
+                                }
+                                ((JLabel)panel.getComponent(0)).setText(UsbDictionary.getDisplayName(desc.idVendor(), desc.idProduct())+(max>1?" ("+count+"/"+max+")":"")+"        ");
+                                if(count==max){
+                                    panel.setBackground(Color.green.darker());
+                                }else if(count>0){
+                                    panel.setBackground(Color.yellow.darker());
+                                }else{
+                                    panel.setBackground(Color.red.darker());
+                                }
+                            }else{
+                                boolean connected = Usb.devices.contains(device);
+                                JPanel panel = usbPanels.get(device);
+                                if(panel==null){
+                                    panel = new JPanel(new GridLayout());
+                                    panel.add(new JLabel(UsbDictionary.getDisplayName(desc.idVendor(), desc.idProduct())+"        "));
+                                    panelUsbDevices.add(panel);
+                                    usbPanels.put(device, panel);
+                                    revalidate();
+                                }
+                                updatePimaxBool(panel, connected);
                             }
-                            updatePimaxBool(panel, connected);
                         }
                     }
 
@@ -393,8 +427,20 @@ public class ManagerGUI extends javax.swing.JFrame{
         buttonPimaxRestartService = new javax.swing.JButton();
         buttonPimaxDeviceSettings = new javax.swing.JButton();
         buttonPimaxShutDown = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
         jPanel19 = new javax.swing.JPanel();
-        jPanel5 = new javax.swing.JPanel();
+        jPanel10 = new javax.swing.JPanel();
+        jLabel12 = new javax.swing.JLabel();
+        jPanel11 = new javax.swing.JPanel();
+        panelPimaxConnectionUSB = new javax.swing.JPanel();
+        jLabel16 = new javax.swing.JLabel();
+        panelPimaxConnectionVideo = new javax.swing.JPanel();
+        jLabel18 = new javax.swing.JLabel();
+        panelPimaxConnectionService = new javax.swing.JPanel();
+        jLabel23 = new javax.swing.JLabel();
+        labelPimaxConnectionUSB = new javax.swing.JLabel();
+        labelPimaxConnectionVideo = new javax.swing.JLabel();
+        labelPimaxConnectionService = new javax.swing.JLabel();
         panelPimaxStatusLights = new javax.swing.JPanel();
         panelPimaxStatusHmdConnect = new javax.swing.JPanel();
         labelPimaxStatusHmdConnect = new javax.swing.JLabel();
@@ -514,19 +560,6 @@ public class ManagerGUI extends javax.swing.JFrame{
         jLabel106 = new javax.swing.JLabel();
         labelPimaxStatusCPU = new javax.swing.JLabel();
         labelPimaxStatusGPU = new javax.swing.JLabel();
-        jPanel20 = new javax.swing.JPanel();
-        jPanel10 = new javax.swing.JPanel();
-        jLabel12 = new javax.swing.JLabel();
-        jPanel11 = new javax.swing.JPanel();
-        panelPimaxConnectionUSB = new javax.swing.JPanel();
-        jLabel16 = new javax.swing.JLabel();
-        panelPimaxConnectionVideo = new javax.swing.JPanel();
-        jLabel18 = new javax.swing.JLabel();
-        panelPimaxConnectionService = new javax.swing.JPanel();
-        jLabel23 = new javax.swing.JLabel();
-        labelPimaxConnectionUSB = new javax.swing.JLabel();
-        labelPimaxConnectionVideo = new javax.swing.JLabel();
-        labelPimaxConnectionService = new javax.swing.JLabel();
         jPanel13 = new javax.swing.JPanel();
         jLabel27 = new javax.swing.JLabel();
         jPanel18 = new javax.swing.JPanel();
@@ -666,6 +699,7 @@ public class ManagerGUI extends javax.swing.JFrame{
         scrollableModules = new javax.swing.JScrollPane();
         panelModulesListContainer = new javax.swing.JPanel();
         panelModulesList = new javax.swing.JPanel();
+        checkBoxTelemetry = new javax.swing.JCheckBox();
         jButton1 = new javax.swing.JButton();
         panelAutoconfig = new javax.swing.JPanel();
         labelAutoconfigTitle = new javax.swing.JLabel();
@@ -674,6 +708,13 @@ public class ManagerGUI extends javax.swing.JFrame{
         buttonAutoconfigConfirm = new javax.swing.JButton();
         scrollableAutoconfig = new javax.swing.JScrollPane();
         labelAutoconfig = new javax.swing.JLabel();
+        panelTelemetry = new javax.swing.JPanel();
+        labelTelemetryTitle = new javax.swing.JLabel();
+        panelTelemetryButtons = new javax.swing.JPanel();
+        buttonTelemetryDeny = new javax.swing.JButton();
+        buttonTelemetryAllow = new javax.swing.JButton();
+        scrollableTelemetry = new javax.swing.JScrollPane();
+        labelTelemetry = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("VR Manager");
@@ -770,6 +811,7 @@ public class ManagerGUI extends javax.swing.JFrame{
 
         panelDashboardModules.setLayout(new java.awt.BorderLayout());
 
+        panelDashboardPimax.setVisible(false);
         panelDashboardPimax.setLayout(new java.awt.BorderLayout());
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -853,9 +895,55 @@ public class ManagerGUI extends javax.swing.JFrame{
 
         panelDashboardPimax.add(jPanel4, java.awt.BorderLayout.PAGE_END);
 
-        jPanel19.setLayout(new java.awt.GridLayout(1, 0));
+        jScrollPane3.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-        jPanel5.setLayout(new javax.swing.BoxLayout(jPanel5, javax.swing.BoxLayout.PAGE_AXIS));
+        jPanel19.setLayout(new javax.swing.BoxLayout(jPanel19, javax.swing.BoxLayout.PAGE_AXIS));
+
+        jPanel10.setLayout(new java.awt.BorderLayout());
+
+        jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel12.setText("Connection Info");
+        jPanel10.add(jLabel12, java.awt.BorderLayout.PAGE_START);
+
+        jPanel11.setLayout(new java.awt.GridLayout(0, 3));
+
+        panelPimaxConnectionUSB.setLayout(new java.awt.GridLayout(1, 0));
+
+        jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel16.setText("USB Connected");
+        panelPimaxConnectionUSB.add(jLabel16);
+
+        jPanel11.add(panelPimaxConnectionUSB);
+
+        panelPimaxConnectionVideo.setLayout(new java.awt.GridLayout(1, 0));
+
+        jLabel18.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel18.setText("Video Connected");
+        panelPimaxConnectionVideo.add(jLabel18);
+
+        jPanel11.add(panelPimaxConnectionVideo);
+
+        panelPimaxConnectionService.setLayout(new java.awt.GridLayout(1, 0));
+
+        jLabel23.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel23.setText("Service Connected");
+        panelPimaxConnectionService.add(jLabel23);
+
+        jPanel11.add(panelPimaxConnectionService);
+
+        labelPimaxConnectionUSB.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jPanel11.add(labelPimaxConnectionUSB);
+
+        labelPimaxConnectionVideo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jPanel11.add(labelPimaxConnectionVideo);
+
+        labelPimaxConnectionService.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jPanel11.add(labelPimaxConnectionService);
+
+        jPanel10.add(jPanel11, java.awt.BorderLayout.CENTER);
+
+        jPanel19.add(jPanel10);
 
         panelPimaxStatusLights.setLayout(new java.awt.GridLayout(0, 3));
 
@@ -971,7 +1059,7 @@ public class ManagerGUI extends javax.swing.JFrame{
 
         panelPimaxStatusLights.add(panelPimaxStatusUiConfig);
 
-        jPanel5.add(panelPimaxStatusLights);
+        jPanel19.add(panelPimaxStatusLights);
 
         jPanel6.setLayout(new java.awt.BorderLayout());
 
@@ -1140,7 +1228,7 @@ public class ManagerGUI extends javax.swing.JFrame{
 
         jPanel6.add(jPanel7, java.awt.BorderLayout.CENTER);
 
-        jPanel5.add(jPanel6);
+        jPanel19.add(jPanel6);
 
         jPanel8.setLayout(new java.awt.BorderLayout());
 
@@ -1203,7 +1291,7 @@ public class ManagerGUI extends javax.swing.JFrame{
         jLabel6.setText("Controllers");
         jPanel8.add(jLabel6, java.awt.BorderLayout.PAGE_START);
 
-        jPanel5.add(jPanel8);
+        jPanel19.add(jPanel8);
 
         jPanel15.setLayout(new java.awt.BorderLayout());
 
@@ -1215,7 +1303,7 @@ public class ManagerGUI extends javax.swing.JFrame{
         jLabel8.setText("Base Stations");
         jPanel15.add(jLabel8, java.awt.BorderLayout.PAGE_START);
 
-        jPanel5.add(jPanel15);
+        jPanel19.add(jPanel15);
 
         jPanel16.setLayout(new java.awt.BorderLayout());
 
@@ -1227,7 +1315,7 @@ public class ManagerGUI extends javax.swing.JFrame{
         panelPimaxStatusTrackers.setLayout(new java.awt.GridLayout(0, 4));
         jPanel16.add(panelPimaxStatusTrackers, java.awt.BorderLayout.CENTER);
 
-        jPanel5.add(jPanel16);
+        jPanel19.add(jPanel16);
 
         jPanel17.setLayout(new java.awt.BorderLayout());
 
@@ -1279,7 +1367,7 @@ public class ManagerGUI extends javax.swing.JFrame{
         labelPimaxStatusErrorString.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jPanel17.add(labelPimaxStatusErrorString, java.awt.BorderLayout.PAGE_END);
 
-        jPanel5.add(jPanel17);
+        jPanel19.add(jPanel17);
 
         jPanel9.setLayout(new java.awt.BorderLayout());
 
@@ -1324,57 +1412,7 @@ public class ManagerGUI extends javax.swing.JFrame{
 
         jPanel9.add(panelPimaxStatusSystemInfo, java.awt.BorderLayout.CENTER);
 
-        jPanel5.add(jPanel9);
-
-        jPanel19.add(jPanel5);
-
-        jPanel20.setLayout(new javax.swing.BoxLayout(jPanel20, javax.swing.BoxLayout.PAGE_AXIS));
-
-        jPanel10.setLayout(new java.awt.BorderLayout());
-
-        jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel12.setText("Connection Info");
-        jPanel10.add(jLabel12, java.awt.BorderLayout.PAGE_START);
-
-        jPanel11.setLayout(new java.awt.GridLayout(0, 3));
-
-        panelPimaxConnectionUSB.setLayout(new java.awt.GridLayout(1, 0));
-
-        jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel16.setText("USB Connected");
-        panelPimaxConnectionUSB.add(jLabel16);
-
-        jPanel11.add(panelPimaxConnectionUSB);
-
-        panelPimaxConnectionVideo.setLayout(new java.awt.GridLayout(1, 0));
-
-        jLabel18.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel18.setText("Video Connected");
-        panelPimaxConnectionVideo.add(jLabel18);
-
-        jPanel11.add(panelPimaxConnectionVideo);
-
-        panelPimaxConnectionService.setLayout(new java.awt.GridLayout(1, 0));
-
-        jLabel23.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel23.setText("Service Connected");
-        panelPimaxConnectionService.add(jLabel23);
-
-        jPanel11.add(panelPimaxConnectionService);
-
-        labelPimaxConnectionUSB.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jPanel11.add(labelPimaxConnectionUSB);
-
-        labelPimaxConnectionVideo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jPanel11.add(labelPimaxConnectionVideo);
-
-        labelPimaxConnectionService.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jPanel11.add(labelPimaxConnectionService);
-
-        jPanel10.add(jPanel11, java.awt.BorderLayout.CENTER);
-
-        jPanel20.add(jPanel10);
+        jPanel19.add(jPanel9);
 
         jPanel13.setLayout(new java.awt.BorderLayout());
 
@@ -1495,7 +1533,7 @@ public class ManagerGUI extends javax.swing.JFrame{
 
         panelPimaxSvc19.setLayout(new java.awt.GridLayout(0, 1));
 
-        panelPimaxSvcBlueLight.setLayout(new java.awt.GridLayout());
+        panelPimaxSvcBlueLight.setLayout(new java.awt.GridLayout(1, 0));
 
         labelPimaxStatusPvrHome7.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         labelPimaxStatusPvrHome7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1511,7 +1549,7 @@ public class ManagerGUI extends javax.swing.JFrame{
 
         panelPimaxSvc20.setLayout(new java.awt.GridLayout(0, 1));
 
-        panelPimaxSvcBacklight.setLayout(new java.awt.GridLayout());
+        panelPimaxSvcBacklight.setLayout(new java.awt.GridLayout(1, 0));
 
         labelPimaxStatusPvrHome8.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         labelPimaxStatusPvrHome8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1527,7 +1565,7 @@ public class ManagerGUI extends javax.swing.JFrame{
 
         panelPimaxSvc21.setLayout(new java.awt.GridLayout(0, 1));
 
-        panelPimaxSvcProximity.setLayout(new java.awt.GridLayout());
+        panelPimaxSvcProximity.setLayout(new java.awt.GridLayout(1, 0));
 
         labelPimaxStatusPvrHome9.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         labelPimaxStatusPvrHome9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1543,7 +1581,7 @@ public class ManagerGUI extends javax.swing.JFrame{
 
         panelPimaxSvc18.setLayout(new java.awt.GridLayout(0, 1));
 
-        panelPimaxSvcGyro.setLayout(new java.awt.GridLayout());
+        panelPimaxSvcGyro.setLayout(new java.awt.GridLayout(1, 0));
 
         labelPimaxStatusPvrHome5.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         labelPimaxStatusPvrHome5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1595,7 +1633,7 @@ public class ManagerGUI extends javax.swing.JFrame{
 
         panelPimaxSvc23.setLayout(new java.awt.GridLayout(0, 1));
 
-        panelPimaxSvcDefAudio.setLayout(new java.awt.GridLayout());
+        panelPimaxSvcDefAudio.setLayout(new java.awt.GridLayout(1, 0));
 
         labelPimaxStatusPvrHome10.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         labelPimaxStatusPvrHome10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1659,7 +1697,7 @@ public class ManagerGUI extends javax.swing.JFrame{
 
         jPanel13.add(panelPimaxSvcPosition1, java.awt.BorderLayout.PAGE_END);
 
-        jPanel20.add(jPanel13);
+        jPanel19.add(jPanel13);
 
         panelHmdCapabilities.setLayout(new java.awt.BorderLayout());
 
@@ -1795,7 +1833,7 @@ public class ManagerGUI extends javax.swing.JFrame{
         labelPimaxSvcCapErr.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         panelHmdCapabilities.add(labelPimaxSvcCapErr, java.awt.BorderLayout.SOUTH);
 
-        jPanel20.add(panelHmdCapabilities);
+        jPanel19.add(panelHmdCapabilities);
 
         panelResolutionCapabilities.setLayout(new java.awt.BorderLayout());
 
@@ -1843,7 +1881,7 @@ public class ManagerGUI extends javax.swing.JFrame{
         labelPimaxSvcCapErr1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         panelResolutionCapabilities.add(labelPimaxSvcCapErr1, java.awt.BorderLayout.SOUTH);
 
-        jPanel20.add(panelResolutionCapabilities);
+        jPanel19.add(panelResolutionCapabilities);
 
         panelResolutionCapabilities1.setLayout(new java.awt.BorderLayout());
 
@@ -1854,7 +1892,7 @@ public class ManagerGUI extends javax.swing.JFrame{
 
         panelPimaxCapabilities2.setLayout(new java.awt.GridLayout(0, 3));
 
-        panelPimaxSvcCapMode1.setLayout(new java.awt.GridLayout());
+        panelPimaxSvcCapMode1.setLayout(new java.awt.GridLayout(1, 0));
 
         labelPimaxStatusHmdConnect3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         labelPimaxStatusHmdConnect3.setText("Smart");
@@ -1862,7 +1900,7 @@ public class ManagerGUI extends javax.swing.JFrame{
 
         panelPimaxCapabilities2.add(panelPimaxSvcCapMode1);
 
-        panelPimaxSvcCapMode2.setLayout(new java.awt.GridLayout());
+        panelPimaxSvcCapMode2.setLayout(new java.awt.GridLayout(1, 0));
 
         labelPimaxStatusSpaceCalibrated3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         labelPimaxStatusSpaceCalibrated3.setText("Video");
@@ -1870,7 +1908,7 @@ public class ManagerGUI extends javax.swing.JFrame{
 
         panelPimaxCapabilities2.add(panelPimaxSvcCapMode2);
 
-        panelPimaxSvcCapMode3.setLayout(new java.awt.GridLayout());
+        panelPimaxSvcCapMode3.setLayout(new java.awt.GridLayout(1, 0));
 
         labelPimaxStatusLeapMotionPlugin3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         labelPimaxStatusLeapMotionPlugin3.setText("DFU");
@@ -1883,11 +1921,11 @@ public class ManagerGUI extends javax.swing.JFrame{
         labelPimaxSvcCapErr2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         panelResolutionCapabilities1.add(labelPimaxSvcCapErr2, java.awt.BorderLayout.SOUTH);
 
-        jPanel20.add(panelResolutionCapabilities1);
+        jPanel19.add(panelResolutionCapabilities1);
 
-        jPanel19.add(jPanel20);
+        jScrollPane3.setViewportView(jPanel19);
 
-        panelDashboardPimax.add(jPanel19, java.awt.BorderLayout.CENTER);
+        panelDashboardPimax.add(jScrollPane3, java.awt.BorderLayout.CENTER);
 
         panelDashboardModules.add(panelDashboardPimax, java.awt.BorderLayout.CENTER);
 
@@ -1939,6 +1977,16 @@ public class ManagerGUI extends javax.swing.JFrame{
         scrollableModules.setViewportView(panelModulesListContainer);
 
         panelModules.add(scrollableModules, java.awt.BorderLayout.CENTER);
+
+        checkBoxTelemetry.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        checkBoxTelemetry.setSelected(VRManager.configuration.enableTelemetry);
+        checkBoxTelemetry.setText("Enable Telemetry");
+        checkBoxTelemetry.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkBoxTelemetryActionPerformed(evt);
+            }
+        });
+        panelModules.add(checkBoxTelemetry, java.awt.BorderLayout.PAGE_END);
 
         panelConfigure.add(panelModules, java.awt.BorderLayout.CENTER);
 
@@ -2012,14 +2060,74 @@ public class ManagerGUI extends javax.swing.JFrame{
 
             panelRoot.add(panelAutoconfig, "autoconfig");
 
-            getContentPane().add(panelRoot, java.awt.BorderLayout.CENTER);
+            panelTelemetry.setBorder(javax.swing.BorderFactory.createEmptyBorder(50, 50, 50, 50));
+            panelTelemetry.setLayout(new java.awt.BorderLayout());
 
-            pack();
-        }// </editor-fold>//GEN-END:initComponents
+            labelTelemetryTitle.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+            labelTelemetryTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+            labelTelemetryTitle.setText("Welcome to VR Manager!");
+            panelTelemetry.add(labelTelemetryTitle, java.awt.BorderLayout.PAGE_START);
+
+            panelTelemetryButtons.setLayout(new java.awt.GridLayout(1, 0, 50, 50));
+
+            buttonTelemetryDeny.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+            buttonTelemetryDeny.setText("Deny");
+            buttonTelemetryDeny.setMargin(new java.awt.Insets(22, 14, 23, 14));
+            buttonTelemetryDeny.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    buttonTelemetryDenyActionPerformed(evt);
+                }
+            });
+            panelTelemetryButtons.add(buttonTelemetryDeny);
+
+            buttonTelemetryAllow.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+            buttonTelemetryAllow.setText("Allow");
+            buttonTelemetryAllow.setMargin(new java.awt.Insets(22, 14, 23, 14));
+            buttonTelemetryAllow.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    buttonTelemetryAllowActionPerformed(evt);
+                }
+            });
+            panelTelemetryButtons.add(buttonTelemetryAllow);
+
+            panelTelemetry.add(panelTelemetryButtons, java.awt.BorderLayout.PAGE_END);
+
+            scrollableTelemetry.setBorder(null);
+
+            labelTelemetry.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+            labelTelemetry.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+            labelTelemetry.setText("""
+                <html>
+                <div style="text-align: center; text-height: 240px;">
+                <br>
+                <p><strong>VR Manager would like to collect some telemetry data. Do you want to allow this?</strong></p>
+                <br>
+                The following types of information may be collected:
+                <ul style="list-style-type: none; margin: 0;">
+                <li>- Unrecognized settings from other programs</li>
+                <li>- Unknown status messages or log entries</li>
+                <li>- Unrecognized USB product or vendor IDs</li>
+                </ul>
+                <br>
+                <p>Data is only sent if VR Manager encounters something it doesn't recognize.</p>
+                <p>All data is transmitted anonymously, but no guarantees can be made about security.</p>
+                <p>Identifying or sensitive data is never collected.</p>
+                <br>
+                </div>
+                </html>
+                """);
+                scrollableTelemetry.setViewportView(labelTelemetry);
+
+                panelTelemetry.add(scrollableTelemetry, java.awt.BorderLayout.CENTER);
+
+                panelRoot.add(panelTelemetry, "telemetry");
+
+                getContentPane().add(panelRoot, java.awt.BorderLayout.CENTER);
+
+                pack();
+            }// </editor-fold>//GEN-END:initComponents
     private void buttonAutoconfigConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAutoconfigConfirmActionPerformed
         if(generatedConfig==null){
-            labelAutoconfig.setHorizontalAlignment(SwingConstants.LEFT);
-            labelAutoconfig.setVerticalAlignment(SwingConstants.TOP);
             buttonAutoconfigSkip.setEnabled(false);
             buttonAutoconfigConfirm.setEnabled(false);
             labelAutoconfig.setText("<html>");
@@ -2029,22 +2137,18 @@ public class ManagerGUI extends javax.swing.JFrame{
             buttonAutoconfigSkip.setEnabled(true);
             buttonAutoconfigConfirm.setEnabled(true);
         }else{
-            labelAutoconfig.setHorizontalAlignment(SwingConstants.CENTER);
-            labelAutoconfig.setVerticalAlignment(SwingConstants.CENTER);
             VRManager.configuration = generatedConfig;
             VRManager.saveConfig();
             generatedConfig = null;
-            ((CardLayout)panelRoot.getLayout()).show(panelRoot, "main");
+            ((CardLayout)panelRoot.getLayout()).show(panelRoot, "telemetry");
             ((CardLayout)panelMainContent.getLayout()).show(panelMainContent, "configure");
             tabButtonConfigure.setSelected(true);
             refreshModules();
         }
     }//GEN-LAST:event_buttonAutoconfigConfirmActionPerformed
     private void buttonAutoconfigSkipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAutoconfigSkipActionPerformed
-        labelAutoconfig.setHorizontalAlignment(SwingConstants.CENTER);
-        labelAutoconfig.setVerticalAlignment(SwingConstants.CENTER);
         generatedConfig = null;
-        ((CardLayout)panelRoot.getLayout()).show(panelRoot, "main");
+        ((CardLayout)panelRoot.getLayout()).show(panelRoot, "telemetry");
         ((CardLayout)panelMainContent.getLayout()).show(panelMainContent, "configure");
         tabButtonConfigure.setSelected(true);
     }//GEN-LAST:event_buttonAutoconfigSkipActionPerformed
@@ -2146,6 +2250,24 @@ public class ManagerGUI extends javax.swing.JFrame{
     private void buttonPimaxShutDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonPimaxShutDownActionPerformed
         PiRpc.Event_Click_HMDShutdown();
     }//GEN-LAST:event_buttonPimaxShutDownActionPerformed
+    private void buttonTelemetryDenyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonTelemetryDenyActionPerformed
+        checkBoxTelemetry.setSelected(VRManager.configuration.enableTelemetry = false);
+        ((CardLayout)panelRoot.getLayout()).show(panelRoot, "main");
+    }//GEN-LAST:event_buttonTelemetryDenyActionPerformed
+    private void buttonTelemetryAllowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonTelemetryAllowActionPerformed
+        checkBoxTelemetry.setSelected(VRManager.configuration.enableTelemetry = true);
+        ((CardLayout)panelRoot.getLayout()).show(panelRoot, "main");
+    }//GEN-LAST:event_buttonTelemetryAllowActionPerformed
+    private void checkBoxTelemetryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkBoxTelemetryActionPerformed
+        if(checkBoxTelemetry.isSelected()){
+            if(JOptionPane.showOptionDialog(this, labelTelemetry.getText().replaceAll("<.+?>", "").trim(), "Enable Telemetry?", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, new String[]{"Deny", "Allow"}, "Allow")!=1){
+                checkBoxTelemetry.setSelected(false);
+                return;
+            }
+        }
+        VRManager.configuration.enableTelemetry = checkBoxTelemetry.isSelected();
+        VRManager.saveConfig();
+    }//GEN-LAST:event_checkBoxTelemetryActionPerformed
     public static void start(){
         String[] preferredLookAndFeels = new String[]{"Windows", "Nimbus"};
         String[] classNames = new String[preferredLookAndFeels.length];
@@ -2189,6 +2311,9 @@ public class ManagerGUI extends javax.swing.JFrame{
     private javax.swing.JButton buttonPimaxStartSteamVR;
     private javax.swing.JButton buttonStart;
     private javax.swing.JButton buttonStop;
+    private javax.swing.JButton buttonTelemetryAllow;
+    private javax.swing.JButton buttonTelemetryDeny;
+    private javax.swing.JCheckBox checkBoxTelemetry;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -2258,17 +2383,16 @@ public class ManagerGUI extends javax.swing.JFrame{
     private javax.swing.JPanel jPanel18;
     private javax.swing.JPanel jPanel19;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel20;
     private javax.swing.JPanel jPanel21;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel labelAutoconfig;
     private javax.swing.JLabel labelAutoconfigTitle;
     private javax.swing.JLabel labelModules;
@@ -2368,6 +2492,8 @@ public class ManagerGUI extends javax.swing.JFrame{
     private javax.swing.JLabel labelPimaxSvcVersion;
     private javax.swing.JLabel labelPimaxSvcVersionGen;
     private javax.swing.JLabel labelTasks;
+    private javax.swing.JLabel labelTelemetry;
+    private javax.swing.JLabel labelTelemetryTitle;
     private javax.swing.JPanel panelAutoconfig;
     private javax.swing.JPanel panelAutoconfigButtons;
     private javax.swing.JPanel panelConfigure;
@@ -2481,9 +2607,12 @@ public class ManagerGUI extends javax.swing.JFrame{
     private javax.swing.JPanel panelTaskHeader;
     private javax.swing.JPanel panelTaskHeader1;
     private javax.swing.JPanel panelTasks;
+    private javax.swing.JPanel panelTelemetry;
+    private javax.swing.JPanel panelTelemetryButtons;
     private javax.swing.JPanel panelUsbDevices;
     private javax.swing.JScrollPane scrollableAutoconfig;
     private javax.swing.JScrollPane scrollableModules;
+    private javax.swing.JScrollPane scrollableTelemetry;
     private javax.swing.JToggleButton tabButtonConfigure;
     private javax.swing.JToggleButton tabButtonMain;
     // End of variables declaration//GEN-END:variables

@@ -4,6 +4,7 @@ import com.sun.jna.ptr.FloatByReference;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
 import com.thizthizzydizzy.vrmanager.Logger;
+import com.thizthizzydizzy.vrmanager.Telemetry;
 import com.thizthizzydizzy.vrmanager.task.Task;
 import com.thizthizzydizzy.vrmanager.VRManager;
 import com.thizthizzydizzy.vrmanager.special.pimax.piSvc.BooleanByReference;
@@ -12,7 +13,14 @@ import com.thizthizzydizzy.vrmanager.special.pimax.piSvc.piSvcCAPI;
 import com.thizthizzydizzy.vrmanager.special.pimax.piSvc.piSvcDesc.piSvcHmdInfo;
 import com.thizthizzydizzy.vrmanager.special.pimax.piSvc.piSvcDesc.piVector3f;
 import com.thizthizzydizzy.vrmanager.special.pimax.piSvc.piSvcType.piSvcResult;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.regex.Pattern;
 public class PiSvc{
     private static Task task;
     public static boolean active = false;
@@ -183,7 +191,8 @@ public class PiSvc{
         run(piSvcCAPI.INSTANCE.svc_reconnectServer(handle));
     }
     /**
-     * @deprecated This is unreliable; Use `PiRpc.Event_rebootHmdAuto` if possible.
+     * @deprecated This is unreliable; Use `PiRpc.Event_rebootHmdAuto` if
+     * possible.
      */
     @Deprecated
     public static void svc_rebootHmd(){
@@ -365,5 +374,42 @@ public class PiSvc{
         int err = error;
         error = 0;
         return err;
+    }
+    public static void scanLog(){
+        Logger.push(PiSvc.class);
+        File f = new File(System.getenv("LOCALAPPDATA"), "Pimax\\PiService");
+        if(!f.isDirectory()){
+            Logger.info("Could not find folder: "+f.getAbsolutePath());
+            Logger.pop();
+            return;
+        }
+        HashSet<String> strs = new HashSet<>();
+        for(File logFile : f.listFiles()){
+            if(logFile.getName().endsWith(".log")){
+                Logger.info("Reading file: "+logFile.getName());
+                try(BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(logFile)))){
+                    String line;
+                    while((line = reader.readLine())!=null){
+                        if(line.contains("pimax_svcpiHmdManager")){
+                            strs.add(line.substring(line.indexOf("pimax_svcpiHmdManager"), line.length()-1));
+                        }
+                    }
+                }catch(IOException ex){
+                    Logger.error("Failed to read file "+logFile.getName(), ex);
+                }
+            }
+        }
+        if(VRManager.configuration.enableTelemetry){
+            HashSet<String> keys = new HashSet<>();
+            Pattern pattern = Pattern.compile("key=(.+?),value=");
+            for(String s : strs){
+                var matcher = pattern.matcher(s);
+                while(matcher.find())keys.add(matcher.group(1));
+            }
+            for(var known : PiSvc.knownConfigKeys)keys.remove(known.key);
+            if(!keys.isEmpty())Telemetry.send("Unrecognized config keys: "+String.join(", ", keys));
+        }
+        for(var str : strs)Logger.info(str);
+        Logger.pop();
     }
 }

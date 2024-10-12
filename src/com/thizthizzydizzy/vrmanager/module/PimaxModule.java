@@ -3,18 +3,12 @@ import com.thizthizzydizzy.vrmanager.command.NamedCommand;
 import com.thizthizzydizzy.vrmanager.Logger;
 import com.thizthizzydizzy.vrmanager.command.CommandUtil;
 import com.thizthizzydizzy.vrmanager.gui.module.ConfigurePimaxGUI;
-import com.thizthizzydizzy.vrmanager.special.Pimax;
+import com.thizthizzydizzy.vrmanager.special.pimax.Pimax;
 import com.thizthizzydizzy.vrmanager.special.pimax.PiRpc;
 import com.thizthizzydizzy.vrmanager.special.pimax.PiSvc;
 import com.thizthizzydizzy.vrmanager.special.pimax.piRpc.PiRpcAPI;
 import com.thizthizzydizzy.vrmanager.special.pimax.piSvc.piSvcDesc.piVector3f;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashSet;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 public class PimaxModule extends VRModule{
@@ -28,28 +22,7 @@ public class PimaxModule extends VRModule{
             new NamedCommand("pisvc", CommandUtil.subcommand(null,
                 new NamedCommand("scanlog", (base, args) -> {
                     if(!CommandUtil.noArguments(base, args))return;
-                    File f = new File(System.getenv("LOCALAPPDATA"), "Pimax\\PiService");
-                    if(!f.isDirectory()){
-                        Logger.info("Could not find folder: "+f.getAbsolutePath());
-                        return;
-                    }
-                    HashSet<String> strs = new HashSet<>();
-                    for(File logFile : f.listFiles()){
-                        if(logFile.getName().endsWith(".log")){
-                            Logger.info("Reading file: "+logFile.getName());
-                            try(BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(logFile)))){
-                                String line;
-                                while((line = reader.readLine())!=null){
-                                    if(line.contains("pimax_svcpiHmdManager")){
-                                        strs.add(line.substring(line.indexOf("pimax_svcpiHmdManager"), line.length()-1));
-                                    }
-                                }
-                            }catch(IOException ex){
-                                Logger.error("Failed to read file "+logFile.getName(), ex);
-                            }
-                        }
-                    }
-                    for(var str : strs)Logger.info(str);
+                    PiSvc.scanLog();
                 }),
                 new NamedCommand("start", (base, args) -> {
                     if(PiSvc.active){
