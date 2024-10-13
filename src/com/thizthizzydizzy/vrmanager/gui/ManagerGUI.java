@@ -1,6 +1,7 @@
 package com.thizthizzydizzy.vrmanager.gui;
 import com.thizthizzydizzy.vrmanager.Logger;
 import com.thizthizzydizzy.vrmanager.VRManager;
+import com.thizthizzydizzy.vrmanager.VersionManager;
 import com.thizthizzydizzy.vrmanager.config.Configuration;
 import com.thizthizzydizzy.vrmanager.config.module.UsbConfiguration;
 import com.thizthizzydizzy.vrmanager.module.VRModule;
@@ -39,6 +40,11 @@ import javax.swing.SwingConstants;
 import javax.usb.UsbDevice;
 public class ManagerGUI extends javax.swing.JFrame{
     private static ManagerGUI instance;
+    public static void updateAvailable(String latestVersion){
+        instance.panelUpdate.setVisible(true);
+        instance.labelUpdate.setText("New version available! Latest: "+latestVersion+", Current: "+VersionManager.version);
+        instance.revalidate();
+    }
     private Configuration generatedConfig;
     private void updatePimaxBool(JPanel panel, Supplier<Boolean> boolSupplier){
         Boolean b = null;
@@ -77,6 +83,7 @@ public class ManagerGUI extends javax.swing.JFrame{
     }
     public ManagerGUI(){
         initComponents();
+        panelUpdate.setVisible(false);
         panelDashboardPimax.setVisible(false);
         refreshModules();
         if(!new File("config.json").exists()){
@@ -715,6 +722,9 @@ public class ManagerGUI extends javax.swing.JFrame{
         buttonTelemetryAllow = new javax.swing.JButton();
         scrollableTelemetry = new javax.swing.JScrollPane();
         labelTelemetry = new javax.swing.JLabel();
+        panelUpdate = new javax.swing.JPanel();
+        labelUpdate = new javax.swing.JLabel();
+        buttonUpdate = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("VR Manager");
@@ -2124,6 +2134,19 @@ public class ManagerGUI extends javax.swing.JFrame{
 
                 getContentPane().add(panelRoot, java.awt.BorderLayout.CENTER);
 
+                panelUpdate.setLayout(new java.awt.BorderLayout());
+
+                labelUpdate.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+                labelUpdate.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+                labelUpdate.setText("Update is available!");
+                panelUpdate.add(labelUpdate, java.awt.BorderLayout.CENTER);
+
+                buttonUpdate.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+                buttonUpdate.setText("Open GitHub Releases");
+                panelUpdate.add(buttonUpdate, java.awt.BorderLayout.EAST);
+
+                getContentPane().add(panelUpdate, java.awt.BorderLayout.PAGE_START);
+
                 pack();
             }// </editor-fold>//GEN-END:initComponents
     private void buttonAutoconfigConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAutoconfigConfirmActionPerformed
@@ -2313,6 +2336,7 @@ public class ManagerGUI extends javax.swing.JFrame{
     private javax.swing.JButton buttonStop;
     private javax.swing.JButton buttonTelemetryAllow;
     private javax.swing.JButton buttonTelemetryDeny;
+    private javax.swing.JButton buttonUpdate;
     private javax.swing.JCheckBox checkBoxTelemetry;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
@@ -2494,6 +2518,7 @@ public class ManagerGUI extends javax.swing.JFrame{
     private javax.swing.JLabel labelTasks;
     private javax.swing.JLabel labelTelemetry;
     private javax.swing.JLabel labelTelemetryTitle;
+    private javax.swing.JLabel labelUpdate;
     private javax.swing.JPanel panelAutoconfig;
     private javax.swing.JPanel panelAutoconfigButtons;
     private javax.swing.JPanel panelConfigure;
@@ -2609,6 +2634,7 @@ public class ManagerGUI extends javax.swing.JFrame{
     private javax.swing.JPanel panelTasks;
     private javax.swing.JPanel panelTelemetry;
     private javax.swing.JPanel panelTelemetryButtons;
+    private javax.swing.JPanel panelUpdate;
     private javax.swing.JPanel panelUsbDevices;
     private javax.swing.JScrollPane scrollableAutoconfig;
     private javax.swing.JScrollPane scrollableModules;

@@ -12,6 +12,7 @@ import com.thizthizzydizzy.vrmanager.module.VRModule;
 import com.thizthizzydizzy.vrmanager.special.pimax.piSvc.piSvcDesc.piVector3f;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
@@ -60,6 +61,22 @@ public class VRManager{
             Logger.info("Starting GUI");
             ManagerGUI.start();
         }
+        Thread versionCheckThread = new Thread(() -> {
+            String latestVersion = versionCheck();
+            if(latestVersion==null)return;
+            if(flags.contains(StartupFlags.NOGUI)){
+                if(latestVersion!=null){
+                    System.out.println("An new version of VR Manager is available!\n"
+                        +"Current Version: "+VersionManager.version+"\n"
+                        +"Latest Version: "+latestVersion+"\n"
+                        +"Please download the new version from https://github.com/ThizThizzyDizzy/VR-Manager/releases/latest");
+                }
+            }else{
+                java.awt.EventQueue.invokeLater(() -> ManagerGUI.updateAvailable(latestVersion));
+            }
+        }, "Version Check");
+        versionCheckThread.setDaemon(true);
+        versionCheckThread.start();
         if(flags.contains(StartupFlags.INIT))init();
         try(BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))){
             CLI:
@@ -290,5 +307,27 @@ public class VRManager{
     }
     public enum StartupFlags{
         NOGUI, INIT
+    }
+    public static String versionCheck(){
+        File versionFile = VersionManager.downloadFile("https://raw.githubusercontent.com/ThizThizzyDizzy/VR-Manager/master/versions.txt", new File("versions.txt.temp"));
+        try{
+            if(versionFile!=null&&versionFile.exists()){
+                try(BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(versionFile)))){
+                    String line;
+                    String latestVersion = null;
+                    while((line = reader.readLine())!=null){
+                        if(line.isBlank())continue;
+                        if(!VersionManager.previousVersions.contains(line)&&!VersionManager.version.equals(line))System.out.println("Unrecognized version: "+line+"!");
+                        latestVersion = line;
+                    }
+                    if(!VersionManager.version.equals(latestVersion)&&!VersionManager.previousVersions.contains(latestVersion))return latestVersion;
+                }
+                versionFile.delete();
+            }else{
+                return null;
+            }
+        }catch(Exception ex){
+        }
+        return null;
     }
 }
