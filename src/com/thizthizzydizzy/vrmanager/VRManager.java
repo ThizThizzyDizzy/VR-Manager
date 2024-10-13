@@ -309,6 +309,8 @@ public class VRManager{
         NOGUI, INIT
     }
     public static String versionCheck(){
+        Logger.push("Version Check");
+        Logger.info("Starting version check...");
         File versionFile = VersionManager.downloadFile("https://raw.githubusercontent.com/ThizThizzyDizzy/VR-Manager/master/versions.txt", new File("versions.txt.temp"));
         try{
             if(versionFile!=null&&versionFile.exists()){
@@ -320,14 +322,18 @@ public class VRManager{
                         if(!VersionManager.previousVersions.contains(line)&&!VersionManager.version.equals(line))System.out.println("Unrecognized version: "+line+"!");
                         latestVersion = line;
                     }
-                    if(!VersionManager.version.equals(latestVersion)&&!VersionManager.previousVersions.contains(latestVersion))return latestVersion;
+                    if(!VersionManager.version.equals(latestVersion)&&!VersionManager.previousVersions.contains(latestVersion)){
+                        Logger.pop();
+                        Logger.info("New version available!");
+                        return latestVersion;
+                    }
                 }
                 versionFile.delete();
-            }else{
-                return null;
             }
         }catch(Exception ex){
         }
+        Logger.info("No new version is available.");
+        Logger.pop();
         return null;
     }
 }

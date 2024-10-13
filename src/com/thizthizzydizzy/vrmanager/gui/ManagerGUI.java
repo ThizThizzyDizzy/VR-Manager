@@ -26,11 +26,13 @@ import java.awt.GridLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.function.Supplier;
+import java.util.logging.Level;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -725,6 +727,7 @@ public class ManagerGUI extends javax.swing.JFrame{
         panelUpdate = new javax.swing.JPanel();
         labelUpdate = new javax.swing.JLabel();
         buttonUpdate = new javax.swing.JButton();
+        buttonDismissUpdate = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("VR Manager");
@@ -2143,7 +2146,21 @@ public class ManagerGUI extends javax.swing.JFrame{
 
                 buttonUpdate.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
                 buttonUpdate.setText("Open GitHub Releases");
+                buttonUpdate.addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                        buttonUpdateActionPerformed(evt);
+                    }
+                });
                 panelUpdate.add(buttonUpdate, java.awt.BorderLayout.EAST);
+
+                buttonDismissUpdate.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+                buttonDismissUpdate.setText("Dismiss");
+                buttonDismissUpdate.addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                        buttonDismissUpdateActionPerformed(evt);
+                    }
+                });
+                panelUpdate.add(buttonDismissUpdate, java.awt.BorderLayout.LINE_START);
 
                 getContentPane().add(panelUpdate, java.awt.BorderLayout.PAGE_START);
 
@@ -2291,6 +2308,15 @@ public class ManagerGUI extends javax.swing.JFrame{
         VRManager.configuration.enableTelemetry = checkBoxTelemetry.isSelected();
         VRManager.saveConfig();
     }//GEN-LAST:event_checkBoxTelemetryActionPerformed
+    private void buttonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonUpdateActionPerformed
+        try{
+            Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler https://github.com/ThizThizzyDizzy/VR-Manager/releases/latest");
+        }catch(IOException ex){
+        }
+    }//GEN-LAST:event_buttonUpdateActionPerformed
+    private void buttonDismissUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonDismissUpdateActionPerformed
+        panelUpdate.setVisible(false);
+    }//GEN-LAST:event_buttonDismissUpdateActionPerformed
     public static void start(){
         String[] preferredLookAndFeels = new String[]{"Windows", "Nimbus"};
         String[] classNames = new String[preferredLookAndFeels.length];
@@ -2323,6 +2349,7 @@ public class ManagerGUI extends javax.swing.JFrame{
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonAutoconfigConfirm;
     private javax.swing.JButton buttonAutoconfigSkip;
+    private javax.swing.JButton buttonDismissUpdate;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton buttonPimaxDeviceSettings;
     private javax.swing.JButton buttonPimaxPairDevice;

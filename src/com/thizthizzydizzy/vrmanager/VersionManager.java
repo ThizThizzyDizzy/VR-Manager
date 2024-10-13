@@ -11,7 +11,7 @@ public class VersionManager{
     public static String version;
     public static ArrayList<String> previousVersions = new ArrayList<>();
     static{
-        addVersion("0.1.0");
+        addVersion("0.1.20");
     }
     private static void addVersion(String v){
         if(version!=null)previousVersions.add(version);
@@ -19,7 +19,6 @@ public class VersionManager{
     }
     public static File downloadFile(String link, File destinationFile){
         if(destinationFile.exists())destinationFile.delete();
-        System.out.println("Downloading "+destinationFile.getName()+"...");
         if(destinationFile.getParentFile()!=null)destinationFile.getParentFile().mkdirs();
         try {
             URL url = new URL(link);
