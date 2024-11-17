@@ -229,6 +229,15 @@ public class VRManager{
             configuration.processManager.processes.add(katVR);
             log.accept("Detected Kat Gateway");
         }
+        if(new File(System.getenv("PROGRAMFILES"), "Ultraleap\\ControlPanel\\Ultraleap Tray.exe").exists()){
+            ProcessManagerConfiguration.ProcessConfiguration katVR = new ProcessManagerConfiguration.ProcessConfiguration();
+            katVR.title = "Ultraleap";
+            katVR.target = System.getenv("PROGRAMFILES")+"\\Ultraleap\\ControlPanel\\Ultraleap Tray.exe";
+            katVR.startIndirect = false;
+            katVR.forceShutdown = false;
+            configuration.processManager.processes.add(katVR);
+            log.accept("Detected Ultraleap");
+        }
         if(usb){
             log.accept("At least one detected service supports USB tracking, adding USB Module");
             configuration.modules.add(0, "usb");//add at the very beginning, so it can monitor startup & shutdown
