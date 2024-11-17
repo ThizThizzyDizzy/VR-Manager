@@ -375,41 +375,4 @@ public class PiSvc{
         error = 0;
         return err;
     }
-    public static void scanLog(){
-        Logger.push(PiSvc.class);
-        File f = new File(System.getenv("LOCALAPPDATA"), "Pimax\\PiService");
-        if(!f.isDirectory()){
-            Logger.info("Could not find folder: "+f.getAbsolutePath());
-            Logger.pop();
-            return;
-        }
-        HashSet<String> strs = new HashSet<>();
-        for(File logFile : f.listFiles()){
-            if(logFile.getName().endsWith(".log")){
-                Logger.info("Reading file: "+logFile.getName());
-                try(BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(logFile)))){
-                    String line;
-                    while((line = reader.readLine())!=null){
-                        if(line.contains("pimax_svcpiHmdManager")){
-                            strs.add(line.substring(line.indexOf("pimax_svcpiHmdManager"), line.length()-1));
-                        }
-                    }
-                }catch(IOException ex){
-                    Logger.error("Failed to read file "+logFile.getName(), ex);
-                }
-            }
-        }
-        if(VRManager.configuration.enableTelemetry){
-            HashSet<String> keys = new HashSet<>();
-            Pattern pattern = Pattern.compile("key=(.+?),value=");
-            for(String s : strs){
-                var matcher = pattern.matcher(s);
-                while(matcher.find())keys.add(matcher.group(1));
-            }
-            for(var known : PiSvc.knownConfigKeys)keys.remove(known.key);
-            if(!keys.isEmpty())Telemetry.send("Unrecognized config keys: "+String.join(", ", keys));
-        }
-        for(var str : strs)Logger.info(str);
-        Logger.pop();
-    }
 }

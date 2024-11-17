@@ -1,5 +1,6 @@
 package com.thizthizzydizzy.vrmanager.special.pimax;
 import com.thizthizzydizzy.vrmanager.Logger;
+import com.thizthizzydizzy.vrmanager.Telemetry;
 import com.thizthizzydizzy.vrmanager.VRManager;
 import com.thizthizzydizzy.vrmanager.special.usb.Usb;
 import com.thizthizzydizzy.vrmanager.special.Windows;
@@ -7,8 +8,15 @@ import com.thizthizzydizzy.vrmanager.special.pimax.piRpc.PiRpcAPI;
 import com.thizthizzydizzy.vrmanager.special.pimax.piSvc.piSvcDesc.piVector3f;
 import com.thizthizzydizzy.vrmanager.special.pimax.piSvc.piSvcType.piSvcResult;
 import com.thizthizzydizzy.vrmanager.task.Task;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.regex.Pattern;
 public class Pimax extends Task{
     public static File deviceSetting = new File("C:\\Program Files\\Pimax\\Runtime\\DeviceSetting.exe");
     public static File pimaxClient = new File("C:\\Program Files\\Pimax\\PimaxClient\\pimaxui\\PimaxClient.exe");
@@ -38,7 +46,7 @@ public class Pimax extends Task{
         }catch(IOException ex){
             Logger.warn("Could not list running tasks! Assuming DeviceSetting is not running...");
         }
-        if(VRManager.configuration.enableTelemetry)PiSvc.scanLog(); // check previous session
+        if(VRManager.configuration.enableTelemetry)Pimax.scanLogs(); // check previous session
         running = true;
         if(VRManager.configuration.pimax.usePimaxClient&&!isClientRunning){
             Logger.info("Starting Pimax Client ("+pimaxClient.getName()+")");
@@ -156,7 +164,7 @@ public class Pimax extends Task{
     @Override
     public void shutdown(){
         Logger.push(this);
-        if(VRManager.configuration.enableTelemetry)PiSvc.scanLog();
+        if(VRManager.configuration.enableTelemetry)Pimax.scanLogs();
         //no RPC to shut down the HMD
         PiRpc.stop();
         PiSvc.stop();
@@ -173,9 +181,91 @@ public class Pimax extends Task{
             service.destroy();
         }
         Windows.taskkill("DeviceSetting.exe");
-        Windows.taskkill("VRServer.exe");
+        Windows.taskkill("vrserver.exe");
+        Windows.taskkill("pi_server.exe");
         running = false;
         pimaxTask = null;
+        Logger.pop();
+    }
+    public static void scanLogs(){
+        Logger.push(Pimax.class);
+        ArrayList<String> telemetryStrs = new ArrayList<>();
+        File f = new File(System.getenv("LOCALAPPDATA"), "Pimax\\PiService");
+        if(f.isDirectory()){
+            Pattern pattern = Pattern.compile("\\(pimax_svcpiHmdManager::(\\w+).+key=(.+),value=(.+)\\)");
+            HashSet<String> strs = new HashSet<>();
+            for(File logFile : f.listFiles()){
+                if(logFile.getName().endsWith(".log")){
+                    Logger.info("Reading file: "+logFile.getName());
+                    try{
+                        for(String line : Files.readAllLines(logFile.toPath())){
+                            var matcher = pattern.matcher(line);
+                            while(matcher.find()){
+                                String str = matcher.group(0);
+                                if(strs.add(str)){
+                                    Logger.info(str);
+                                    if(VRManager.configuration.enableTelemetry){
+                                        String func = matcher.group(1);
+                                        String key = matcher.group(2);
+                                        String value = matcher.group(3);
+                                        boolean isKnown = false;
+                                        for(var known : PiSvc.knownConfigKeys){
+                                            if(known.key.equals(key))isKnown = true;
+                                        }
+                                        if(isKnown)continue;
+                                        telemetryStrs.add(func+"  "+key+" = "+value);
+                                    }
+                                }
+                            }
+                        }
+                    }catch(IOException ex){
+                        Logger.error("Failed to read file "+logFile.getName(), ex);
+                    }
+                }
+            }
+        }else
+            Logger.info("Could not find folder: "+f.getAbsolutePath());
+        
+        f = new File(System.getenv("LOCALAPPDATA"), "Pimax\\PiTool");
+        if(f.isDirectory()){
+            Pattern pattern = Pattern.compile("PiService.+ ((?:svc_)?[sg]et(?:\\w+Config)?) (\\w+(?: \\w+)*) ((?:fail|err|suc)\\w+) +(.+)?");
+            HashSet<String> strs = new HashSet<>();
+            for(File logFile : f.listFiles()){
+                if(logFile.getName().endsWith(".log")){
+                    Logger.info("Reading file: "+logFile.getName());
+                    try{
+                        for(String line : Files.readAllLines(logFile.toPath())){
+                            var matcher = pattern.matcher(line);
+                            while(matcher.find()){
+                                String str = matcher.group(0);
+                                if(strs.add(str)){
+                                    Logger.info(str);
+                                    if(VRManager.configuration.enableTelemetry){
+                                        String func = matcher.group(1);
+                                        String key = matcher.group(2);
+                                        String status = matcher.group(3);
+                                        String value = matcher.group(4);
+                                        boolean isKnown = false;
+                                        for(var known : PiSvc.knownConfigKeys){
+                                            if(known.key.equals(key))isKnown = true;
+                                        }
+                                        if(isKnown)continue;
+                                        telemetryStrs.add(func+"  "+key+" = "+value+"  "+status);
+                                    }
+                                }
+                            }
+                        }
+                    }catch(IOException ex){
+                        Logger.error("Failed to read file "+logFile.getName(), ex);
+                    }
+                }
+            }
+        }else
+            Logger.info("Could not find folder: "+f.getAbsolutePath());
+        
+        if(VRManager.configuration.enableTelemetry&&!telemetryStrs.isEmpty()){
+            Telemetry.send("Unrecognized config keys:\n"+String.join("\n", telemetryStrs));
+        }
         Logger.pop();
     }
 }

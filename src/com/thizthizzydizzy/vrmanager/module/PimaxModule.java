@@ -19,11 +19,11 @@ public class PimaxModule extends VRModule{
     @Override
     public NamedCommand[] getCommands(){
         return CommandUtil.subcommands(
+            new NamedCommand("scanlog", (base, args) -> {
+                if(!CommandUtil.noArguments(base, args))return;
+                Pimax.scanLogs();
+            }),
             new NamedCommand("pisvc", CommandUtil.subcommand(null,
-                new NamedCommand("scanlog", (base, args) -> {
-                    if(!CommandUtil.noArguments(base, args))return;
-                    PiSvc.scanLog();
-                }),
                 new NamedCommand("start", (base, args) -> {
                     if(PiSvc.active){
                         Logger.info("PiSvc Manager is already active!");
