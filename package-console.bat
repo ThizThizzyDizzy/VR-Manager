@@ -1,1 +1,1 @@
-jpackage -n "VR Manager (Console)" -i "./dist" --main-jar "./VR_Manager.jar" --app-version "1.1.0" --win-console --about-url https://github.com/ThizThizzyDizzy/VR-Manager/ --win-per-user-install --win-shortcut --arguments "nogui"
+jpackage -n "VR Manager (Console)" -i "./dist" --main-jar "./VR_Manager.jar" --java-options "-Djna.library.path=\"C:\\Program Files\\Pimax\\Runtime\"" --app-version "1.1.0" --win-console --about-url https://github.com/ThizThizzyDizzy/VR-Manager/ --win-per-user-install --win-shortcut --arguments "nogui"
