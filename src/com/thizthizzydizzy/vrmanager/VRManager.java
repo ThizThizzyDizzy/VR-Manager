@@ -230,12 +230,18 @@ public class VRManager{
             log.accept("Detected Kat Gateway");
         }
         if(new File(System.getenv("PROGRAMFILES"), "Ultraleap\\ControlPanel\\Ultraleap Tray.exe").exists()){
-            ProcessManagerConfiguration.ProcessConfiguration katVR = new ProcessManagerConfiguration.ProcessConfiguration();
-            katVR.title = "Ultraleap";
-            katVR.target = System.getenv("PROGRAMFILES")+"\\Ultraleap\\ControlPanel\\Ultraleap Tray.exe";
-            katVR.startIndirect = false;
-            katVR.forceShutdown = false;
-            configuration.processManager.processes.add(katVR);
+            ProcessManagerConfiguration.ProcessConfiguration controlPanel = new ProcessManagerConfiguration.ProcessConfiguration();
+            controlPanel.title = "Ultraleap Control Panel";
+            controlPanel.target = System.getenv("PROGRAMFILES")+"\\Ultraleap\\ControlPanel\\UnityApp\\Ultraleap Control Panel.exe";
+            controlPanel.startIndirect = false;
+            controlPanel.forceShutdown = false;
+            configuration.processManager.processes.add(controlPanel);
+            ProcessManagerConfiguration.ProcessConfiguration tray = new ProcessManagerConfiguration.ProcessConfiguration();
+            tray.title = "Ultraleap Tray";
+            tray.target = System.getenv("PROGRAMFILES")+"\\Ultraleap\\ControlPanel\\Ultraleap Tray.exe";
+            tray.startIndirect = false;
+            tray.forceShutdown = false;
+            configuration.processManager.processes.add(tray);
             log.accept("Detected Ultraleap");
         }
         if(usb){
