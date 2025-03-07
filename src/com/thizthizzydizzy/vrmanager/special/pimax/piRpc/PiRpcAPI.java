@@ -106,6 +106,7 @@ public class PiRpcAPI{
         Logger.pop();
     }
     public static void stop(){
+        if(rpcChannel==null)return; // Already stopped.
         Logger.push(PiRpcAPI.class);
         Logger.info("Shutting down GRPC!");
         rpcChannel.shutdownNow();
