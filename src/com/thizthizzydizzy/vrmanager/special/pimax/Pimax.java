@@ -1,6 +1,5 @@
 package com.thizthizzydizzy.vrmanager.special.pimax;
 import com.thizthizzydizzy.vrmanager.Logger;
-import com.thizthizzydizzy.vrmanager.Telemetry;
 import com.thizthizzydizzy.vrmanager.VRManager;
 import com.thizthizzydizzy.vrmanager.special.usb.Usb;
 import com.thizthizzydizzy.vrmanager.special.Windows;
@@ -11,7 +10,6 @@ import com.thizthizzydizzy.vrmanager.task.Task;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.regex.Pattern;
 public class Pimax extends Task{
@@ -193,7 +191,6 @@ public class Pimax extends Task{
     }
     public static void scanLogs(){
         Logger.push(Pimax.class);
-        ArrayList<String> telemetryStrs = new ArrayList<>();
         File f = new File(System.getenv("LOCALAPPDATA"), "Pimax\\PiService");
         if(f.isDirectory()){
             Pattern pattern = Pattern.compile("\\(pimax_svcpiHmdManager::(\\w+).+key=(.+),value=(.+)\\)");
@@ -208,17 +205,6 @@ public class Pimax extends Task{
                                 String str = matcher.group(0);
                                 if(strs.add(str)){
                                     Logger.info(str);
-                                    if(VRManager.configuration.enableTelemetry){
-                                        String func = matcher.group(1);
-                                        String key = matcher.group(2);
-                                        String value = matcher.group(3);
-                                        boolean isKnown = false;
-                                        for(var known : PiSvc.knownConfigKeys){
-                                            if(known.key.equals(key))isKnown = true;
-                                        }
-                                        if(isKnown)continue;
-                                        telemetryStrs.add(func+"  "+key+" = "+value);
-                                    }
                                 }
                             }
                         }
@@ -244,18 +230,6 @@ public class Pimax extends Task{
                                 String str = matcher.group(0);
                                 if(strs.add(str)){
                                     Logger.info(str);
-                                    if(VRManager.configuration.enableTelemetry){
-                                        String func = matcher.group(1);
-                                        String key = matcher.group(2);
-                                        String status = matcher.group(3);
-                                        String value = matcher.group(4);
-                                        boolean isKnown = false;
-                                        for(var known : PiSvc.knownConfigKeys){
-                                            if(known.key.equals(key))isKnown = true;
-                                        }
-                                        if(isKnown)continue;
-                                        telemetryStrs.add(func+"  "+key+" = "+value+"  "+status);
-                                    }
                                 }
                             }
                         }
@@ -267,9 +241,6 @@ public class Pimax extends Task{
         }else
             Logger.info("Could not find folder: "+f.getAbsolutePath());
         
-        if(VRManager.configuration.enableTelemetry&&!telemetryStrs.isEmpty()){
-            Telemetry.send("Unrecognized config keys:\n"+String.join("\n", telemetryStrs));
-        }
         Logger.pop();
     }
 }
