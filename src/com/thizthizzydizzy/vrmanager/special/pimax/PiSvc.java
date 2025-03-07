@@ -34,7 +34,7 @@ public class PiSvc{
         knownConfigKeys.add(new PiSvcConfig("display_timing_selection", PiSvcConfig.Type.INT, "Refresh Rate (0 = 120 Hz, 1 = 90 Hz, 2 = 72 Hz)", 0, 2));
         knownConfigKeys.add(new PiSvcConfig("ipd_auto_adjust", PiSvcConfig.Type.INT, "Auto Ipd Adjustment", 0, 1));
         knownConfigKeys.add(new PiSvcConfig("hmd_mount_adjust", PiSvcConfig.Type.INT, "Wearing Location Reminder", 0, 1));
-        knownConfigKeys.add(new PiSvcConfig("ipd", PiSvcConfig.Type.FLOAT, false, "IPD Adjustment"));
+        knownConfigKeys.add(new PiSvcConfig("ipd", PiSvcConfig.Type.FLOAT, false, "IPD (READ ONLY, use physical_ipd to adjust)"));
         knownConfigKeys.add(new PiSvcConfig("enable_leapmotion_controller", PiSvcConfig.Type.INT, "Enable Hand Tracking (Leap Motion)", 0, 1));
         knownConfigKeys.add(new PiSvcConfig("use_controller_type_knuckles", PiSvcConfig.Type.INT, "Simulate Valve Index Controllers", 0, 1));
         knownConfigKeys.add(new PiSvcConfig("pixels_per_display_pixel_rate", PiSvcConfig.Type.FLOAT, "Render scale multiplier", 0.5f, 2));
@@ -70,11 +70,28 @@ public class PiSvc{
         knownConfigKeys.add(new PiSvcConfig("headphone_state", PiSvcConfig.Type.INT, false, ""));
         knownConfigKeys.add(new PiSvcConfig("hmd_debug_status", PiSvcConfig.Type.INT, false, ""));
         knownConfigKeys.add(new PiSvcConfig("expire_ts", PiSvcConfig.Type.INT, false, ""));
-        knownConfigKeys.add(new PiSvcConfig("notify_feature_update", PiSvcConfig.Type.INT, "This was set to 1 at some point"));
+        knownConfigKeys.add(new PiSvcConfig("notify_feature_update", PiSvcConfig.Type.INT, "This was set to 1 at some point")); // This is set to 1 during setsnLockTrailTmpStatus; Crystal Light only
         knownConfigKeys.add(new PiSvcConfig("vr_mode", PiSvcConfig.Type.INT, "Recline Mode", 0, 1));
         knownConfigKeys.add(new PiSvcConfig("controller_haptic_scale", PiSvcConfig.Type.FLOAT, "Controller haptics intensity", 0, 1));
         knownConfigKeys.add(new PiSvcConfig("camera_mode_auto_detect", PiSvcConfig.Type.INT, "Auto-detect Room Lighting Frequency", 0, 1));
         knownConfigKeys.add(new PiSvcConfig("camera_mode_idx", PiSvcConfig.Type.INT, "Room Lighting Frequency (0 = 60 Hz, 1 = 50 Hz)", 0, 1));
+        knownConfigKeys.add(new PiSvcConfig("nolo_display_mode", PiSvcConfig.Type.INT, ""));
+        knownConfigKeys.add(new PiSvcConfig("notify_steamvr_quit", PiSvcConfig.Type.INT, "", 1, 1));
+        knownConfigKeys.add(new PiSvcConfig("hmd_lock_status", PiSvcConfig.Type.INT, "enableHmd", 1, 1));
+        knownConfigKeys.add(new PiSvcConfig("toggle_vst", PiSvcConfig.Type.INT, "Turn passthrough on or off", 0, 1));
+        knownConfigKeys.add(new PiSvcConfig("support_vst", PiSvcConfig.Type.INT, "", 0, 1));
+        knownConfigKeys.add(new PiSvcConfig("enable_openxr_quadviews_fr", PiSvcConfig.Type.INT, "", 0, 1));
+        knownConfigKeys.add(new PiSvcConfig("active_pi_openxr", PiSvcConfig.Type.INT, "", 1, 1));
+        knownConfigKeys.add(new PiSvcConfig("dbg_local_dimming_forced_value", PiSvcConfig.Type.INT, ""));
+        knownConfigKeys.add(new PiSvcConfig("over_drive_level", PiSvcConfig.Type.INT, ""));
+        knownConfigKeys.add(new PiSvcConfig("disable_sys_button", PiSvcConfig.Type.INT, "", 0, 1));
+        knownConfigKeys.add(new PiSvcConfig("lens_selection_count", PiSvcConfig.Type.INT, ""));
+        knownConfigKeys.add(new PiSvcConfig("lens_separation_offset", PiSvcConfig.Type.FLOAT, ""));
+        knownConfigKeys.add(new PiSvcConfig("space_calibrate", PiSvcConfig.Type.FLOAT, ""));
+        knownConfigKeys.add(new PiSvcConfig("center_calibrate", PiSvcConfig.Type.FLOAT, "", 1, 1));
+        knownConfigKeys.add(new PiSvcConfig("floor_calibrate", PiSvcConfig.Type.FLOAT, ""));
+        knownConfigKeys.add(new PiSvcConfig("physical_ipd", PiSvcConfig.Type.FLOAT, "IPD", .058f, .072f));
+        knownConfigKeys.add(new PiSvcConfig("lighthouse_turnOffControllersTimeout", PiSvcConfig.Type.FLOAT, "Lighthouse tracking timeout (shuts down controllers)"));
     }
     public static void start(){
         Logger.push(PiSvc.class);
