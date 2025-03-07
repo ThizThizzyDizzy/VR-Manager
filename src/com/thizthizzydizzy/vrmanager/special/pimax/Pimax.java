@@ -8,11 +8,8 @@ import com.thizthizzydizzy.vrmanager.special.pimax.piRpc.PiRpcAPI;
 import com.thizthizzydizzy.vrmanager.special.pimax.piSvc.piSvcDesc.piVector3f;
 import com.thizthizzydizzy.vrmanager.special.pimax.piSvc.piSvcType.piSvcResult;
 import com.thizthizzydizzy.vrmanager.task.Task;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -175,13 +172,20 @@ public class Pimax extends Task{
             }catch(InterruptedException ex){
             }
         }
+        if(VRManager.configuration.pimax.startSteamVR){
+            // Shut down SteamVR
+            Windows.taskkill("vrmonitor.exe");
+            try{
+                Thread.sleep(5000);
+            }catch(InterruptedException ex){
+            }
+        }
         Windows.taskkill("PimaxClient.exe");
         if(service!=null){
             Logger.info("Shutting down Pitool");
             service.destroy();
         }
         Windows.taskkill("DeviceSetting.exe");
-        Windows.taskkill("vrserver.exe");
         Windows.taskkill("pi_server.exe");
         running = false;
         pimaxTask = null;

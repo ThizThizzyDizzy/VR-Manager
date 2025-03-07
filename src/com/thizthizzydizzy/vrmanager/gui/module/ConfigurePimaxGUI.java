@@ -191,7 +191,7 @@ public class ConfigurePimaxGUI extends javax.swing.JDialog{
 
         boxUsePimaxClientShutdown.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         boxUsePimaxClientShutdown.setText("Use Pimax Client for Shutdown");
-        boxUsePimaxClientShutdown.setToolTipText("Should the pimax client be started for shutdown? (This helps ensure a clean shutdown, as the pimax service doesn't like to shut down without it)");
+        boxUsePimaxClientShutdown.setToolTipText("Should the pimax client be started for shutdown?\nThis helps ensure a clean shutdown, as the pimax service doesn't like to shut down without it.\nNote: If this doesn't work, make sure pimax play is up to date and you are logged in.");
         boxUsePimaxClientShutdown.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 boxUsePimaxClientShutdownActionPerformed(evt);
